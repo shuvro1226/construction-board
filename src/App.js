@@ -1,11 +1,13 @@
+import './assets/js/fontawesome';
 import './App.css';
-// import { } from 'react-bootstrap';
+
+import ConstructionBoard from './containers/ConstructionBoard/ConstructionBoard';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Welcome to construction board!</h1>
+        <ConstructionBoard />
       </header>
     </div>
   );
