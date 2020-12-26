@@ -9,11 +9,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import taskBoardReducer from './store/reducers/taskBoard';
+import workingOrderReducer from './store/reducers/workingOrder';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const rootReducer = combineReducers({
-  taskBoard: taskBoardReducer
+  taskBoard: taskBoardReducer,
+  workingOrder: workingOrderReducer
 })
 
 const store = createStore(rootReducer, composeEnhancers(

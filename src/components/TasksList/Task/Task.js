@@ -20,7 +20,9 @@ const task = (props) => {
                 <strong className="mr-auto">{props.woDetail.taskName}</strong>
                 <small>{moment(props.woDetail.endDate).fromNow()}</small>
                 <div className={taskActionsClasses.join(' ')}>
-                    <FontAwesomeIcon icon="pencil-alt" />
+                    <span className="TaskAction" onClick={props.showWorkingOrderEditModal}>
+                        <FontAwesomeIcon icon="pencil-alt" />
+                    </span>
                 </div>
             </ToastHeader>
             <Toast.Body>

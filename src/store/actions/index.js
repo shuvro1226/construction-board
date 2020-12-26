@@ -4,3 +4,8 @@ export {
     toggleTaskActions
 }
 from './taskBoard';
+
+export {
+    toggleWOModal
+}
+from './workingOrder';

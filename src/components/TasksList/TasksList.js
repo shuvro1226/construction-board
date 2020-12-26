@@ -6,11 +6,16 @@ import './TasksList.css';
 
 const TasksList = (props) => {
 
+    const showWOEditModal = (woDetail) => {
+        props.onToggleWOModal(true, woDetail);
+    }
+
     const workingOrdersList = props.workingOrders[props.statusDetail.displayText].map((woDetail, index) => {
         if (index < 10 && woDetail.longDescription !== "") {      
             return <Task 
                 key={woDetail.uniqueKey} 
                 woDetail={woDetail} 
+                showWorkingOrderEditModal={() => showWOEditModal(woDetail)}
                 showActions={() => props.onToggleTaskActions(index, true, props.statusDetail.displayText)} 
                 hideActions={() => props.onToggleTaskActions(index, false, props.statusDetail.displayText)} />;
         }
@@ -28,7 +33,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onToggleTaskActions: (index, showActions, status) => dispatch(actions.toggleTaskActions(index, showActions, status))
+        onToggleTaskActions: (index, showActions, status) => dispatch(actions.toggleTaskActions(index, showActions, status)),
+        onToggleWOModal: (showModal, woDetail) => dispatch(actions.toggleWOModal(showModal, woDetail))
     }
 }
 

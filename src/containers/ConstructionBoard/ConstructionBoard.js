@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Wrapper from '../../hoc/Wrapper/Wrapper';
 import TaskBoards from './TaskBoards/TaskBoards';
 import * as actions from '../../store/actions/index';
+import WorkingOrder from '../WorkingOrder/WorkingOrder';
 
 class ConstructionBoard extends Component {
     componentDidMount() {
@@ -33,6 +34,7 @@ class ConstructionBoard extends Component {
                         {taskBoardLayout}
                     </Row>
                 </Container>
+                <WorkingOrder />
             </Wrapper>
         )
     }
