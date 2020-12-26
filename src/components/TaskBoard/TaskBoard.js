@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import TasksList from './TasksList/TasksList';
+import TasksList from '../TasksList/TasksList';
 import styles from './TaskBoard.module.css';
 
 const TaskBoard = (props) => {
@@ -9,14 +9,7 @@ const TaskBoard = (props) => {
     let cardHeaderStyles = [
         'text-white',
         styles.TextCapitalize
-    ];
-
-    const workingOrdersList = props.workingOrders.map((woDetail, index) => {
-        if (index < 10 && woDetail.longDescription !== "") {      
-            return <TasksList key={woDetail.uniqueKey} index={index} woDetail={woDetail} />;
-        }
-        return null;
-    });
+    ];    
 
     return (
         <Card bg={props.statusDetail.scheme.toLowerCase()}>
@@ -25,11 +18,13 @@ const TaskBoard = (props) => {
             </Card.Header>
             <Card.Body>
                 <Card.Text as="div">
-                    {workingOrdersList}
+                    <TasksList statusDetail={props.statusDetail} />
                 </Card.Text>
             </Card.Body>
         </Card>
     )
 }
+
+
 
 export default TaskBoard;

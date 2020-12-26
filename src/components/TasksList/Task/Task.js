@@ -1,9 +1,9 @@
 import React from 'react';
 import { Toast, ToastHeader } from 'react-bootstrap';
 import moment from 'moment';
-import './TaskList.css';
 
-const TasksList = (props) => {
+const Task = (props) => {
+
     return (
         <Toast 
             key={props.woDetail.uniqueKey} 
@@ -17,6 +17,7 @@ const TasksList = (props) => {
             </Toast.Body>
         </Toast>     
     );
+
 };
 
-export default TasksList;
+export default Task;
