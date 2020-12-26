@@ -66,3 +66,14 @@ export const fetchWOByStatus = (statusDetail) => {
             });
     }
 }
+
+export const toggleTaskActions = (index, showActions, status) => {
+    return (dispatch) => {
+        dispatch({
+            type: actionTypes.TOGGLE_TASK_ACTIONS,
+            status: status,
+            index: index,
+            showActions: showActions
+        })
+    }
+}

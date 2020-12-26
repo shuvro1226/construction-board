@@ -103,6 +103,29 @@ const fetchWOStart = (state, action) => {
     }
 }
 
+const toggleTaskActions = (state, action) => {
+    const woElement = {
+        ...state.workingOrders[action.status]
+    };
+    const updatedWoElements = Object.keys(woElement).map(key => {
+        if (key === action.index.toString()) {
+            const updatedWoDetail = {
+                ...woElement[key],
+                showActions: action.showActions
+            };
+            return updatedWoDetail;
+        }
+        return woElement[key];
+    });
+    return {
+        ...state,
+        workingOrders: {
+            ...state.workingOrders,
+            [action.status]: updatedWoElements
+        }
+    }
+}
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.FETCH_STATUS_SUCCESS:
@@ -117,6 +140,8 @@ const reducer = (state = initialState, action) => {
             return fetchWOFailed(state, action);
         case actionTypes.FETCH_WO_SUCCESS:
             return fetchWOSuccess(state, action);
+        case actionTypes.TOGGLE_TASK_ACTIONS:
+            return toggleTaskActions(state, action);
         default:
             return state;
     }

@@ -4,4 +4,14 @@
 
 .Toast {
     max-width: 100%;
+    position: relative;
+}
+
+.Toast .TaskActions {
+    position: absolute;
+    right: 4px;
+    top: 0;
+    padding: 4px;
+    background: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
 }
