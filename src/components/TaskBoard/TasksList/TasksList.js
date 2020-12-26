@@ -1,20 +1,22 @@
 import React from 'react';
 import { Toast, ToastHeader } from 'react-bootstrap';
+import moment from 'moment';
 import './TaskList.css';
 
 const TasksList = (props) => {
     return (
-        <Toast>
+        <Toast 
+            key={props.woDetail.uniqueKey} 
+            className="Toast">
             <ToastHeader>
-                <img src="holder.js/20x20?text=%20" className="rounded mr-2" alt="" />
-                <strong className="mr-auto">Bootstrap</strong>
-                <small>11 mins ago</small>
+                <strong className="mr-auto">{props.woDetail.taskName}</strong>
+                <small>{moment(props.woDetail.endDate).fromNow()}</small>
             </ToastHeader>
             <Toast.Body>
-                This is a {props.status.displayText} task!
+                {props.woDetail.longDescription}
             </Toast.Body>
-        </Toast>
-    )
+        </Toast>     
+    );
 };
 
 export default TasksList;

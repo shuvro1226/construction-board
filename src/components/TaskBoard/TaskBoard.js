@@ -5,22 +5,27 @@ import TasksList from './TasksList/TasksList';
 import styles from './TaskBoard.module.css';
 
 const TaskBoard = (props) => {
+    
     let cardHeaderStyles = [
-        'bg-' + props.status.scheme.toLowerCase(),
         'text-white',
         styles.TextCapitalize
     ];
 
+    const workingOrdersList = props.workingOrders.map((woDetail, index) => {
+        if (index < 10 && woDetail.longDescription !== "") {      
+            return <TasksList key={woDetail.uniqueKey} index={index} woDetail={woDetail} />;
+        }
+        return null;
+    });
+
     return (
-        <Card
-            bg="light"
-            border={props.status.scheme.toLowerCase()}>
+        <Card bg={props.statusDetail.scheme.toLowerCase()}>
             <Card.Header as="h5" className={cardHeaderStyles.join(' ')}>
-                <FontAwesomeIcon icon={props.status.icon} /> {props.status.displayText}
+                <FontAwesomeIcon icon={props.statusDetail.icon} /> {props.statusDetail.displayText}
             </Card.Header>
             <Card.Body>
                 <Card.Text as="div">
-                    <TasksList status={props.status} />
+                    {workingOrdersList}
                 </Card.Text>
             </Card.Body>
         </Card>

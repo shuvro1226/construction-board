@@ -1,3 +1,7 @@
 .toast-header button.close {
     display: none;
 }
+
+.Toast {
+    max-width: 100%;
+}
