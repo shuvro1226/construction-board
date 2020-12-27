@@ -15,6 +15,10 @@ class WorkingOrder extends Component {
         this.props.onToggleWOModal(false, null);
     }
 
+    onFieldChanged = (event) => {
+        console.log(event);
+    }
+
     render() {
         return (            
             <Modal
@@ -24,7 +28,10 @@ class WorkingOrder extends Component {
                 modalSubmit={this.onModalSubmit}
                 modalSize="lg"
             >
-                <EditForm />
+                <EditForm 
+                    workingOrderFields={this.props.workingOrderFields}
+                    statusList={this.props.status}
+                    onFieldChanged={(event) => this.onFieldChanged(event)} />
             </Modal>
         )
     }
@@ -32,7 +39,9 @@ class WorkingOrder extends Component {
 
 const mapStateToProps = state => {
     return {
-        showWOModal: state.workingOrder.showWOModal
+        showWOModal: state.workingOrder.showWOModal,
+        workingOrderFields: state.workingOrder.woDetail,
+        status: state.taskBoard.status
     }
 }
 

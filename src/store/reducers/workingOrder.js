@@ -1,15 +1,32 @@
 import * as actionTypes from '../actions/actionTypes';
+import { workingOrderModel } from '../../config/models/workingOrder';
 
 const initialState = {
     showWOModal: false,
-    woDetail: null
+    woDetail: workingOrderModel
 }
 
 const toggleWOModal = (state, action) => {
+    let workingOrderData = {};
+    if (action.woDetail) {
+        for (const [key, elements] of Object.entries(state.woDetail)) {
+            let updatedValue = action.woDetail[key];
+            if (state.woDetail[key].alias) {
+                updatedValue = action.woDetail[state.woDetail[key].alias]
+            }
+            workingOrderData[key] = {
+                ...elements,
+                value: updatedValue
+            }
+        }
+    } else {
+        workingOrderData = workingOrderModel
+    }
+
     return {
         ...state,
         showWOModal: action.showModal,
-        woDetail: action.woDetail
+        woDetail: workingOrderData
     }
 }
 
