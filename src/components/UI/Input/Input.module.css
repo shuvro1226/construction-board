@@ -1,0 +1,4 @@
+select.FormSelect,
+select.FormSelect option {
+    text-transform: capitalize;
+}

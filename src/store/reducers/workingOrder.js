@@ -34,6 +34,11 @@ const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.TOGGLE_WO_MODAL:
             return toggleWOModal(state, action);
+        case actionTypes.FORM_ELEMENT_CHANGE:
+            return {
+                ...state,
+                woDetail: action.woFields
+            };
         default:
             return state;
     }

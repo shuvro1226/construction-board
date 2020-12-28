@@ -1,50 +1,73 @@
 export const workingOrderModel = {
     projectNo: {
-        type: 'hidden',
+        elementType: 'input',
+        elementConfig: {
+            type: 'hidden'
+        },
         value: 0
     },
     workingOrderNo: {
-        type: 'hidden',
+        elementType: 'input',
+        elementConfig: {
+            type: 'hidden'
+        },
         value: 0
     },
     description: {
-        type: 'text',
+        elementType: 'input',
+        elementConfig: {
+            type: 'text',
+            placeholder: 'Enter working order title'
+        },
         value: '',
         alias: 'shortDescription',
         displayText: 'Title',
         isDate: false
     },
     detailDescription: {
-        type: 'textarea',
+        elementType: 'textarea',
         value: '',
         alias: 'longDescription',
         displayText: 'Description'
     },
     editBy: {
-        type: 'hidden',
+        elementType: 'input',
+        elementConfig: {
+            type: 'hidden'
+        },
         value: 289
     },
     createDate: {
-        type: 'text',
+        elementType: 'input',
+        elementConfig: {
+            type: 'text'
+        },
         value: '',
         alias: 'creationDate',
         displayText: 'Creation Date',
         isDate: true
     },
     status: {
-        type: 'select',
+        elementType: 'select',
+        elementConfig: null,
         value: 0,
         displayText: 'Status'
     },
     executionStartDate: {
-        type: 'text',
+        elementType: 'input',
+        elementConfig: {
+            type: 'text'
+        },
         value: '',
         alias: 'startDate',
         displayText: 'Start Date',
         isDate: true
     },
     executionEndDate: {
-        type: 'text',
+        elementType: 'input',
+        elementConfig: {
+            type: 'text'
+        },
         value: '',
         alias: 'endDate',
         displayText: 'End Date',

@@ -9,3 +9,12 @@ export const toggleWOModal = (showModal, woDetail) => {
         });
     }
 }
+
+export const formElementChange = (updatedFields) => {
+    return (dispatch) => {
+        dispatch({
+            type: actionTypes.FORM_ELEMENT_CHANGE,
+            woFields: updatedFields
+        })
+    }
+}
