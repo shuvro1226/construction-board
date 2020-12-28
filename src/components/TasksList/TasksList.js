@@ -10,14 +10,14 @@ const TasksList = (props) => {
         props.onToggleWOModal(true, woDetail);
     }
 
-    const workingOrdersList = props.workingOrders[props.statusDetail.displayText].map((woDetail, index) => {
+    const workingOrdersList = props.workingOrders[props.statusDetail.status].map((woDetail, index) => {
         if (index < 10 && woDetail.longDescription !== "") {      
             return <Task 
                 key={woDetail.uniqueKey} 
                 woDetail={woDetail} 
                 showWorkingOrderEditModal={() => showWOEditModal(woDetail)}
-                showActions={() => props.onToggleTaskActions(index, true, props.statusDetail.displayText)} 
-                hideActions={() => props.onToggleTaskActions(index, false, props.statusDetail.displayText)} />;
+                showActions={() => props.onToggleTaskActions(index, true, props.statusDetail.status)} 
+                hideActions={() => props.onToggleTaskActions(index, false, props.statusDetail.status)} />;
         }
         return null;
     });

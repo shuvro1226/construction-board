@@ -30,13 +30,6 @@ export const workingOrderModel = {
         alias: 'longDescription',
         displayText: 'Description'
     },
-    editBy: {
-        elementType: 'input',
-        elementConfig: {
-            type: 'hidden'
-        },
-        value: 289
-    },
     createDate: {
         elementType: 'input',
         elementConfig: {

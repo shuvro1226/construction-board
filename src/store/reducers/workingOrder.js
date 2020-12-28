@@ -3,7 +3,9 @@ import { workingOrderModel } from '../../config/models/workingOrder';
 
 const initialState = {
     showWOModal: false,
-    woDetail: workingOrderModel
+    woDetail: workingOrderModel,
+    loading: false,
+    error: false
 }
 
 const toggleWOModal = (state, action) => {
@@ -38,6 +40,24 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 woDetail: action.woFields
+            };
+        case actionTypes.UPDATE_WO_START:
+            return {
+                ...state,
+                loading: true,
+                error: false
+            };
+        case actionTypes.UPDATE_WO_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                error: false
+            };
+        case actionTypes.UPDATE_WO_FAIL:
+            return {
+                ...state,
+                loading: false,
+                error: true
             };
         default:
             return state;

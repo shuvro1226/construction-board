@@ -6,15 +6,15 @@ import * as actions from '../../../store/actions/index';
 
 class TaskBoards extends Component {
     componentDidMount() {
-        this.props.onWoGetByStatus(this.props.statusDetail);
+        this.props.onWoGetByStatus(this.props.statusDetail.status);
     }
 
     render() {
         let taskBoardContent = null;
         
-        if (this.props.workingOrders && this.props.workingOrders[this.props.statusDetail.displayText]) {
+        if (this.props.workingOrders && this.props.workingOrders[this.props.statusDetail.status]) {
             taskBoardContent =  <TaskBoard 
-                workingOrders={this.props.workingOrders[this.props.statusDetail.displayText]} 
+                workingOrders={this.props.workingOrders[this.props.statusDetail.status]} 
                 statusDetail={this.props.statusDetail} />;
         }       
 
@@ -30,7 +30,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onWoGetByStatus: (statusDetail) => dispatch(actions.fetchWOByStatus(statusDetail))
+        onWoGetByStatus: (statusId) => dispatch(actions.fetchWOByStatus(statusId))
     }
 }
 

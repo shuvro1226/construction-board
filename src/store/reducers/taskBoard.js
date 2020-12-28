@@ -8,27 +8,27 @@ const initialState = {
 }
 
 const WOStatusDefaults = {
-    'recorded': {
+    "1": {
         scheme: 'Info',
         icon: 'file-medical-alt',
         useBoard: true
     },
-    'pre-planned': {
+    "2": {
         scheme: 'Warning',
         icon: 'balance-scale-left',
         useBoard: true
     },
-    'planned': {
+    "3": {
         scheme: 'Success',
         icon: 'balance-scale',
         useBoard: true
     },
-    'finished': {
+    "4": {
         scheme: 'Secondary',
         icon: 'check-circle',
         useBoard: true
     },
-    'deleted': {
+    "5": {
         scheme: 'Danger',
         icon: 'minus-circle',
         useBoard: false
@@ -39,7 +39,7 @@ const setWOStatus = (state, action) => {
     let updatedStatusArray = null;
     updatedStatusArray = action.statusList.map((woStatus) => {
         return {
-            ...WOStatusDefaults[woStatus.displayText],
+            ...WOStatusDefaults[woStatus.status],
             ...woStatus
         }
     });
@@ -67,16 +67,16 @@ const fetchStatusStart = (state, action) => {
 }
 
 const fetchWOSuccess = (state, action) => {
-    const status = action.status;
+    const statusId = action.statusId;
     const woGroupdByStatus = [];
 
-    woGroupdByStatus[status.displayText] = action.workingOrders.map(woDetail => {
+    woGroupdByStatus[statusId] = action.workingOrders.map(woDetail => {
         return woDetail;
     });
 
     const updatedWorkingOrdersList = {
         ...state.workingOrders,
-        [status.displayText]: woGroupdByStatus[status.displayText]
+        [statusId]: woGroupdByStatus[statusId]
     };
 
     return {
@@ -105,7 +105,7 @@ const fetchWOStart = (state, action) => {
 
 const toggleTaskActions = (state, action) => {
     const woElement = {
-        ...state.workingOrders[action.status]
+        ...state.workingOrders[action.statusId]
     };
     const updatedWoElements = Object.keys(woElement).map(key => {
         if (key === action.index.toString()) {
@@ -121,7 +121,7 @@ const toggleTaskActions = (state, action) => {
         ...state,
         workingOrders: {
             ...state.workingOrders,
-            [action.status]: updatedWoElements
+            [action.statusId]: updatedWoElements
         }
     }
 }

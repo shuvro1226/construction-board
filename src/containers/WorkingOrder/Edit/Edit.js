@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import { Form } from 'react-bootstrap';
+import moment from 'moment';
 // import EditForm from '../../../components/WOEditForm/WOEditForm';
 import Input from '../../../components/UI/Input/Input';
 import Modal from '../../../components/UI/Modal/Modal';
@@ -14,6 +14,18 @@ class WorkingOrder extends Component {
     }
 
     onModalSubmit = () => {
+        const updatedData = {};
+        for (let key in this.props.workingOrderFields) {
+            let fieldValue = this.props.workingOrderFields[key].value;
+            if (this.props.workingOrderFields[key].isDate) {
+                fieldValue = moment(fieldValue).toISOString();
+            }
+            updatedData[key] = fieldValue;
+        }
+        
+        const workingOrderData = [updatedData];
+        
+        this.props.onUpdateWorkingOrder(workingOrderData);
         this.props.onToggleWOModal(false, null);
     }
 
@@ -50,17 +62,15 @@ class WorkingOrder extends Component {
                 modalSubmit={this.onModalSubmit}
                 modalSize="lg"
             >
-                <Form>
-                    {workingOrderFormArray.map(field => (
-                        <Input
-                            key={field.id}
-                            config={field.config}
-                            element={field.id}
-                            statusList={this.props.status}
-                            changed={(event) => this.onInputChangedHandler(event, field)}
-                        />
-                    ))}
-                </Form>
+                {workingOrderFormArray.map(field => (
+                    <Input
+                        key={field.id}
+                        config={field.config}
+                        element={field.id}
+                        statusList={this.props.status}
+                        changed={(event) => this.onInputChangedHandler(event, field)}
+                    />
+                ))}
             </Modal>
         )
     }
@@ -77,7 +87,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onToggleWOModal: (showModal, woDetail) => dispatch(actions.toggleWOModal(showModal, woDetail)),
-        onFormElementChange: (updatedFields) => dispatch(actions.formElementChange(updatedFields))
+        onFormElementChange: (updatedFields) => dispatch(actions.formElementChange(updatedFields)),
+        onUpdateWorkingOrder: (woDetail) => dispatch(actions.updateWorkingOrder(woDetail))
     }
 }
 

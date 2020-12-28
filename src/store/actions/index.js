@@ -7,6 +7,7 @@ from './taskBoard';
 
 export {
     toggleWOModal,
-    formElementChange
+    formElementChange,
+    updateWorkingOrder
 }
 from './workingOrder';

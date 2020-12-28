@@ -34,11 +34,11 @@ export const fetchStatus = () => {
     }
 }
 
-export const fetchWOSuccess = (workingOrdersList, statusDetail) => {
+export const fetchWOSuccess = (workingOrdersList, statusId) => {
     return {
         type: actionTypes.FETCH_WO_SUCCESS,
         workingOrders: workingOrdersList,
-        status: statusDetail
+        statusId: statusId
     }
 }
 
@@ -54,12 +54,12 @@ export const fetchWOStart = () => {
     }
 }
 
-export const fetchWOByStatus = (statusDetail) => {
+export const fetchWOByStatus = (statusId) => {
     return (dispatch) => {
         dispatch(fetchWOStart());
-        axios.get(apiConstants.GET_WO_BY_STATUS + statusDetail.status + apiConstants.GET_WO_PARAMS)
+        axios.get(apiConstants.GET_WO_BY_STATUS + statusId + apiConstants.GET_WO_PARAMS)
             .then(res => {
-                dispatch(fetchWOSuccess(res.data, statusDetail));
+                dispatch(fetchWOSuccess(res.data, statusId));
             })
             .catch(err => {
                 dispatch(fetchWOFailed(err));
@@ -67,11 +67,11 @@ export const fetchWOByStatus = (statusDetail) => {
     }
 }
 
-export const toggleTaskActions = (index, showActions, status) => {
+export const toggleTaskActions = (index, showActions, statusId) => {
     return (dispatch) => {
         dispatch({
             type: actionTypes.TOGGLE_TASK_ACTIONS,
-            status: status,
+            statusId: statusId,
             index: index,
             showActions: showActions
         })
