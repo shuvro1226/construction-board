@@ -126,6 +126,35 @@ const toggleTaskActions = (state, action) => {
     }
 }
 
+const updateWOList = (state, action) => {
+
+    let workingOrdersList = {
+        ...state.workingOrders
+    };
+    if (action.params.oldStatus === action.params.newStatus) {
+        const updatedList = state.workingOrders[action.params.newStatus].map((element, index) => {
+            if (index === action.params.oldIndex) {
+                return action.params.updatedWO;
+            }
+            return element;
+        })
+        workingOrdersList = {
+            ...state.workingOrders,
+            [action.params.oldStatus]: updatedList
+        }
+    } else {
+        workingOrdersList[action.params.oldStatus].splice(action.params.oldIndex, 1);
+        workingOrdersList[action.params.newStatus].splice(0, 0, action.params.updatedWO);
+    }
+
+    return {
+        ...state,
+        error: false,
+        loading: true,
+        workingOrders: workingOrdersList
+    }
+}
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.FETCH_STATUS_SUCCESS:
@@ -142,6 +171,8 @@ const reducer = (state = initialState, action) => {
             return fetchWOSuccess(state, action);
         case actionTypes.TOGGLE_TASK_ACTIONS:
             return toggleTaskActions(state, action);
+        case actionTypes.UPDATE_WO_LIST:
+            return updateWOList(state, action);
         default:
             return state;
     }

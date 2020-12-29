@@ -1,7 +1,8 @@
 export {
     fetchStatus,
     fetchWOByStatus,
-    toggleTaskActions
+    toggleTaskActions,
+    updateWOList
 }
 from './taskBoard';
 

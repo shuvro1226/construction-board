@@ -4,14 +4,16 @@ export const workingOrderModel = {
         elementConfig: {
             type: 'hidden'
         },
-        value: 0
+        value: 0,
+        alias: 'projectNo'
     },
     workingOrderNo: {
         elementType: 'input',
         elementConfig: {
             type: 'hidden'
         },
-        value: 0
+        value: 0,
+        alias: 'workingOrderNo'
     },
     description: {
         elementType: 'input',
@@ -44,6 +46,7 @@ export const workingOrderModel = {
         elementType: 'select',
         elementConfig: null,
         value: 0,
+        alias: 'status',
         displayText: 'Status'
     },
     executionStartDate: {

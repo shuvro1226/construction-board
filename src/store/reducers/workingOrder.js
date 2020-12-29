@@ -4,6 +4,7 @@ import { workingOrderModel } from '../../config/models/workingOrder';
 const initialState = {
     showWOModal: false,
     woDetail: workingOrderModel,
+    oldWODetail: workingOrderModel,
     loading: false,
     error: false
 }
@@ -28,8 +29,40 @@ const toggleWOModal = (state, action) => {
     return {
         ...state,
         showWOModal: action.showModal,
-        woDetail: workingOrderData
+        woDetail: workingOrderData,
+        oldWODetail: workingOrderData
     }
+}
+
+const updateWOEditFormElement = (state, action) => {
+    return {
+        ...state,
+        woDetail: action.woFields
+    };
+}
+
+const updateWOStart = (state, action) => {
+    return {
+        ...state,
+        loading: true,
+        error: false
+    };
+}
+
+const updateWOSuccess = (state, action) => {
+    return {
+        ...state,
+        loading: false,
+        error: false
+    };
+}
+
+const updateWOFail = (state, action) => {
+    return {
+        ...state,
+        loading: false,
+        error: true
+    };
 }
 
 const reducer = (state = initialState, action) => {
@@ -37,28 +70,13 @@ const reducer = (state = initialState, action) => {
         case actionTypes.TOGGLE_WO_MODAL:
             return toggleWOModal(state, action);
         case actionTypes.FORM_ELEMENT_CHANGE:
-            return {
-                ...state,
-                woDetail: action.woFields
-            };
+            return updateWOEditFormElement(state, action);
         case actionTypes.UPDATE_WO_START:
-            return {
-                ...state,
-                loading: true,
-                error: false
-            };
+            return updateWOStart(state, action);
         case actionTypes.UPDATE_WO_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                error: false
-            };
+            return updateWOSuccess(state, action);
         case actionTypes.UPDATE_WO_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: true
-            };
+            return updateWOFail(state, action);
         default:
             return state;
     }

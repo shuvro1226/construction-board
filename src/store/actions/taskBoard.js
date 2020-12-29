@@ -77,3 +77,12 @@ export const toggleTaskActions = (index, showActions, statusId) => {
         })
     }
 }
+
+export const updateWOList = (params) => {
+    return (dispatch) => {
+        dispatch({
+            type: actionTypes.UPDATE_WO_LIST,
+            params: params
+        })
+    }
+}

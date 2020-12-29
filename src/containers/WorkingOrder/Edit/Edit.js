@@ -8,24 +8,48 @@ import * as actions from '../../../store/actions/index';
 
 
 class WorkingOrder extends Component {
+    state = {
+        initialWODetails: null
+    }
 
     onModalClose = () => {
         this.props.onToggleWOModal(false, null);
     }
 
     onModalSubmit = () => {
-        const updatedData = {};
+        const updatedPostData = {};
+        const updatedDataWithAlias = {};
+        
         for (let key in this.props.workingOrderFields) {
-            let fieldValue = this.props.workingOrderFields[key].value;
-            if (this.props.workingOrderFields[key].isDate) {
+            let woConfig = this.props.workingOrderFields[key];
+            let fieldValue = woConfig.value;
+            if (woConfig.isDate) {
                 fieldValue = moment(fieldValue).toISOString();
             }
-            updatedData[key] = fieldValue;
+            updatedPostData[key] = fieldValue;
+            updatedDataWithAlias[woConfig.alias] = fieldValue;
         }
         
-        const workingOrderData = [updatedData];
-        
+        const workingOrderData = [updatedPostData];        
+
+        const oldStatus = this.props.oldWorkingOrderFields.status.value,
+            oldProjectNo = this.props.oldWorkingOrderFields.projectNo.value,
+            oldWorkingOrderNo = this.props.oldWorkingOrderFields.workingOrderNo.value,
+            oldData = this.props.workingOrders[oldStatus].find(element => element.projectNo === oldProjectNo && element.workingOrderNo === oldWorkingOrderNo),
+            oldIndex = this.props.workingOrders[oldStatus].findIndex(element => element.projectNo === oldProjectNo && element.workingOrderNo === oldWorkingOrderNo),
+            mergeNewWithOld = {
+                ...oldData,
+                ...updatedDataWithAlias
+            },
+            updateWOListParams = {
+                oldIndex: oldIndex,
+                oldStatus: oldStatus,
+                newStatus: updatedPostData.status,
+                updatedWO: mergeNewWithOld
+            };
+
         this.props.onUpdateWorkingOrder(workingOrderData);
+        this.props.onUpdateWorkingOrdersList(updateWOListParams);
         this.props.onToggleWOModal(false, null);
     }
 
@@ -80,7 +104,9 @@ const mapStateToProps = state => {
     return {
         showWOModal: state.workingOrder.showWOModal,
         workingOrderFields: state.workingOrder.woDetail,
-        status: state.taskBoard.status
+        oldWorkingOrderFields: state.workingOrder.oldWODetail,
+        status: state.taskBoard.status,
+        workingOrders: state.taskBoard.workingOrders
     }
 }
 
@@ -88,7 +114,8 @@ const mapDispatchToProps = dispatch => {
     return {
         onToggleWOModal: (showModal, woDetail) => dispatch(actions.toggleWOModal(showModal, woDetail)),
         onFormElementChange: (updatedFields) => dispatch(actions.formElementChange(updatedFields)),
-        onUpdateWorkingOrder: (woDetail) => dispatch(actions.updateWorkingOrder(woDetail))
+        onUpdateWorkingOrder: (woDetail) => dispatch(actions.updateWorkingOrder(woDetail)),
+        onUpdateWorkingOrdersList: (params) => dispatch(actions.updateWOList(params))
     }
 }
 
