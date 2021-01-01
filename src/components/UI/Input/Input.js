@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
-import moment from 'moment';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 import styles from './Input.module.css';
 
 const input = (props) => {
@@ -10,12 +11,26 @@ const input = (props) => {
         case ( 'input' ):
             let fieldValue = props.config.value;
             if (props.config.isDate) {
-                fieldValue = moment(props.config.value).format('DD.MM.YYYY');
+                let timeStamp = Date.parse(fieldValue);
+                fieldValue = new Date(timeStamp);//moment(props.config.value).toDate();
+                // https://kiarash-z.github.io/react-modern-calendar-datepicker/docs/default-values
+                inputElement = <DatePicker
+                    className="form-control"
+                    wrapperClassName={styles.DatePickerWrapper}
+                    selected={fieldValue}
+                    startDate={fieldValue}
+                    dateFormat="dd-MM-yyyy"
+                    peekNextMonth
+                    showMonthDropdown
+                    showYearDropdown
+                    onChange={props.changed} />
+            } else {
+                inputElement = <Form.Control 
+                    {...props.config.elementConfig} 
+                    value={fieldValue}
+                    onChange={props.changed} />
             }
-            inputElement = <Form.Control 
-                {...props.config.elementConfig} 
-                value={fieldValue} 
-                onChange={props.changed} />
+            
             break;
         case ( 'textarea' ):
             inputElement = <Form.Control 

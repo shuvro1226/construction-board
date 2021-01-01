@@ -2,3 +2,8 @@ select.FormSelect,
 select.FormSelect option {
     text-transform: capitalize;
 }
+
+.DatePickerWrapper {
+    display: block;
+    width: 100%;
+}

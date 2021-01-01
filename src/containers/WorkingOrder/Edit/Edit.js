@@ -19,15 +19,11 @@ class WorkingOrder extends Component {
     onModalSubmit = () => {
         const updatedPostData = {};
         const updatedDataWithAlias = {};
-        
+
         for (let key in this.props.workingOrderFields) {
             let woConfig = this.props.workingOrderFields[key];
-            let fieldValue = woConfig.value;
-            if (woConfig.isDate) {
-                fieldValue = moment(fieldValue).toISOString();
-            }
-            updatedPostData[key] = fieldValue;
-            updatedDataWithAlias[woConfig.alias] = fieldValue;
+            updatedPostData[key] = woConfig.value;
+            updatedDataWithAlias[woConfig.alias] = woConfig.value;
         }
         
         const workingOrderData = [updatedPostData];        
@@ -54,8 +50,12 @@ class WorkingOrder extends Component {
     }
 
     onInputChangedHandler = (event, element) => {
-        let updatedValue = event.target.value;
-        
+        let updatedValue;
+        if (element.config.isDate) {
+            updatedValue = moment(event).format("YYYY-MM-DDThh:mm:ss");
+        } else {
+            updatedValue = event.target.value;
+        }         
         const updatedFormElement = {
             ...this.props.workingOrderFields,
             [element.id]: {
@@ -86,15 +86,18 @@ class WorkingOrder extends Component {
                 modalSubmit={this.onModalSubmit}
                 modalSize="lg"
             >
-                {workingOrderFormArray.map(field => (
-                    <Input
-                        key={field.id}
-                        config={field.config}
-                        element={field.id}
-                        statusList={this.props.status}
-                        changed={(event) => this.onInputChangedHandler(event, field)}
-                    />
-                ))}
+                <div className="row">
+                    {workingOrderFormArray.map(field => (
+                        <div key={field.id} className={field.config.elementUIConfig ? field.config.elementUIConfig.grid : ''}>
+                            <Input
+                                config={field.config}
+                                element={field.id}
+                                statusList={this.props.status}
+                                changed={(event) => this.onInputChangedHandler(event, field)}
+                            />
+                        </div>
+                    ))}
+                </div>               
             </Modal>
         )
     }

@@ -2,16 +2,46 @@ export const workingOrderModel = {
     projectNo: {
         elementType: 'input',
         elementConfig: {
-            type: 'hidden'
+            type: 'hidden',
+            readOnly: false
         },
+        elementUIConfig: null,
         value: 0,
         alias: 'projectNo'
+    },
+    projectName: {
+        elementType: 'input',
+        elementConfig: {
+            type: 'text',
+            readOnly: true
+        },
+        elementUIConfig: {
+            grid: 'col-12'
+        },
+        value: '',
+        displayText: 'Project Name',
+        isDate: false
+    },
+    customerName: {
+        elementType: 'input',
+        elementConfig: {
+            type: 'text',
+            readOnly: true
+        },
+        elementUIConfig: {
+            grid: 'col-12'
+        },
+        value: '',
+        displayText: 'Customer Name',
+        isDate: false
     },
     workingOrderNo: {
         elementType: 'input',
         elementConfig: {
-            type: 'hidden'
+            type: 'hidden',
+            readOnly: false
         },
+        elementUIConfig: null,
         value: 0,
         alias: 'workingOrderNo'
     },
@@ -19,7 +49,11 @@ export const workingOrderModel = {
         elementType: 'input',
         elementConfig: {
             type: 'text',
-            placeholder: 'Enter working order title'
+            placeholder: 'Enter working order title',
+            readOnly: false
+        },
+        elementUIConfig: {
+            grid: 'col-12'
         },
         value: '',
         alias: 'shortDescription',
@@ -28,31 +62,46 @@ export const workingOrderModel = {
     },
     detailDescription: {
         elementType: 'textarea',
+        elementUIConfig: {
+            grid: 'col-12'
+        },
         value: '',
         alias: 'longDescription',
         displayText: 'Description'
     },
-    createDate: {
-        elementType: 'input',
-        elementConfig: {
-            type: 'text'
-        },
-        value: '',
-        alias: 'creationDate',
-        displayText: 'Creation Date',
-        isDate: true
-    },
     status: {
         elementType: 'select',
-        elementConfig: null,
+        elementConfig: {
+            readOnly: false
+        },
+        elementUIConfig: {
+            grid: 'col-12 col-md-6'
+        },
         value: 0,
         alias: 'status',
         displayText: 'Status'
     },
+    totalBookedHours: {
+        elementType: 'input',
+        elementConfig: {
+            type: 'text',
+            readOnly: true
+        },
+        elementUIConfig: {
+            grid: 'col-12 col-md-6'
+        },
+        value: '',
+        displayText: 'Total Planned Hours',
+        isDate: false
+    },
     executionStartDate: {
         elementType: 'input',
         elementConfig: {
-            type: 'text'
+            type: 'text',
+            readOnly: false
+        },
+        elementUIConfig: {
+            grid: 'col-12 col-md-6'
         },
         value: '',
         alias: 'startDate',
@@ -62,7 +111,11 @@ export const workingOrderModel = {
     executionEndDate: {
         elementType: 'input',
         elementConfig: {
-            type: 'text'
+            type: 'text',
+            readOnly: false
+        },
+        elementUIConfig: {
+            grid: 'col-12 col-md-6'
         },
         value: '',
         alias: 'endDate',
