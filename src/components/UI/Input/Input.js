@@ -1,8 +1,9 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
-import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css";
+import 'react-modern-calendar-datepicker/lib/DatePicker.css';
+import { Calendar } from 'react-modern-calendar-datepicker';
 import styles from './Input.module.css';
+import moment from 'moment';
 
 const input = (props) => {
     let inputElement = null;
@@ -10,19 +11,15 @@ const input = (props) => {
     switch(props.config.elementType) {
         case ( 'input' ):
             let fieldValue = props.config.value;
-            if (props.config.isDate) {
-                let timeStamp = Date.parse(fieldValue);
-                fieldValue = new Date(timeStamp);//moment(props.config.value).toDate();
-                // https://kiarash-z.github.io/react-modern-calendar-datepicker/docs/default-values
-                inputElement = <DatePicker
-                    className="form-control"
-                    wrapperClassName={styles.DatePickerWrapper}
-                    selected={fieldValue}
-                    startDate={fieldValue}
-                    dateFormat="dd-MM-yyyy"
-                    peekNextMonth
-                    showMonthDropdown
-                    showYearDropdown
+            if (props.config.isDate) {                
+                const dateValue = {
+                    year: moment(fieldValue).year(),
+                    month: moment(fieldValue).month() + 1,
+                    day: moment(fieldValue).date(),
+                };
+                inputElement = <Calendar
+                    value={dateValue}
+                    shouldHighlightWeekends
                     onChange={props.changed} />
             } else {
                 inputElement = <Form.Control 
@@ -36,7 +33,6 @@ const input = (props) => {
             inputElement = <Form.Control 
                 as="textarea"
                 rows={3}
-                {...props.config.elementConfig} 
                 value={props.config.value} 
                 onChange={props.changed} />
             break;

@@ -52,7 +52,8 @@ class WorkingOrder extends Component {
     onInputChangedHandler = (event, element) => {
         let updatedValue;
         if (element.config.isDate) {
-            updatedValue = moment(event).format("YYYY-MM-DDThh:mm:ss");
+            let updatedDate = event.year + '-' + event.month + '-' + event.day
+            updatedValue = moment(updatedDate).format("YYYY-MM-DDThh:mm:ss");
         } else {
             updatedValue = event.target.value;
         }         
