@@ -6,6 +6,7 @@ import Wrapper from '../../hoc/Wrapper/Wrapper';
 import TaskBoards from './TaskBoards/TaskBoards';
 import * as actions from '../../store/actions/index';
 import WorkingOrder from '../WorkingOrder/WorkingOrder';
+import Filters from './Filters/Filters';
 
 class ConstructionBoard extends Component {
     componentDidMount() {
@@ -30,7 +31,8 @@ class ConstructionBoard extends Component {
         return (
             <Wrapper>
                 <Container fluid>
-                    <Row>
+                    <Filters />
+                    <Row className="py-2">
                         {taskBoardLayout}
                     </Row>
                 </Container>

@@ -4,7 +4,9 @@ const initialState = {
     status: null,
     workingOrders: null,
     error: false,
-    loading: false
+    loading: false,
+    woProjects: null,
+    woCustomers: null
 }
 
 const WOStatusDefaults = {
@@ -71,7 +73,10 @@ const fetchWOSuccess = (state, action) => {
     const woGroupdByStatus = [];
 
     woGroupdByStatus[statusId] = action.workingOrders.map(woDetail => {
-        return woDetail;
+        return {
+            ...woDetail,
+            visible: true
+        };
     });
 
     const updatedWorkingOrdersList = {
@@ -79,11 +84,32 @@ const fetchWOSuccess = (state, action) => {
         [statusId]: woGroupdByStatus[statusId]
     };
 
+    const updatedWOProjects = [];
+    const updatedWOCustomers = [];
+    for (const woDetail of action.workingOrders) {
+        updatedWOProjects['project-' + woDetail.projectNo] = {
+            projectNo: woDetail.projectNo,
+            projectName: woDetail.projectName
+        };
+        updatedWOCustomers['customer-' + woDetail.customerNo] = {
+            customerNo: woDetail.customerNo,
+            customerName: woDetail.customerName
+        };
+    }
+
     return {
         ...state,
         workingOrders: updatedWorkingOrdersList,
         error: false,
-        loading: false
+        loading: false,
+        woProjects: {
+            ...state.woProjects,
+            ...updatedWOProjects
+        },
+        woCustomers: {
+            ...state.woCustomers,
+            ...updatedWOCustomers
+        }
     }
 }
 
@@ -155,6 +181,41 @@ const updateWOList = (state, action) => {
     }
 }
 
+const filterWOList = (state, action) => {
+    const woGroupdByStatus = [];
+    for (const statusItem of state.status) {
+        if (statusItem.useBoard) {
+            const statusId = statusItem.status;
+            woGroupdByStatus[statusId] = state.workingOrders[statusId].map(woDetail => {
+                let visible = false;
+                if (
+                    (action.filters.project.value.toString() === "-1" && action.filters.customer.value.toString() === "-1") ||
+                    (action.filters.customer.value.toString() === "-1" && action.filters.project.value.toString() === woDetail.projectNo.toString()) ||
+                    (action.filters.project.value.toString() === "-1" && action.filters.customer.value.toString() === woDetail.customerNo.toString()) ||
+                    (action.filters.project.value.toString() === woDetail.projectNo.toString() && action.filters.customer.value.toString() === woDetail.customerNo.toString())
+                ) {
+                    visible = true;
+                }
+                return {
+                    ...woDetail,
+                    visible: visible
+                }
+            });
+        }
+    }
+
+    const updatedWorkingOrdersList = {
+        ...state.workingOrders,
+        ...woGroupdByStatus
+    };
+
+
+    return {
+        ...state,
+        workingOrders: updatedWorkingOrdersList
+    }
+}
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.FETCH_STATUS_SUCCESS:
@@ -173,6 +234,8 @@ const reducer = (state = initialState, action) => {
             return toggleTaskActions(state, action);
         case actionTypes.UPDATE_WO_LIST:
             return updateWOList(state, action);
+        case actionTypes.APPLY_FILTER_TO_WO_LIST:
+            return filterWOList(state, action);
         default:
             return state;
     }

@@ -86,3 +86,12 @@ export const updateWOList = (params) => {
         })
     }
 }
+
+export const applyFiltersToWOList = (filters) => {
+    return (dispatch) => {
+        dispatch({
+            type: actionTypes.APPLY_FILTER_TO_WO_LIST,
+            filters: filters
+        })
+    }
+}

@@ -11,7 +11,7 @@ const TasksList = (props) => {
     }
 
     const workingOrdersList = props.workingOrders[props.statusDetail.status].map((woDetail, index) => {
-        if (index < 10 && woDetail.longDescription !== "") {      
+        if (index < 10 && woDetail.longDescription !== "" && woDetail.visible) {      
             return <Task 
                 key={woDetail.uniqueKey} 
                 woDetail={woDetail} 

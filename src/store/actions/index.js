@@ -2,7 +2,8 @@ export {
     fetchStatus,
     fetchWOByStatus,
     toggleTaskActions,
-    updateWOList
+    updateWOList,
+    applyFiltersToWOList
 }
 from './taskBoard';
 

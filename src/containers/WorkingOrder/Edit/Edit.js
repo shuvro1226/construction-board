@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import moment from 'moment';
-// import EditForm from '../../../components/WOEditForm/WOEditForm';
 import Input from '../../../components/UI/Input/Input';
 import Modal from '../../../components/UI/Modal/Modal';
 import * as actions from '../../../store/actions/index';
