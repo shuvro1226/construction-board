@@ -1,5 +1,17 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCheckCircle, faBalanceScaleLeft, faBalanceScale, faFileMedicalAlt, faMinusCircle, faPencilAlt, faFilter } from '@fortawesome/free-solid-svg-icons'
+import {
+    faCheckCircle,
+    faBalanceScaleLeft,
+    faBalanceScale,
+    faFileMedicalAlt,
+    faMinusCircle,
+    faPencilAlt,
+    faFilter,
+    faLink,
+    faUserTie,
+    faCalendarAlt,
+    faTasks
+} from '@fortawesome/free-solid-svg-icons'
 
 library.add(
     faCheckCircle,
@@ -8,5 +20,9 @@ library.add(
     faFileMedicalAlt,
     faMinusCircle,
     faPencilAlt,
-    faFilter
+    faFilter,
+    faLink,
+    faUserTie,
+    faCalendarAlt,
+    faTasks
 )

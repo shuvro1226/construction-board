@@ -6,7 +6,9 @@ import * as actions from '../../../store/actions/index';
 
 class TaskBoards extends Component {
     componentDidMount() {
-        this.props.onWoGetByStatus(this.props.statusDetail.status);
+        if (!this.props.workingOrders) {
+            this.props.onWoGetByStatus(this.props.statusDetail.status);
+        }
     }
 
     render() {

@@ -63,7 +63,7 @@ class Filters extends Component {
         return (
             <Row className="py-2">
                 {filtersSelects}     
-                <div className="col-12 col-md-4 py-4">
+                <div className="col-12 col-md-4">
                     <Button variant="primary" onClick={this.onApplyFilter}>
                         <FontAwesomeIcon icon="filter" /> Filter Tasks
                     </Button>                    

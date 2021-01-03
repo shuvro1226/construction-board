@@ -13,3 +13,9 @@ export {
     updateWorkingOrder
 }
 from './workingOrder';
+
+export {
+    fetchProject,
+    fetchProjectWorkingOrders
+}
+from './project';

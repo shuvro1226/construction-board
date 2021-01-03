@@ -71,10 +71,16 @@ class WorkingOrder extends Component {
 
         const workingOrderFormArray = [];
 
-        for (let key in this.props.workingOrderFields) {            
+        for (let key in this.props.workingOrderFields) {
+            let linkedTo = '';
+            if (key === 'projectName') 
+            {
+                linkedTo = '/project/' + this.props.workingOrderFields['projectNo'].value + '/' + this.props.workingOrderFields['projectYear'].value
+            }
             workingOrderFormArray.push({
                 id: key,
-                config: this.props.workingOrderFields[key]
+                config: this.props.workingOrderFields[key],
+                linkedTo: linkedTo
             })
         }
 
@@ -93,6 +99,7 @@ class WorkingOrder extends Component {
                                 config={field.config}
                                 element={field.id}
                                 statusList={this.props.status}
+                                linkedTo={field.linkedTo}
                                 changed={(event) => this.onInputChangedHandler(event, field)}
                             />
                         </div>

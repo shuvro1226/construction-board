@@ -9,6 +9,16 @@ export const workingOrderModel = {
         value: 0,
         alias: 'projectNo'
     },
+    projectYear: {
+        elementType: 'input',
+        elementConfig: {
+            type: 'hidden',
+            readOnly: false
+        },
+        elementUIConfig: null,
+        value: 0,
+        alias: 'projectYear'
+    },
     projectName: {
         elementType: 'input',
         elementConfig: {

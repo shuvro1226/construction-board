@@ -10,7 +10,9 @@ import Filters from './Filters/Filters';
 
 class ConstructionBoard extends Component {
     componentDidMount() {
-        this.props.onFetchStatus();
+        if (!this.props.status) {
+            this.props.onFetchStatus();
+        }
     }
 
     render() {

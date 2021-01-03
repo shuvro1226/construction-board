@@ -1,5 +1,7 @@
 import React from 'react';
-import { Form } from 'react-bootstrap';
+import { Form, InputGroup } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import { Calendar } from 'react-modern-calendar-datepicker';
 import styles from './Input.module.css';
@@ -22,10 +24,23 @@ const input = (props) => {
                     shouldHighlightWeekends
                     onChange={props.changed} />
             } else {
-                inputElement = <Form.Control 
+                inputElement = <Form.Control
                     {...props.config.elementConfig} 
                     value={fieldValue}
-                    onChange={props.changed} />
+                    onChange={props.changed}
+                />;
+                if (props.linkedTo !== '') {
+                    inputElement = <InputGroup className="mb-3">
+                        {inputElement}
+                        <InputGroup.Append>
+                            <InputGroup.Text>
+                                <Link to={props.linkedTo}>
+                                    <FontAwesomeIcon icon="link" />
+                                </Link>
+                            </InputGroup.Text>
+                        </InputGroup.Append>
+                    </InputGroup>
+                }              
             }
             
             break;
