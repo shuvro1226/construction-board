@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import Wrapper from '../../hoc/Wrapper/Wrapper';
-import Editor from './Edit/Edit';
+import EditWorkingOrder from './Edit/Edit';
 
 
 class WorkingOrder extends Component {
     render() {
         return (
             <Wrapper>
-                <Editor />     
+                <EditWorkingOrder />     
             </Wrapper>
         )
     }

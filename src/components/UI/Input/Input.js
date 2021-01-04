@@ -9,7 +9,10 @@ import moment from 'moment';
 
 const input = (props) => {
     let inputElement = null;
-
+    let disabled = false;
+    if (props.mode === 'edit' && props.config.disabledOnEdit) {
+        disabled = true;
+    }
     switch(props.config.elementType) {
         case ( 'input' ):
             let fieldValue = props.config.value;
@@ -50,7 +53,7 @@ const input = (props) => {
                 as="select"
                 className={styles.FormSelect}
                 value={props.config.value} 
-                disabled={props.config.disabledOnEdit}
+                disabled={disabled}
                 onChange={props.changed}>
                 {props.config.defaultOptions.map(option => (
                     <option key={option.value} value={parseInt(option.value)}>{option.displayText}</option>
@@ -61,7 +64,7 @@ const input = (props) => {
             break;            
     }
 
-    if (props.linkedTo !== '') {
+    if (props.linkedTo !== '' && props.mode === 'edit') {
         inputElement = <InputGroup className="mb-3">
             {inputElement}
             <InputGroup.Append>

@@ -6,7 +6,7 @@ import Modal from '../../../components/UI/Modal/Modal';
 import * as actions from '../../../store/actions/index';
 
 
-class WorkingOrder extends Component {
+class EditWorkingOrder extends Component {
     state = {
         initialWODetails: null
     }
@@ -122,6 +122,7 @@ class WorkingOrder extends Component {
                     element={field.id}
                     statusList={this.props.status}
                     linkedTo={field.linkedTo}
+                    mode="edit"
                     changed={(event) => this.onInputChangedHandler(event, field)}
                 />
             </div>
@@ -164,4 +165,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(WorkingOrder);
+export default connect(mapStateToProps, mapDispatchToProps)(EditWorkingOrder);

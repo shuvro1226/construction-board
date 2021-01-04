@@ -6,7 +6,8 @@ const initialState = {
     error: false,
     loading: false,
     woProjects: null,
-    woCustomers: null
+    woCustomers: null,
+    showActionsModal: false
 }
 
 const WOStatusDefaults = {

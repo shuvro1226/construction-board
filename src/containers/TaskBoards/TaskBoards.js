@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 
-import TaskBoard from '../../../components/TaskBoard/TaskBoard';
-import * as actions from '../../../store/actions/index';
+import TaskBoard from './TaskBoard/TaskBoard';
+import * as actions from '../../store/actions/index';
 
 class TaskBoards extends Component {
     componentDidMount() {
@@ -13,12 +13,13 @@ class TaskBoards extends Component {
 
     render() {
         let taskBoardContent = null;
-        
+
         if (this.props.workingOrders && this.props.workingOrders[this.props.statusDetail.status]) {
-            taskBoardContent =  <TaskBoard 
-                workingOrders={this.props.workingOrders[this.props.statusDetail.status]} 
-                statusDetail={this.props.statusDetail} />;
-        }       
+            taskBoardContent = < TaskBoard
+            workingOrders = { this.props.workingOrders[this.props.statusDetail.status] }
+            statusDetail = { this.props.statusDetail }
+            />;
+        }
 
         return taskBoardContent;
     }

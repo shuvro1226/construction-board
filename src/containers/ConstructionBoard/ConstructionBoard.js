@@ -3,7 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import Wrapper from '../../hoc/Wrapper/Wrapper';
-import TaskBoards from './TaskBoards/TaskBoards';
+import TaskBoards from '../TaskBoards/TaskBoards';
 import * as actions from '../../store/actions/index';
 import WorkingOrder from '../WorkingOrder/WorkingOrder';
 import Filters from './Filters/Filters';
