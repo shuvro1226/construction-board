@@ -20,9 +20,11 @@ class WorkingOrder extends Component {
         const updatedDataWithAlias = {};
 
         for (let key in this.props.workingOrderFields) {
-            let woConfig = this.props.workingOrderFields[key];
-            updatedPostData[key] = woConfig.value;
-            updatedDataWithAlias[woConfig.alias] = woConfig.value;
+            if (this.props.workingOrderFields[key].addToRequest) {
+                let woConfig = this.props.workingOrderFields[key];
+                updatedPostData[key] = woConfig.value;
+                updatedDataWithAlias[woConfig.alias] = woConfig.value;
+            }            
         }
         
         const workingOrderData = [updatedPostData];        
@@ -56,6 +58,9 @@ class WorkingOrder extends Component {
         } else {
             updatedValue = event.target.value;
         }         
+        if (['projectNo','status'].includes(element.id)) {
+            updatedValue = parseInt(updatedValue);
+        }
         const updatedFormElement = {
             ...this.props.workingOrderFields,
             [element.id]: {
@@ -73,16 +78,54 @@ class WorkingOrder extends Component {
 
         for (let key in this.props.workingOrderFields) {
             let linkedTo = '';
-            if (key === 'projectName') 
-            {
-                linkedTo = '/project/' + this.props.workingOrderFields['projectNo'].value + '/' + this.props.workingOrderFields['projectYear'].value
+            let defaultOptions = null;
+            if (key === 'projectNo' && this.props.projects) {
+                linkedTo = '/project/' + this.props.workingOrderFields['projectNo'].value + '/' + this.props.workingOrderFields['projectYear'].value;
+                defaultOptions = Object.keys(this.props.projects).map(key => {
+                    return {
+                        value: this.props.projects[key].projectNo,
+                        displayText: this.props.projects[key].projectName
+                    }
+                });                
+            }
+            if (key === 'customerNo' && this.props.customers) {
+                defaultOptions = Object.keys(this.props.customers).map(key => {
+                    return {
+                        value: this.props.customers[key].customerNo,
+                        displayText: this.props.customers[key].customerName
+                    }
+                });
+            }
+            if (key === 'status' && this.props.status) {
+                defaultOptions = this.props.status.map(statusDetail => {
+                    return {
+                        value: statusDetail.status,
+                        displayText: statusDetail.displayText
+                    }
+                });
+            }
+            const config = {
+                ...this.props.workingOrderFields[key],
+                defaultOptions: defaultOptions
             }
             workingOrderFormArray.push({
                 id: key,
-                config: this.props.workingOrderFields[key],
+                config: config,
                 linkedTo: linkedTo
             })
         }
+
+        const workingOrderFields = workingOrderFormArray.map(field => {            
+            return <div key={field.id} className={field.config.elementUIConfig ? field.config.elementUIConfig.grid : ''}>
+                <Input
+                    config={field.config}
+                    element={field.id}
+                    statusList={this.props.status}
+                    linkedTo={field.linkedTo}
+                    changed={(event) => this.onInputChangedHandler(event, field)}
+                />
+            </div>
+        })
 
         return (            
             <Modal
@@ -93,17 +136,7 @@ class WorkingOrder extends Component {
                 modalSize="lg"
             >
                 <div className="row">
-                    {workingOrderFormArray.map(field => (
-                        <div key={field.id} className={field.config.elementUIConfig ? field.config.elementUIConfig.grid : ''}>
-                            <Input
-                                config={field.config}
-                                element={field.id}
-                                statusList={this.props.status}
-                                linkedTo={field.linkedTo}
-                                changed={(event) => this.onInputChangedHandler(event, field)}
-                            />
-                        </div>
-                    ))}
+                    {workingOrderFields}
                 </div>               
             </Modal>
         )
@@ -116,7 +149,9 @@ const mapStateToProps = state => {
         workingOrderFields: state.workingOrder.woDetail,
         oldWorkingOrderFields: state.workingOrder.oldWODetail,
         status: state.taskBoard.status,
-        workingOrders: state.taskBoard.workingOrders
+        workingOrders: state.taskBoard.workingOrders,
+        projects: state.taskBoard.woProjects,
+        customers: state.taskBoard.woCustomers
     }
 }
 

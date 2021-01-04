@@ -3,7 +3,7 @@ import { Form, InputGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
-import { Calendar } from 'react-modern-calendar-datepicker';
+import DatePicker from 'react-modern-calendar-datepicker';
 import styles from './Input.module.css';
 import moment from 'moment';
 
@@ -19,28 +19,22 @@ const input = (props) => {
                     month: moment(fieldValue).month() + 1,
                     day: moment(fieldValue).date(),
                 };
-                inputElement = <Calendar
+                const formatInputValue = () => {
+                    return `${moment(fieldValue).format('DD.MM.YYYY')}`;
+                };
+                inputElement = <DatePicker
                     value={dateValue}
+                    formatInputText={formatInputValue}
                     shouldHighlightWeekends
+                    inputClassName={styles.DatePickerWrapper}
+                    wrapperClassName={styles.DatePicker}
                     onChange={props.changed} />
             } else {
                 inputElement = <Form.Control
                     {...props.config.elementConfig} 
                     value={fieldValue}
                     onChange={props.changed}
-                />;
-                if (props.linkedTo !== '') {
-                    inputElement = <InputGroup className="mb-3">
-                        {inputElement}
-                        <InputGroup.Append>
-                            <InputGroup.Text>
-                                <Link to={props.linkedTo}>
-                                    <FontAwesomeIcon icon="link" />
-                                </Link>
-                            </InputGroup.Text>
-                        </InputGroup.Append>
-                    </InputGroup>
-                }              
+                />;    
             }
             
             break;
@@ -56,15 +50,29 @@ const input = (props) => {
                 as="select"
                 className={styles.FormSelect}
                 value={props.config.value} 
+                disabled={props.config.disabledOnEdit}
                 onChange={props.changed}>
-                {props.statusList.map(option => (
-                    <option key={option.displayText} value={option.status}>{option.displayText}</option>
+                {props.config.defaultOptions.map(option => (
+                    <option key={option.value} value={parseInt(option.value)}>{option.displayText}</option>
                 ))}
-            </Form.Control>
+            </Form.Control>            
             break;
         default:
-            break;
+            break;            
     }
+
+    if (props.linkedTo !== '') {
+        inputElement = <InputGroup className="mb-3">
+            {inputElement}
+            <InputGroup.Append>
+                <InputGroup.Text>
+                    <Link to={props.linkedTo}>
+                        <FontAwesomeIcon icon="link" />
+                    </Link>
+                </InputGroup.Text>
+            </InputGroup.Append>
+        </InputGroup>
+    }  
 
     let formGroupClass = '';
     if (props.config.elementConfig && props.config.elementConfig.type === 'hidden') {

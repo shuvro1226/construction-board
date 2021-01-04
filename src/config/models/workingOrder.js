@@ -1,59 +1,47 @@
 export const workingOrderModel = {
     projectNo: {
-        elementType: 'input',
-        elementConfig: {
-            type: 'hidden',
-            readOnly: false
+        elementType: 'select',
+        elementConfig: null,
+        elementUIConfig: {
+            grid: 'col-12'
         },
-        elementUIConfig: null,
+        defaultOptions: null,
         value: 0,
-        alias: 'projectNo'
+        alias: 'projectNo',
+        displayText: 'Project',
+        addToRequest: true,
+        disabledOnEdit: true
     },
     projectYear: {
         elementType: 'input',
         elementConfig: {
-            type: 'hidden',
-            readOnly: false
+            type: 'hidden'
         },
         elementUIConfig: null,
         value: 0,
         alias: 'projectYear'
     },
-    projectName: {
-        elementType: 'input',
-        elementConfig: {
-            type: 'text',
-            readOnly: true
-        },
+    customerNo: {
+        elementType: 'select',
+        elementConfig: null,
         elementUIConfig: {
             grid: 'col-12'
         },
-        value: '',
-        displayText: 'Project Name',
-        isDate: false
-    },
-    customerName: {
-        elementType: 'input',
-        elementConfig: {
-            type: 'text',
-            readOnly: true
-        },
-        elementUIConfig: {
-            grid: 'col-12'
-        },
-        value: '',
-        displayText: 'Customer Name',
-        isDate: false
+        defaultOptions: null,
+        value: 0,
+        alias: 'customerNo',
+        displayText: 'Customer',
+        disabledOnEdit: true
     },
     workingOrderNo: {
         elementType: 'input',
         elementConfig: {
-            type: 'hidden',
-            readOnly: false
+            type: 'hidden'
         },
         elementUIConfig: null,
         value: 0,
-        alias: 'workingOrderNo'
+        alias: 'workingOrderNo',
+        addToRequest: true
     },
     description: {
         elementType: 'input',
@@ -68,28 +56,30 @@ export const workingOrderModel = {
         value: '',
         alias: 'shortDescription',
         displayText: 'Title',
-        isDate: false
+        addToRequest: true
     },
     detailDescription: {
         elementType: 'textarea',
+        elementConfig: null,
         elementUIConfig: {
             grid: 'col-12'
         },
         value: '',
         alias: 'longDescription',
-        displayText: 'Description'
+        displayText: 'Description',
+        addToRequest: true
     },
     status: {
         elementType: 'select',
-        elementConfig: {
-            readOnly: false
-        },
+        elementConfig: null,
         elementUIConfig: {
             grid: 'col-12 col-md-6'
         },
+        defaultOptions: null,
         value: 0,
         alias: 'status',
-        displayText: 'Status'
+        displayText: 'Status',
+        addToRequest: true
     },
     totalBookedHours: {
         elementType: 'input',
@@ -107,8 +97,7 @@ export const workingOrderModel = {
     executionStartDate: {
         elementType: 'input',
         elementConfig: {
-            type: 'text',
-            readOnly: false
+            type: 'text'
         },
         elementUIConfig: {
             grid: 'col-12 col-md-6'
@@ -116,7 +105,8 @@ export const workingOrderModel = {
         value: '',
         alias: 'startDate',
         displayText: 'Start Date',
-        isDate: true
+        isDate: true,
+        addToRequest: true
     },
     executionEndDate: {
         elementType: 'input',
@@ -130,6 +120,7 @@ export const workingOrderModel = {
         value: '',
         alias: 'endDate',
         displayText: 'End Date',
-        isDate: true
+        isDate: true,
+        addToRequest: true
     }
 }
