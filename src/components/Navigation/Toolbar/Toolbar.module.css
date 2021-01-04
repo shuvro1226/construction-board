@@ -1,0 +1,19 @@
+.Logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    background: #007bff;
+    color: #fff;
+    text-align: center;
+    line-height: 50px;
+    text-decoration: none;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.Logo:hover {
+    color: #fff;
+    background-color: #0069d9;
+    border-color: #0062cc;
+    text-decoration: none;
+}
