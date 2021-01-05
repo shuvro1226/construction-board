@@ -149,3 +149,40 @@ export const saveWorkingOrder = (updatedWOData, isCreate) => {
             })
     }
 }
+
+export const fetchTasksStart = () => {
+    return {
+        type: actionTypes.FETCH_TASKS_START
+    }
+}
+
+export const fetchTasksSuccess = (response) => {
+    return {
+        type: actionTypes.FETCH_TASKS_SUCCESS,
+        response: response
+    }
+}
+
+export const fetchTasksFail = (err) => {
+    return {
+        type: actionTypes.FETCH_TASKS_FAIL,
+        error: err
+    }
+}
+
+export const fetchTasks = () => {
+    return (dispatch) => {
+        dispatch(fetchTasksStart());
+        let config = {
+            method: 'get',
+            url: apiConstants.GET_WO_TASKS
+        };
+        axios(config)
+            .then(response => {
+                dispatch(fetchTasksSuccess(response.data));
+            })
+            .catch(error => {
+                dispatch(fetchTasksFail(error));
+            })
+    }
+}

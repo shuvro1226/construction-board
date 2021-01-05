@@ -7,6 +7,15 @@ import Loader from '../../components/UI/Loader/Loader';
 
 class Layout extends Component {
 
+    componentDidMount() {
+        if (!this.props.status) {
+            this.props.onFetchStatus();
+        }
+        if (!this.props.woTasks) {
+            this.props.onFetchTaskSelections();
+        }
+    }
+
     showWOEditModal = () => {
         this.props.onToggleWOModal(true, null, true);
     }
@@ -31,13 +40,16 @@ class Layout extends Component {
 const mapStateToProps = state => {
     return {
         taskBoardLoading: state.taskBoard.loading,
-        projectLoading: state.project.loading
+        projectLoading: state.project.loading,
+        woTasks: state.taskBoard.woTasks
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onToggleWOModal: (showModal, woDetail, createMode) => dispatch(actions.toggleWOModal(showModal, woDetail, createMode))
+        onFetchStatus: () => dispatch(actions.fetchStatus()),
+        onToggleWOModal: (showModal, woDetail, createMode) => dispatch(actions.toggleWOModal(showModal, woDetail, createMode)),
+        onFetchTaskSelections: () => dispatch(actions.fetchTasks())
     }
 }
 

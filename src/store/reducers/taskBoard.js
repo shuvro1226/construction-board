@@ -10,7 +10,8 @@ const initialState = {
     woCustomers: null,
     showWOModal: false,
     createMode: false,
-    woDetail: workingOrderModel
+    woDetail: workingOrderModel,
+    woTasks: null
 }
 
 const WOStatusDefaults = {
@@ -244,6 +245,31 @@ const saveWOFail = (state, action) => {
     };
 }
 
+const fetchTasksStart = (state, action) => {
+    return {
+        ...state,
+        loading: true,
+        error: false
+    };
+}
+
+const fetchTasksSuccess = (state, action) => {
+    return {
+        ...state,
+        woTasks: action.response,
+        loading: false,
+        error: false
+    };
+}
+
+const fetchTasksFail = (state, action) => {
+    return {
+        ...state,
+        loading: false,
+        error: true
+    };
+}
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.FETCH_STATUS_SUCCESS:
@@ -272,6 +298,12 @@ const reducer = (state = initialState, action) => {
             return saveWOSuccess(state, action);
         case actionTypes.UPDATE_WO_FAIL:
             return saveWOFail(state, action);
+        case actionTypes.FETCH_TASKS_START:
+            return fetchTasksStart(state, action);
+        case actionTypes.FETCH_TASKS_SUCCESS:
+            return fetchTasksSuccess(state, action);
+        case actionTypes.FETCH_TASKS_FAIL:
+            return fetchTasksFail(state, action);
         default:
             return state;
     }

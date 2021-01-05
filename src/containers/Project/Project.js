@@ -10,9 +10,6 @@ class Project extends Component {
     componentDidMount () {
         this.props.onFetchProjectDetails(this.props.match.params.id, this.props.match.params.year);
         this.props.onFetchProjectWO(this.props.match.params.id);
-        if (!this.props.statusList) {
-            this.props.onFetchStatus();
-        }        
     }
 
     render() {
@@ -45,8 +42,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onFetchProjectDetails: (projectNo, projectYear) => dispatch(actions.fetchProject(projectNo, projectYear)),
-        onFetchProjectWO: (projectNo) => dispatch(actions.fetchProjectWorkingOrders(projectNo)),
-        onFetchStatus: () => dispatch(actions.fetchStatus())
+        onFetchProjectWO: (projectNo) => dispatch(actions.fetchProjectWorkingOrders(projectNo))
     }
 }
 

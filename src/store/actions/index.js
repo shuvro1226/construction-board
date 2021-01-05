@@ -5,7 +5,8 @@ export {
     applyFiltersToWOList,
     toggleWOModal,
     formElementChange,
-    saveWorkingOrder
+    saveWorkingOrder,
+    fetchTasks
 }
 from './taskBoard';
 

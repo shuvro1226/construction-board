@@ -16,7 +16,7 @@ const TasksList = (props) => {
             }
 
             const taskHeader = <Wrapper>
-                <strong className="mr-auto">{woDetail.taskName}</strong>
+                <strong className="mr-auto">{woDetail.customerName}</strong>
                 <small>{moment(woDetail.plannedDate).fromNow()}</small>
                 <div className={taskActionsClasses.join(' ')}>
                     <span className="TaskAction" onClick={() => props.showWorkingOrderEditModal(woDetail)}>
@@ -31,7 +31,7 @@ const TasksList = (props) => {
                 showActions={() => props.showActions(index, true, props.statusDetail.status)} 
                 hideActions={() => props.hideActions(index, false, props.statusDetail.status)}>
                     {woDetail.detailDescription}
-            </Toast>
+            </Toast>;
         }
         return null;
     });

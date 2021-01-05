@@ -82,6 +82,19 @@ export const workingOrderModel = {
         addToEditRequest: true,
         addToCreateRequest: true
     },
+    taskSelection: {
+        elementType: 'select',
+        elementConfig: null,
+        elementUIConfig: {
+            grid: 'col-12 col-md-6'
+        },
+        defaultOptions: null,
+        defaultOption: 'Select task',
+        value: '',
+        displayText: 'Task',
+        addToEditRequest: true,
+        addToCreateRequest: true
+    },
     totalBookedHours: {
         elementType: 'input',
         elementConfig: {

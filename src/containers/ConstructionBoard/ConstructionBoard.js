@@ -4,17 +4,11 @@ import { connect } from 'react-redux';
 
 import Wrapper from '../../hoc/Wrapper/Wrapper';
 import TaskBoards from '../TaskBoards/TaskBoards';
-import * as actions from '../../store/actions/index';
 import WorkingOrder from '../WorkingOrder/WorkingOrder';
 import Filters from './Filters/Filters';
 
 class ConstructionBoard extends Component {
-    componentDidMount() {
-        if (!this.props.status) {
-            this.props.onFetchStatus();
-        }
-    }
-
+    
     render() {
         let taskBoardLayout = null;
 
@@ -50,10 +44,4 @@ const mapStateToProps = state => {
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        onFetchStatus: () => dispatch(actions.fetchStatus())
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ConstructionBoard);
+export default connect(mapStateToProps)(ConstructionBoard);
