@@ -8,7 +8,6 @@ export const workingOrderModel = {
         defaultOptions: null,
         defaultOption: 'Select a project',
         value: -1,
-        alias: 'projectNo',
         displayText: 'Project',
         addToEditRequest: true,
         addToCreateRequest: true,
@@ -20,8 +19,7 @@ export const workingOrderModel = {
             type: 'hidden'
         },
         elementUIConfig: null,
-        value: 0,
-        alias: 'projectYear'
+        value: 0
     },
     customerNo: {
         elementType: 'select',
@@ -32,7 +30,6 @@ export const workingOrderModel = {
         defaultOptions: null,
         defaultOption: 'Select a customer',
         value: -1,
-        alias: 'customerNo',
         displayText: 'Customer',
         addToCreateRequest: true,
         disabledOnEdit: true
@@ -44,7 +41,6 @@ export const workingOrderModel = {
         },
         elementUIConfig: null,
         value: 0,
-        alias: 'workingOrderNo',
         addToEditRequest: true
     },
     description: {
@@ -58,7 +54,6 @@ export const workingOrderModel = {
             grid: 'col-12'
         },
         value: '',
-        alias: 'shortDescription',
         displayText: 'Title',
         addToEditRequest: true,
         addToCreateRequest: true
@@ -70,7 +65,6 @@ export const workingOrderModel = {
             grid: 'col-12'
         },
         value: '',
-        alias: 'longDescription',
         displayText: 'Description',
         addToEditRequest: true,
         addToCreateRequest: true
@@ -84,7 +78,6 @@ export const workingOrderModel = {
         defaultOptions: null,
         defaultOption: 'Select working order status',
         value: -1,
-        alias: 'status',
         displayText: 'Status',
         addToEditRequest: true,
         addToCreateRequest: true
@@ -111,7 +104,6 @@ export const workingOrderModel = {
             grid: 'col-12 col-md-6'
         },
         value: '',
-        alias: 'startDate',
         displayText: 'Start Date',
         isDate: true,
         addToEditRequest: true,
@@ -126,7 +118,6 @@ export const workingOrderModel = {
             grid: 'col-12 col-md-6'
         },
         value: '',
-        alias: 'endDate',
         displayText: 'End Date',
         isDate: true,
         addToEditRequest: true,
@@ -141,7 +132,6 @@ export const workingOrderModel = {
             grid: 'col-12 col-md-4'
         },
         value: '',
-        alias: 'plannedDate',
         displayText: 'Plan Date',
         isDate: true
     },
@@ -154,7 +144,6 @@ export const workingOrderModel = {
             grid: 'col-12 col-md-4'
         },
         value: '',
-        alias: 'plannedStartTime',
         displayText: 'Plan Start Time',
         isTime: true,
         addToEditRequest: true,
@@ -170,7 +159,6 @@ export const workingOrderModel = {
             grid: 'col-12 col-md-4'
         },
         value: '',
-        alias: 'plannedEndTime',
         displayText: 'Plan End Time',
         isTime: true,
         addToEditRequest: true,
@@ -186,7 +174,6 @@ export const workingOrderModel = {
             grid: 'col-12 col-md-4'
         },
         value: 0.0,
-        alias: 'plannedWorkloadHours',
         displayText: 'Working Hours',
         addToEditRequest: true,
         addToCreateRequest: true,
@@ -201,7 +188,6 @@ export const workingOrderModel = {
             grid: 'col-12 col-md-4'
         },
         value: 0.0,
-        alias: 'plannedDuration',
         displayText: 'Duration',
         addToEditRequest: true,
         addToCreateRequest: true,
@@ -216,7 +202,6 @@ export const workingOrderModel = {
             grid: 'col-12 col-md-4'
         },
         value: 0.0,
-        alias: 'plannedTravelTime',
         displayText: 'Travel Time',
         addToEditRequest: true,
         addToCreateRequest: true,

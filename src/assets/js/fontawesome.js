@@ -12,7 +12,8 @@ import {
     faCalendarAlt,
     faTasks,
     faBatteryHalf,
-    faPlus
+    faPlus,
+    faCog
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -28,5 +29,6 @@ library.add(
     faCalendarAlt,
     faTasks,
     faBatteryHalf,
-    faPlus
+    faPlus,
+    faCog
 )

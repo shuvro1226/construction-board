@@ -9,7 +9,7 @@ const TasksList = (props) => {
     
     const workingOrdersList = props.workingOrders[props.statusDetail.status].map((woDetail, index) => {
         
-        if (index < 10 && woDetail.longDescription !== "" && woDetail.visible) {
+        if (index < 10 && woDetail.detailDescription !== "" && woDetail.visible) {
             let taskActionsClasses = ['TaskActions'];
             if (!woDetail.showActions) {
                 taskActionsClasses.push('d-none');
@@ -17,7 +17,7 @@ const TasksList = (props) => {
 
             const taskHeader = <Wrapper>
                 <strong className="mr-auto">{woDetail.taskName}</strong>
-                <small>{moment(woDetail.endDate).fromNow()}</small>
+                <small>{moment(woDetail.plannedDate).fromNow()}</small>
                 <div className={taskActionsClasses.join(' ')}>
                     <span className="TaskAction" onClick={() => props.showWorkingOrderEditModal(woDetail)}>
                         <FontAwesomeIcon icon="pencil-alt" />
@@ -30,7 +30,7 @@ const TasksList = (props) => {
                 header={taskHeader}
                 showActions={() => props.showActions(index, true, props.statusDetail.status)} 
                 hideActions={() => props.hideActions(index, false, props.statusDetail.status)}>
-                    {woDetail.longDescription}
+                    {woDetail.detailDescription}
             </Toast>
         }
         return null;

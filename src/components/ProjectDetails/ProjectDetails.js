@@ -19,7 +19,18 @@ const ProjectDetails = (props) => {
         workingOrders = props.workingOrders.map(workingOrder => {
             if (workingOrder.status !== 5) { // Skipping deleted status counts
                 workingOrderByStatus[workingOrder.status] = workingOrderByStatus[workingOrder.status] + 1;
+                if (!workingOrder.totalBookedHours) {
+                    // manually calculating totalBookedHours for presentation purpose
+                    const startDate = moment(workingOrder.startDate);
+                    const endDate = moment(workingOrder.endDate);
+                    const totalDays = endDate.diff(startDate, 'days') + 1;
+                    const startTime = moment(workingOrder.plannedStartTime,'HH:mm');
+                    const endTime = moment(workingOrder.plannedEndTime,'HH:mm');
+                    const totalHours = endTime.diff(startTime, 'hours');
+                    workingOrder.totalBookedHours = (totalDays * totalHours);
+                }
                 totalBookedHours += workingOrder.totalBookedHours;
+
                 if (workingOrder.status === 4) {
                     totalFinishedHours += workingOrder.totalBookedHours;
                 }

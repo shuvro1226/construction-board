@@ -55,10 +55,9 @@ export const fetchWOStart = () => {
 }
 
 export const fetchWOByStatus = (statusId) => {
-    console.log(statusId);
     return (dispatch) => {
         dispatch(fetchWOStart());
-        axios.get(apiConstants.GET_WO_BY_STATUS + statusId + apiConstants.GET_WO_PARAMS + apiConstants.GET_WO_PARTIALS)
+        axios.get(apiConstants.GET_WO_BY_STATUS + statusId + apiConstants.GET_WO_PARAMS)
             .then(res => {
                 dispatch(fetchWOSuccess(res.data, statusId));
             })
