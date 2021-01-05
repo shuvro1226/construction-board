@@ -6,10 +6,12 @@ export const workingOrderModel = {
             grid: 'col-12'
         },
         defaultOptions: null,
-        value: 0,
+        defaultOption: 'Select a project',
+        value: -1,
         alias: 'projectNo',
         displayText: 'Project',
-        addToRequest: true,
+        addToEditRequest: true,
+        addToCreateRequest: true,
         disabledOnEdit: true
     },
     projectYear: {
@@ -28,9 +30,11 @@ export const workingOrderModel = {
             grid: 'col-12'
         },
         defaultOptions: null,
-        value: 0,
+        defaultOption: 'Select a customer',
+        value: -1,
         alias: 'customerNo',
         displayText: 'Customer',
+        addToCreateRequest: true,
         disabledOnEdit: true
     },
     workingOrderNo: {
@@ -41,7 +45,7 @@ export const workingOrderModel = {
         elementUIConfig: null,
         value: 0,
         alias: 'workingOrderNo',
-        addToRequest: true
+        addToEditRequest: true
     },
     description: {
         elementType: 'input',
@@ -56,7 +60,8 @@ export const workingOrderModel = {
         value: '',
         alias: 'shortDescription',
         displayText: 'Title',
-        addToRequest: true
+        addToEditRequest: true,
+        addToCreateRequest: true
     },
     detailDescription: {
         elementType: 'textarea',
@@ -67,7 +72,8 @@ export const workingOrderModel = {
         value: '',
         alias: 'longDescription',
         displayText: 'Description',
-        addToRequest: true
+        addToEditRequest: true,
+        addToCreateRequest: true
     },
     status: {
         elementType: 'select',
@@ -76,10 +82,12 @@ export const workingOrderModel = {
             grid: 'col-12 col-md-6'
         },
         defaultOptions: null,
-        value: 0,
+        defaultOption: 'Select working order status',
+        value: -1,
         alias: 'status',
         displayText: 'Status',
-        addToRequest: true
+        addToEditRequest: true,
+        addToCreateRequest: true
     },
     totalBookedHours: {
         elementType: 'input',
@@ -106,13 +114,13 @@ export const workingOrderModel = {
         alias: 'startDate',
         displayText: 'Start Date',
         isDate: true,
-        addToRequest: true
+        addToEditRequest: true,
+        addToCreateRequest: true
     },
     executionEndDate: {
         elementType: 'input',
         elementConfig: {
-            type: 'text',
-            readOnly: false
+            type: 'text'
         },
         elementUIConfig: {
             grid: 'col-12 col-md-6'
@@ -121,6 +129,97 @@ export const workingOrderModel = {
         alias: 'endDate',
         displayText: 'End Date',
         isDate: true,
-        addToRequest: true
+        addToEditRequest: true,
+        addToCreateRequest: true
+    },
+    plannedDate: {
+        elementType: 'input',
+        elementConfig: {
+            type: 'text'
+        },
+        elementUIConfig: {
+            grid: 'col-12 col-md-4'
+        },
+        value: '',
+        alias: 'plannedDate',
+        displayText: 'Plan Date',
+        isDate: true
+    },
+    startTime: {
+        elementType: 'input',
+        elementConfig: {
+            type: 'text'
+        },
+        elementUIConfig: {
+            grid: 'col-12 col-md-4'
+        },
+        value: '',
+        alias: 'plannedStartTime',
+        displayText: 'Plan Start Time',
+        isTime: true,
+        addToEditRequest: true,
+        addToCreateRequest: true,
+        parent: 'planData'
+    },
+    endTime: {
+        elementType: 'input',
+        elementConfig: {
+            type: 'text'
+        },
+        elementUIConfig: {
+            grid: 'col-12 col-md-4'
+        },
+        value: '',
+        alias: 'plannedEndTime',
+        displayText: 'Plan End Time',
+        isTime: true,
+        addToEditRequest: true,
+        addToCreateRequest: true,
+        parent: 'planData'
+    },
+    workingHours: {
+        elementType: 'input',
+        elementConfig: {
+            type: 'text'
+        },
+        elementUIConfig: {
+            grid: 'col-12 col-md-4'
+        },
+        value: 0.0,
+        alias: 'plannedWorkloadHours',
+        displayText: 'Working Hours',
+        addToEditRequest: true,
+        addToCreateRequest: true,
+        parent: 'planData'
+    },
+    duration: {
+        elementType: 'input',
+        elementConfig: {
+            type: 'text'
+        },
+        elementUIConfig: {
+            grid: 'col-12 col-md-4'
+        },
+        value: 0.0,
+        alias: 'plannedDuration',
+        displayText: 'Duration',
+        addToEditRequest: true,
+        addToCreateRequest: true,
+        parent: 'planData'
+    },
+    travelTime: {
+        elementType: 'input',
+        elementConfig: {
+            type: 'text'
+        },
+        elementUIConfig: {
+            grid: 'col-12 col-md-4'
+        },
+        value: 0.0,
+        alias: 'plannedTravelTime',
+        displayText: 'Travel Time',
+        addToEditRequest: true,
+        addToCreateRequest: true,
+        parent: 'planData'
     }
 }

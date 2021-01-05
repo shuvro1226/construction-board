@@ -9,7 +9,7 @@ import * as actions from '../../../store/actions/index';
 class TaskBoard extends Component {
 
     showWOEditModal = (woDetail) => {
-        this.props.onToggleWOModal(true, woDetail);
+        this.props.onToggleWOModal(true, woDetail, false);
     }
     
     render() {
@@ -48,7 +48,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onToggleTaskActions: (index, showActions, status) => dispatch(actions.toggleTaskActions(index, showActions, status)),
-        onToggleWOModal: (showModal, woDetail) => dispatch(actions.toggleWOModal(showModal, woDetail))
+        onToggleWOModal: (showModal, woDetail, createMode) => dispatch(actions.toggleWOModal(showModal, woDetail, createMode))
     }
 }
 

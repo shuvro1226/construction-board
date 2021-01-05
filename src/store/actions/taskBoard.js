@@ -55,6 +55,7 @@ export const fetchWOStart = () => {
 }
 
 export const fetchWOByStatus = (statusId) => {
+    console.log(statusId);
     return (dispatch) => {
         dispatch(fetchWOStart());
         axios.get(apiConstants.GET_WO_BY_STATUS + statusId + apiConstants.GET_WO_PARAMS + apiConstants.GET_WO_PARTIALS)
@@ -78,20 +79,74 @@ export const toggleTaskActions = (index, showActions, statusId) => {
     }
 }
 
-export const updateWOList = (params) => {
-    return (dispatch) => {
-        dispatch({
-            type: actionTypes.UPDATE_WO_LIST,
-            params: params
-        })
-    }
-}
-
 export const applyFiltersToWOList = (filters) => {
     return (dispatch) => {
         dispatch({
             type: actionTypes.APPLY_FILTER_TO_WO_LIST,
             filters: filters
         })
+    }
+}
+
+export const toggleWOModal = (showModal, woDetail, createMode) => {
+    return (dispatch) => {
+        dispatch({
+            type: actionTypes.TOGGLE_WO_MODAL,
+            showModal: showModal,
+            woDetail: woDetail,
+            isCreate: createMode
+        });
+    }
+}
+
+export const formElementChange = (updatedFields) => {
+    return (dispatch) => {
+        dispatch({
+            type: actionTypes.FORM_ELEMENT_CHANGE,
+            woFields: updatedFields
+        })
+    }
+}
+
+export const saveWOStart = () => {
+    return {
+        type: actionTypes.UPDATE_WO_START
+    }
+}
+
+export const saveWOSuccess = (response) => {
+    return {
+        type: actionTypes.UPDATE_WO_SUCCESS,
+        response: response
+    }
+}
+
+export const saveWOFail = (err) => {
+    return {
+        type: actionTypes.UPDATE_WO_FAIL,
+        error: err
+    }
+}
+
+export const saveWorkingOrder = (updatedWOData, isCreate) => {
+    return (dispatch) => {
+        dispatch(saveWOStart());
+        let method = 'put';
+        if (isCreate) {
+            method = 'post';
+        }
+        let config = {
+            method: method,
+            url: apiConstants.WORKING_ORDERS,
+            data: updatedWOData
+        }
+        axios(config)
+            .then(response => {
+                dispatch(saveWOSuccess(response.data));
+                dispatch(fetchWOByStatus(updatedWOData[0].status));
+            })
+            .catch(error => {
+                dispatch(saveWOFail(error));
+            })
     }
 }

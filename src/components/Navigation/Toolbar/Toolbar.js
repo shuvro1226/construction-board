@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navbar, Nav, Button } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './Toolbar.module.css';
 
 const toolbar = (props) => (
@@ -9,7 +10,9 @@ const toolbar = (props) => (
         <Navbar.Toggle />
         <Navbar.Collapse>
             <Nav className="ml-auto">
-                <Button variant="primary">Add New Task</Button>
+                <Button variant="primary" onClick={props.showCreateWOModal}>
+                    <FontAwesomeIcon icon="plus" /> Add New Task
+                </Button>
             </Nav>
         </Navbar.Collapse>
     </Navbar>

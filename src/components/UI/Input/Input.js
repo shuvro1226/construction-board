@@ -16,7 +16,10 @@ const input = (props) => {
     switch(props.config.elementType) {
         case ( 'input' ):
             let fieldValue = props.config.value;
-            if (props.config.isDate) {                
+            if (props.config.isDate) {         
+                if (fieldValue === "") {
+                    fieldValue = moment().format('YYYY-MM-DD');
+                }       
                 const dateValue = {
                     year: moment(fieldValue).year(),
                     month: moment(fieldValue).month() + 1,
@@ -55,6 +58,7 @@ const input = (props) => {
                 value={props.config.value} 
                 disabled={disabled}
                 onChange={props.changed}>
+                    <option value="-1">{props.config.defaultOption}</option>
                 {props.config.defaultOptions.map(option => (
                     <option key={option.value} value={parseInt(option.value)}>{option.displayText}</option>
                 ))}

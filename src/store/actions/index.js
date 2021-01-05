@@ -2,17 +2,12 @@ export {
     fetchStatus,
     fetchWOByStatus,
     toggleTaskActions,
-    updateWOList,
-    applyFiltersToWOList
-}
-from './taskBoard';
-
-export {
+    applyFiltersToWOList,
     toggleWOModal,
     formElementChange,
-    updateWorkingOrder
+    saveWorkingOrder
 }
-from './workingOrder';
+from './taskBoard';
 
 export {
     fetchProject,

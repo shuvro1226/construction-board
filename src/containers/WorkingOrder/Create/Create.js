@@ -6,7 +6,7 @@ import Modal from '../../../components/UI/Modal/Modal';
 import * as actions from '../../../store/actions/index';
 
 
-class EditWorkingOrder extends Component {
+class CreateWorkingOrder extends Component {
     state = {
         initialWODetails: null
     }
@@ -21,7 +21,7 @@ class EditWorkingOrder extends Component {
         
         for (let key in this.props.workingOrderFields) {    
             let woConfig = this.props.workingOrderFields[key];        
-            if (this.props.workingOrderFields[key].addToEditRequest) {
+            if (this.props.workingOrderFields[key].addToCreateRequest) {
                 let fieldValue = woConfig.value;
                 if (['startTime','endTime'].includes(key)) {
                     fieldValue = plannedDate + 'T' + fieldValue + ':00';
@@ -36,23 +36,23 @@ class EditWorkingOrder extends Component {
                 } else {
                     updatedPostData[key] = fieldValue;
                 }
-            }         
+            }                          
         }
-        
-        const workingOrderData = [updatedPostData];  
-        this.props.onUpdateWorkingOrder(workingOrderData, this.props.isCreateWO);
+       
+        const workingOrderData = [updatedPostData];
+        this.props.onCreateWorkingOrder(workingOrderData, this.props.isCreateWO);
         this.props.onToggleWOModal(false, null, false);
     }
 
     onInputChangedHandler = (event, element) => {
         let updatedValue;
         if (element.config.isDate) {
-            let updatedDate = event.year + '-' + event.month + '-' + event.day;
+            let updatedDate = event.year + '-' + event.month + '-' + event.day
             updatedValue = moment(updatedDate, "YYYY-MM-DD").format("YYYY-MM-DDThh:mm:ss");
         } else {
             updatedValue = event.target.value;
         }         
-        if (['projectNo','status'].includes(element.id)) {
+        if (['projectNo','status','customerNo'].includes(element.id)) {
             updatedValue = parseInt(updatedValue);
         }
         const updatedFormElement = {
@@ -116,7 +116,7 @@ class EditWorkingOrder extends Component {
                     element={field.id}
                     statusList={this.props.status}
                     linkedTo={field.linkedTo}
-                    mode="edit"
+                    mode="create"
                     changed={(event) => this.onInputChangedHandler(event, field)}
                 />
             </div>
@@ -126,7 +126,7 @@ class EditWorkingOrder extends Component {
             <Modal
                 modalShow={this.props.showWOModal}
                 modalClose={this.onModalClose}
-                modalTitle="Edit Working Order"
+                modalTitle="Create Working Order"
                 modalSubmit={this.onModalSubmit}
                 modalSize="lg"
             >
@@ -154,8 +154,8 @@ const mapDispatchToProps = dispatch => {
     return {
         onToggleWOModal: (showModal, woDetail, createMode) => dispatch(actions.toggleWOModal(showModal, woDetail, createMode)),
         onFormElementChange: (updatedFields) => dispatch(actions.formElementChange(updatedFields)),
-        onUpdateWorkingOrder: (woDetail, isCreateWO) => dispatch(actions.saveWorkingOrder(woDetail, isCreateWO))
+        onCreateWorkingOrder: (woDetail, isCreateWO) => dispatch(actions.saveWorkingOrder(woDetail, isCreateWO))
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditWorkingOrder);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateWorkingOrder);
