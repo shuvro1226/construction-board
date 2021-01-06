@@ -48,6 +48,8 @@ class WorkingOrder extends Component {
         if (element.config.isDate) {
             let updatedDate = event.year + '-' + event.month + '-' + event.day;
             updatedValue = moment(updatedDate, "YYYY-MM-DD").format("YYYY-MM-DDThh:mm:ss");
+        } else if (element.config.isTime) {
+            updatedValue = event.format('HH:mm');
         } else {
             updatedValue = event.target.value;
         }         

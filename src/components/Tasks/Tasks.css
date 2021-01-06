@@ -5,6 +5,7 @@
 .Toast {
     max-width: 100%;
     position: relative;
+    cursor: pointer;
 }
 
 .Toast .TaskActions {
@@ -13,5 +14,4 @@
     top: 0;
     padding: 4px;
     background: rgba(255, 255, 255, 0.7);
-    cursor: pointer;
 }

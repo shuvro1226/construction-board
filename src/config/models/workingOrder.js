@@ -108,7 +108,7 @@ export const workingOrderModel = {
         },
         value: '',
         displayText: 'Total Planned Hours',
-        isDate: false
+        hideOnCreate: true
     },
     executionStartDate: {
         elementType: 'input',
@@ -132,7 +132,7 @@ export const workingOrderModel = {
         elementUIConfig: {
             grid: 'col-12 col-md-6'
         },
-        value: moment().format('YYYY-MM-DDThh:mm:ss'),
+        value: moment().add(7, 'days').format('YYYY-MM-DDThh:mm:ss'),
         displayText: 'End Date',
         isDate: true,
         addToEditRequest: true,
@@ -158,7 +158,7 @@ export const workingOrderModel = {
         elementUIConfig: {
             grid: 'col-12 col-md-4'
         },
-        value: '07:00',
+        value: '08:00',
         displayText: 'Plan Start Time',
         isTime: true,
         addToEditRequest: true,
@@ -173,7 +173,7 @@ export const workingOrderModel = {
         elementUIConfig: {
             grid: 'col-12 col-md-4'
         },
-        value: '15:00',
+        value: '17:00',
         displayText: 'Plan End Time',
         isTime: true,
         addToEditRequest: true,
@@ -183,7 +183,7 @@ export const workingOrderModel = {
     workingHours: {
         elementType: 'input',
         elementConfig: {
-            type: 'text'
+            type: 'number'
         },
         elementUIConfig: {
             grid: 'col-12 col-md-4'
@@ -197,7 +197,7 @@ export const workingOrderModel = {
     duration: {
         elementType: 'input',
         elementConfig: {
-            type: 'text'
+            type: 'number'
         },
         elementUIConfig: {
             grid: 'col-12 col-md-4'
@@ -211,7 +211,7 @@ export const workingOrderModel = {
     travelTime: {
         elementType: 'input',
         elementConfig: {
-            type: 'text'
+            type: 'number'
         },
         elementUIConfig: {
             grid: 'col-12 col-md-4'

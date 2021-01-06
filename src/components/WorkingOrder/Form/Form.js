@@ -6,7 +6,10 @@ import Modal from '../../../components/UI/Modal/Modal';
 const form = (props) => {
     let workingOrderFields = null;
     if (props.formFields) {
-        workingOrderFields = props.formFields.map(field => {            
+        workingOrderFields = props.formFields.map(field => {        
+            if (props.isCreateWO && field.config.hideOnCreate) {
+                return null;
+            }    
             return <div key={field.id} className={field.config.elementUIConfig ? field.config.elementUIConfig.grid : ''}>
                 <Input
                     config={field.config}

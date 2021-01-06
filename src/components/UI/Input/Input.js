@@ -3,9 +3,11 @@ import { Form, InputGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
+import 'rc-time-picker/assets/index.css';
 import DatePicker from 'react-modern-calendar-datepicker';
 import styles from './Input.module.css';
 import moment from 'moment';
+import TimePicker from 'rc-time-picker';
 
 const input = (props) => {
     let inputElement = null;
@@ -31,7 +33,19 @@ const input = (props) => {
                     shouldHighlightWeekends
                     inputClassName={styles.DatePickerWrapper}
                     wrapperClassName={styles.DatePicker}
-                    onChange={props.changed} />
+                    onChange={props.changed} 
+                />
+            } else if (props.config.isTime) {
+                inputElement = <TimePicker 
+                    defaultValue={moment()}
+                    value={moment(fieldValue, 'HH:mm')} 
+                    showSecond={false}
+                    className={styles.TimePickerWrapper}
+                    minuteStep={15}
+                    use12Hours={false}
+                    allowEmpty={false}
+                    onChange={props.changed} 
+                />
             } else {
                 inputElement = <Form.Control
                     {...props.config.elementConfig} 

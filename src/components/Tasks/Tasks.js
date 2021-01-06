@@ -19,7 +19,7 @@ const TasksList = (props) => {
                 <strong className="mr-auto">{woDetail.customerName}</strong>
                 <small>{moment(woDetail.plannedDate).fromNow()}</small>
                 <div className={taskActionsClasses.join(' ')}>
-                    <span className="TaskAction" onClick={() => props.showWorkingOrderEditModal(woDetail)}>
+                    <span className="TaskAction">
                         <FontAwesomeIcon icon="pencil-alt" />
                     </span>
                 </div>
@@ -28,6 +28,8 @@ const TasksList = (props) => {
             return <Toast 
                 key={woDetail.uniqueKey} 
                 header={taskHeader}
+                headerIcon="user-tie"
+                toastAction={() => props.showWorkingOrderEditModal(woDetail)}
                 showActions={() => props.showActions(index, true, props.statusDetail.status)} 
                 hideActions={() => props.hideActions(index, false, props.statusDetail.status)}>
                     {woDetail.detailDescription}
