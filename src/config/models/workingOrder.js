@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const workingOrderModel = {
     projectNo: {
         elementType: 'select',
@@ -116,7 +118,7 @@ export const workingOrderModel = {
         elementUIConfig: {
             grid: 'col-12 col-md-6'
         },
-        value: '',
+        value: moment().format('YYYY-MM-DDThh:mm:ss'),
         displayText: 'Start Date',
         isDate: true,
         addToEditRequest: true,
@@ -130,7 +132,7 @@ export const workingOrderModel = {
         elementUIConfig: {
             grid: 'col-12 col-md-6'
         },
-        value: '',
+        value: moment().format('YYYY-MM-DDThh:mm:ss'),
         displayText: 'End Date',
         isDate: true,
         addToEditRequest: true,
@@ -144,7 +146,7 @@ export const workingOrderModel = {
         elementUIConfig: {
             grid: 'col-12 col-md-4'
         },
-        value: '',
+        value: moment().format('YYYY-MM-DDThh:mm:ss'),
         displayText: 'Plan Date',
         isDate: true
     },
@@ -156,7 +158,7 @@ export const workingOrderModel = {
         elementUIConfig: {
             grid: 'col-12 col-md-4'
         },
-        value: '',
+        value: '07:00',
         displayText: 'Plan Start Time',
         isTime: true,
         addToEditRequest: true,
@@ -171,7 +173,7 @@ export const workingOrderModel = {
         elementUIConfig: {
             grid: 'col-12 col-md-4'
         },
-        value: '',
+        value: '15:00',
         displayText: 'Plan End Time',
         isTime: true,
         addToEditRequest: true,

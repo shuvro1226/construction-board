@@ -41,7 +41,6 @@ class WorkingOrder extends Component {
         
         const workingOrderData = [updatedPostData];  
         this.props.onSaveWorkingOrder(workingOrderData, this.props.isCreateWO);
-        this.props.onToggleWOModal(false, null, false);
     }
 
     onInputChangedHandler = (event, element) => {

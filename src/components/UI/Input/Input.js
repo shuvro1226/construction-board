@@ -16,10 +16,7 @@ const input = (props) => {
     switch(props.config.elementType) {
         case ( 'input' ):
             let fieldValue = props.config.value;
-            if (props.config.isDate) {         
-                if (fieldValue === "") {
-                    fieldValue = moment().format('YYYY-MM-DD');
-                }       
+            if (props.config.isDate) {
                 const dateValue = {
                     year: moment(fieldValue).year(),
                     month: moment(fieldValue).month() + 1,
