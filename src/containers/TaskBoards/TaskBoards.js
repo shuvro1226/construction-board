@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Card } from 'react-bootstrap';
 
-import TaskBoard from './TaskBoard/TaskBoard';
+import Tasks from '../../components/Tasks/Tasks';
 import * as actions from '../../store/actions/index';
+import styles from './TaskBoards.module.css';
 
 class TaskBoards extends Component {
     componentDidMount() {
@@ -11,17 +14,39 @@ class TaskBoards extends Component {
         }
     }
 
-    render() {
-        let taskBoardContent = null;
+    showWOEditModal = (woDetail) => {
+        this.props.onToggleWOModal(true, woDetail, false);
+    }
 
+    render() {
+        let cardHeaderStyles = [
+            'text-white',
+            styles.TextCapitalize
+        ];  
+
+        let taskBoardContent = null;
         if (this.props.workingOrders && this.props.workingOrders[this.props.statusDetail.status]) {
-            taskBoardContent = < TaskBoard
-            workingOrders = { this.props.workingOrders[this.props.statusDetail.status] }
-            statusDetail = { this.props.statusDetail }
+            taskBoardContent = <Tasks
+                workingOrders = {this.props.workingOrders}
+                statusDetail = {this.props.statusDetail}
+                showWorkingOrderEditModal={this.showWOEditModal}
+                showActions={this.props.onToggleTaskActions} 
+                hideActions={this.props.onToggleTaskActions}
             />;
         }
 
-        return taskBoardContent;
+        return (
+            <Card bg={this.props.statusDetail.scheme.toLowerCase()}>
+                <Card.Header as="h5" className={cardHeaderStyles.join(' ')}>
+                    <FontAwesomeIcon icon={this.props.statusDetail.icon} /> {this.props.statusDetail.displayText}
+                </Card.Header>
+                <Card.Body>
+                    <Card.Text as="div">
+                        {taskBoardContent}
+                    </Card.Text>
+                </Card.Body>
+            </Card>
+        );
     }
 }
 
@@ -33,7 +58,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onWoGetByStatus: (statusId) => dispatch(actions.fetchWOByStatus(statusId))
+        onWoGetByStatus: (statusId) => dispatch(actions.fetchWOByStatus(statusId)),
+        onToggleTaskActions: (index, showActions, status) => dispatch(actions.toggleTaskActions(index, showActions, status)),
+        onToggleWOModal: (showModal, woDetail, createMode) => dispatch(actions.toggleWOModal(showModal, woDetail, createMode))
     }
 }
 

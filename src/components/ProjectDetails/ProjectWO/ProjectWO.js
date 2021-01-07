@@ -12,11 +12,11 @@ const ProjectWO = (props) => {
     }
 
     let workingOrder = null;
-    if (props.statusDetail && props.workingOrder.longDescription) {
+    if (props.statusDetail && props.workingOrder.detailDescription) {
         workingOrder = <Col xs="12" className="py-2">
             <h5>
                 {badge}
-                {props.workingOrder.longDescription}
+                {props.workingOrder.detailDescription}
             </h5>
         </Col>
     }

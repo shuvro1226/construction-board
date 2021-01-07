@@ -2,7 +2,7 @@ import React from "react";
 import { Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
-import WorkingOrder from './ProjectWO/ProjectWO';
+import ProjectWO from './ProjectWO/ProjectWO';
 import ProjectStatus from './ProjectStatus/ProjectStatus';
 import Card from '../UI/Card/Card';
 
@@ -20,12 +20,12 @@ const ProjectDetails = (props) => {
             if (workingOrder.status !== 5) { // Skipping deleted status counts
                 workingOrderByStatus[workingOrder.status] = workingOrderByStatus[workingOrder.status] + 1;
                 if (!workingOrder.totalBookedHours) {
-                    // manually calculating totalBookedHours for presentation purpose
-                    const startDate = moment(workingOrder.startDate);
-                    const endDate = moment(workingOrder.endDate);
+                    // manually calculating totalBookedHours for presentation purpose if no totalbookedhours found
+                    const startDate = moment(workingOrder.executionStartDate);
+                    const endDate = moment(workingOrder.executionEndDate);
                     const totalDays = endDate.diff(startDate, 'days') + 1;
-                    const startTime = moment(workingOrder.plannedStartTime,'HH:mm');
-                    const endTime = moment(workingOrder.plannedEndTime,'HH:mm');
+                    const startTime = moment(workingOrder.startTime,'HH:mm');
+                    const endTime = moment(workingOrder.endTime,'HH:mm');
                     const totalHours = endTime.diff(startTime, 'hours');
                     workingOrder.totalBookedHours = (totalDays * totalHours);
                 }
@@ -36,7 +36,7 @@ const ProjectDetails = (props) => {
                 }
             }            
             let statusDetail = props.statusList[workingOrder.status - 1];
-            return <WorkingOrder 
+            return <ProjectWO 
                 key={workingOrder.workingOrderNo} 
                 workingOrder={workingOrder} 
                 statusDetail={statusDetail} 

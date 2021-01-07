@@ -58,7 +58,7 @@ export const fetchProjectWOFail = (err) => {
 export const fetchProjectWorkingOrders = (projectNo) => {
     return (dispatch) => {
         dispatch(fetchProjectWOStart());
-        axios.get(apiConstants.GET_PROJECT_WO + projectNo + apiConstants.GET_WO_PARTIALS)
+        axios.get(apiConstants.GET_PROJECT_WO + projectNo + apiConstants.GET_WO_PARTIALS + apiConstants.GET_WO_ALIAS)
             .then(response => {
                 dispatch(fetchProjectWOSuccess(response.data));
             })
