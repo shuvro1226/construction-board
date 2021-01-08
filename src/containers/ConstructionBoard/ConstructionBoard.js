@@ -6,12 +6,21 @@ import Wrapper from '../../hoc/Wrapper/Wrapper';
 import TaskBoards from '../TaskBoards/TaskBoards';
 import WorkingOrder from '../WorkingOrder/WorkingOrder';
 import Filters from './Filters/Filters';
+import * as actions from '../../store/actions/index';
 
 class ConstructionBoard extends Component {
+
+    componentDidMount() {
+        if (!this.props.status && this.props.isAuthenticated) {
+            this.props.onFetchStatus();
+        }
+        if (!this.props.woTasks && this.props.isAuthenticated) {
+            this.props.onFetchTaskSelections();
+        }
+    }
     
     render() {
         let taskBoardLayout = null;
-
         if (this.props.status) {
             taskBoardLayout = this.props.status.map(status => {
                 if (status.useBoard) {
@@ -40,8 +49,18 @@ class ConstructionBoard extends Component {
 
 const mapStateToProps = state => {
     return {
-        status: state.taskBoard.status
+        status: state.taskBoard.status,
+        woTasks: state.taskBoard.woTasks,
+        isAuthenticated: state.auth.token !== null
     }
 }
 
-export default connect(mapStateToProps)(ConstructionBoard);
+const mapDispatchToProps = dispatch => {
+    return {
+        onFetchStatus: () => dispatch(actions.fetchStatus()),
+        onFetchTaskSelections: () => dispatch(actions.fetchTasks())
+    }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(ConstructionBoard);

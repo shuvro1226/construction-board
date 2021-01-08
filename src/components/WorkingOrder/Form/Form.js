@@ -15,7 +15,8 @@ const form = (props) => {
                     config={field.config}
                     element={field.id}
                     linkedTo={field.linkedTo}
-                    isCreateWO={props.isCreateWO}
+                    linkClicked={props.onLinkClicked}
+                    isCreate={props.isCreateWO}
                     changed={(event) => props.changed(event, field)}
                 />
             </div>

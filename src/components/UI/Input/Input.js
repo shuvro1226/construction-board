@@ -1,6 +1,5 @@
 import React from 'react';
-import { Form, InputGroup } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Form, InputGroup, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import 'rc-time-picker/assets/index.css';
@@ -15,9 +14,12 @@ const input = (props) => {
     if (!props.isCreateWO && props.config.disabledOnEdit) {
         disabled = true;
     }
+    let fieldValue = props.config.value;
+    if (props.value) {
+        fieldValue = props.value;
+    }
     switch(props.config.elementType) {
         case ( 'input' ):
-            let fieldValue = props.config.value;
             if (props.config.isDate) {
                 const dateValue = {
                     year: moment(fieldValue).year(),
@@ -59,14 +61,14 @@ const input = (props) => {
             inputElement = <Form.Control 
                 as="textarea"
                 rows={3}
-                value={props.config.value} 
+                value={fieldValue} 
                 onChange={props.changed} />
             break;
         case ( 'select' ):
             inputElement = <Form.Control 
                 as="select"
                 className={styles.FormSelect}
-                value={props.config.value} 
+                value={fieldValue} 
                 disabled={disabled}
                 onChange={props.changed}>
                     <option value="-1">{props.config.defaultOption}</option>
@@ -79,14 +81,14 @@ const input = (props) => {
             break;            
     }
 
-    if (props.linkedTo !== '' && !props.isCreateWO) {
+    if (props.linkedTo !== '' && !props.isCreate) {
         inputElement = <InputGroup className="mb-3">
             {inputElement}
             <InputGroup.Append>
-                <InputGroup.Text>
-                    <Link to={props.linkedTo}>
+                <InputGroup.Text className={styles.InputLinkWrapper}>
+                    <Button variant="info" size="sm" onClick={() => props.linkClicked(props.linkedTo)}>
                         <FontAwesomeIcon icon="link" />
-                    </Link>
+                    </Button>
                 </InputGroup.Text>
             </InputGroup.Append>
         </InputGroup>

@@ -28,3 +28,7 @@ select.FormSelect option {
 .TimePickerWrapper {
     width: 100%;
 }
+
+.InputLinkWrapper {
+    padding: 3px;
+}

@@ -17,3 +17,7 @@
     border-color: #0062cc;
     text-decoration: none;
 }
+
+.Navbar .Button {
+    margin-left: 10px;
+}

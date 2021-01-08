@@ -11,12 +11,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import taskBoardReducer from './store/reducers/taskBoard';
 import projectReducer from './store/reducers/project';
+import authReducer from './store/reducers/auth';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const rootReducer = combineReducers({
   taskBoard: taskBoardReducer,
-  project: projectReducer
+  project: projectReducer,
+  auth: authReducer
 })
 
 const store = createStore(rootReducer, composeEnhancers(

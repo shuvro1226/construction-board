@@ -13,7 +13,8 @@ import {
     faTasks,
     faBatteryHalf,
     faPlus,
-    faCog
+    faCog,
+    faSignOutAlt
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -30,5 +31,6 @@ library.add(
     faTasks,
     faBatteryHalf,
     faPlus,
-    faCog
+    faCog,
+    faSignOutAlt
 )

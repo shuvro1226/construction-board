@@ -15,3 +15,10 @@ export {
     fetchProjectWorkingOrders
 }
 from './project';
+
+export {
+    authenticate,
+    logoutUser,
+    authCheckState
+}
+from './auth';

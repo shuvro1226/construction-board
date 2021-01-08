@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import moment from 'moment';
+import { withRouter } from 'react-router-dom';
 import Wrapper from '../../hoc/Wrapper/Wrapper';
 import Form from '../../components/WorkingOrder/Form/Form';
 import * as actions from '../../store/actions/index';
@@ -67,6 +68,11 @@ class WorkingOrder extends Component {
         this.props.onFormElementChange(updatedFormElement);
     }
 
+    linkClickedHandler = (link) => {
+        this.props.onToggleWOModal(false, null, false);
+        this.props.history.push(link);
+    }
+
 
     render() {
 
@@ -128,6 +134,7 @@ class WorkingOrder extends Component {
                     modalSubmitted={this.onModalSubmit}
                     showWOModal={this.props.showWOModal}
                     isCreateWO={this.props.isCreateWO} 
+                    onLinkClicked={this.linkClickedHandler}
                 />;
             </Wrapper>
         )
@@ -155,4 +162,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(WorkingOrder);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(WorkingOrder));
