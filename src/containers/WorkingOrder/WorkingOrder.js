@@ -41,7 +41,8 @@ class WorkingOrder extends Component {
         }
         
         const workingOrderData = [updatedPostData];  
-        this.props.onSaveWorkingOrder(workingOrderData, this.props.isCreateWO);
+        this.props.onSaveWorkingOrder(workingOrderData, this.props.isCreateWO, this.props.filters);        
+        this.props.history.push('/');
     }
 
     onInputChangedHandler = (event, element) => {
@@ -150,7 +151,8 @@ const mapStateToProps = state => {
         status: state.taskBoard.status,
         workingOrders: state.taskBoard.workingOrders,
         projects: state.taskBoard.woProjects,
-        customers: state.taskBoard.woCustomers
+        customers: state.taskBoard.woCustomers,
+        filters: state.taskBoard.woFilters
     }
 }
 

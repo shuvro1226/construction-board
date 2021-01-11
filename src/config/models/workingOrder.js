@@ -1,28 +1,6 @@
 import moment from 'moment';
 
 export const workingOrderModel = {
-    projectNo: {
-        elementType: 'select',
-        elementConfig: null,
-        elementUIConfig: {
-            grid: 'col-12'
-        },
-        defaultOptions: null,
-        defaultOption: 'Select a project',
-        value: -1,
-        displayText: 'Project',
-        addToEditRequest: true,
-        addToCreateRequest: true,
-        disabledOnEdit: true
-    },
-    projectYear: {
-        elementType: 'input',
-        elementConfig: {
-            type: 'hidden'
-        },
-        elementUIConfig: null,
-        value: 0
-    },
     customerNo: {
         elementType: 'select',
         elementConfig: null,
@@ -35,6 +13,28 @@ export const workingOrderModel = {
         displayText: 'Customer',
         addToCreateRequest: true,
         disabledOnEdit: true
+    },
+    projectNo: {
+        elementType: 'select',
+        elementConfig: null,
+        elementUIConfig: {
+            grid: 'col-12'
+        },
+        defaultOptions: null,
+        defaultOption: 'Select a project',
+        value: -1,
+        displayText: 'Project',
+        addToEditRequest: true,
+        addToCreateRequest: true,
+        disabledOnEdit: true,
+    },
+    projectYear: {
+        elementType: 'input',
+        elementConfig: {
+            type: 'hidden'
+        },
+        elementUIConfig: null,
+        value: 0
     },
     workingOrderNo: {
         elementType: 'input',
@@ -149,6 +149,15 @@ export const workingOrderModel = {
         value: moment().format('YYYY-MM-DDThh:mm:ss'),
         displayText: 'Plan Date',
         isDate: true
+    },
+    planData: {
+        elementType: 'headline',
+        elementConfig: null,
+        elementUIConfig: {
+            grid: 'col-12 my-2'
+        },
+        value: '',
+        displayText: 'Disposition'
     },
     startTime: {
         elementType: 'input',

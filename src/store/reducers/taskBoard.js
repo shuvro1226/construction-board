@@ -1,5 +1,6 @@
 import * as actionTypes from '../actions/actionTypes';
 import { workingOrderModel } from '../../config/models/workingOrder';
+import { filters } from '../../config/models/filters';
 
 const initialState = {
     status: null,
@@ -12,7 +13,8 @@ const initialState = {
     createMode: false,
     woDetail: workingOrderModel,
     oldWODetail: workingOrderModel,
-    woTasks: null
+    woTasks: null,
+    woFilters: filters
 }
 
 const WOStatusDefaults = {
@@ -158,41 +160,6 @@ const toggleTaskActions = (state, action) => {
     }
 }
 
-const filterWOList = (state, action) => {
-    const woGroupdByStatus = [];
-    for (const statusItem of state.status) {
-        if (statusItem.useBoard) {
-            const statusId = statusItem.status;
-            woGroupdByStatus[statusId] = state.workingOrders[statusId].map(woDetail => {
-                let visible = false;
-                if (
-                    (action.filters.project.value.toString() === "-1" && action.filters.customer.value.toString() === "-1") ||
-                    (action.filters.customer.value.toString() === "-1" && action.filters.project.value.toString() === woDetail.projectNo.toString()) ||
-                    (action.filters.project.value.toString() === "-1" && action.filters.customer.value.toString() === woDetail.customerNo.toString()) ||
-                    (action.filters.project.value.toString() === woDetail.projectNo.toString() && action.filters.customer.value.toString() === woDetail.customerNo.toString())
-                ) {
-                    visible = true;
-                }
-                return {
-                    ...woDetail,
-                    visible: visible
-                }
-            });
-        }
-    }
-
-    const updatedWorkingOrdersList = {
-        ...state.workingOrders,
-        ...woGroupdByStatus
-    };
-
-
-    return {
-        ...state,
-        workingOrders: updatedWorkingOrdersList
-    }
-}
-
 const toggleWOModal = (state, action) => {
     let workingOrderData = {};
     if (action.woDetail) {
@@ -220,6 +187,13 @@ const updateWOEditFormElement = (state, action) => {
     return {
         ...state,
         woDetail: action.woFields
+    };
+}
+
+const updateFilterElement = (state, action) => {
+    return {
+        ...state,
+        woFilters: action.woFilters
     };
 }
 
@@ -303,12 +277,12 @@ const reducer = (state = initialState, action) => {
             return fetchWOSuccess(state, action);
         case actionTypes.TOGGLE_TASK_ACTIONS:
             return toggleTaskActions(state, action);
-        case actionTypes.APPLY_FILTER_TO_WO_LIST:
-            return filterWOList(state, action);
         case actionTypes.TOGGLE_WO_MODAL:
             return toggleWOModal(state, action);
         case actionTypes.FORM_ELEMENT_CHANGE:
             return updateWOEditFormElement(state, action);
+        case actionTypes.FILTER_ELEMENT_CHANGE:
+            return updateFilterElement(state, action);
         case actionTypes.UPDATE_WO_START:
             return saveWOStart(state, action);
         case actionTypes.UPDATE_WO_SUCCESS:

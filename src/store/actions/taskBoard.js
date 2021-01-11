@@ -1,6 +1,7 @@
 import * as actionTypes from './actionTypes';
 import * as apiConstants from '../../config/constants';
 import axios from '../../config/axios-config';
+import moment from 'moment';
 
 export const fetchStatusSuccess = (woStatusData) => {
     return {
@@ -54,10 +55,27 @@ export const fetchWOStart = () => {
     }
 }
 
-export const fetchWOByStatus = (statusId) => {
+export const fetchWOByStatus = (statusId, filters = null) => {
+    let url = apiConstants.GET_WO_BY_STATUS + statusId;
+    if (filters) {
+        if (filters.projectNo.value.toString() !== "-1") {
+            url += '&filter[projectNo][eq]=' + filters.projectNo.value;
+        }
+        if (filters.customerNo.value.toString() !== "-1") {
+            url += '&filter[customerNo][eq]=' + filters.customerNo.value;
+        }
+        if (filters.taskSelection.value.toString() !== "-1") {
+            url += '&filter[taskName][like]=' + filters.taskSelection.value;
+        }
+        url += '&filter[plannedDate][gte]=' + moment(filters.executionStartDate.value, 'YYYY-MM-DDThh:mm:ss').format('YYYY-MM-DD');
+        url += '&filter[plannedDate][lte]=' + moment(filters.executionEndDate.value, 'YYYY-MM-DDThh:mm:ss').format('YYYY-MM-DD');
+    } else {
+        url += '&filter[plannedDate][gte]=' + moment().clone().startOf('month').format('YYYY-MM-DD');
+        url += '&filter[plannedDate][lte]=' + moment().clone().endOf('month').format('YYYY-MM-DD')
+    }
     return (dispatch) => {
         dispatch(fetchWOStart());
-        axios.get(apiConstants.GET_WO_BY_STATUS + statusId + apiConstants.GET_WO_PARAMS)
+        axios.get(url + apiConstants.GET_WO_PARAMS)
             .then(res => {
                 dispatch(fetchWOSuccess(res.data, statusId));
             })
@@ -78,15 +96,6 @@ export const toggleTaskActions = (index, showActions, statusId) => {
     }
 }
 
-export const applyFiltersToWOList = (filters) => {
-    return (dispatch) => {
-        dispatch({
-            type: actionTypes.APPLY_FILTER_TO_WO_LIST,
-            filters: filters
-        })
-    }
-}
-
 export const toggleWOModal = (showModal, woDetail, createMode) => {
     return (dispatch) => {
         dispatch({
@@ -103,6 +112,15 @@ export const formElementChange = (updatedFields) => {
         dispatch({
             type: actionTypes.FORM_ELEMENT_CHANGE,
             woFields: updatedFields
+        })
+    }
+}
+
+export const filterChange = (updatedFields) => {
+    return (dispatch) => {
+        dispatch({
+            type: actionTypes.FILTER_ELEMENT_CHANGE,
+            woFilters: updatedFields
         })
     }
 }
@@ -128,7 +146,7 @@ export const saveWOFail = (err) => {
     }
 }
 
-export const saveWorkingOrder = (updatedWOData, isCreate) => {
+export const saveWorkingOrder = (updatedWOData, isCreate, filters) => {
     return (dispatch) => {
         dispatch(saveWOStart());
         let method = 'put';
@@ -143,7 +161,7 @@ export const saveWorkingOrder = (updatedWOData, isCreate) => {
         axios(config)
             .then(response => {
                 dispatch(saveWOSuccess(response.data, updatedWOData[0]));
-                dispatch(fetchWOByStatus(updatedWOData[0].status));
+                dispatch(fetchWOByStatus(updatedWOData[0].status, filters));
                 setTimeout(() => {
                     dispatch(toggleWOModal(false, null, false));
                 }, 500);

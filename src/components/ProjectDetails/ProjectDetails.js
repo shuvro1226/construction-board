@@ -72,11 +72,6 @@ const ProjectDetails = (props) => {
                     {projectStatus}
                 </Card>                
             </Col>
-            <Col xs="12" className="py-4">
-                <Card icon="tasks" title="Working Orders for this project">
-                    {workingOrders}
-                </Card>                     
-            </Col>
         </Row>
     )
 }

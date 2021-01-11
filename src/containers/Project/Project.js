@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import { Container } from 'react-bootstrap';
+import { Container, Row } from 'react-bootstrap';
 import Wrapper from '../../hoc/Wrapper/Wrapper';
 import ProjectDetails from '../../components/ProjectDetails/ProjectDetails';
 import * as actions from '../../store/actions/index';
@@ -28,6 +28,9 @@ class Project extends Component {
             <Wrapper>
                 <Container>
                     {projectDetails}
+                    <Row>
+
+                    </Row>
                 </Container>
             </Wrapper>
         )

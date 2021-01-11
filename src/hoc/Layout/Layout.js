@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Wrapper from '../Wrapper/Wrapper';
 import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
+import WorkingOrder from '../../containers/WorkingOrder/WorkingOrder';
 import * as actions from '../../store/actions/index';
 
 class Layout extends Component {
@@ -26,8 +27,9 @@ class Layout extends Component {
                     : null                        
                 }
                 <main className="my-5 py-4">
-                    {this.props.children}
-                </main>
+                    {this.props.children}                               
+                    <WorkingOrder />
+                </main>     
             </Wrapper>
         );
     }

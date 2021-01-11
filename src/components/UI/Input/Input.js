@@ -11,7 +11,7 @@ import TimePicker from 'rc-time-picker';
 const input = (props) => {
     let inputElement = null;
     let disabled = false;
-    if (!props.isCreateWO && props.config.disabledOnEdit) {
+    if (!props.isCreate && props.config.disabledOnEdit) {
         disabled = true;
     }
     let fieldValue = props.config.value;
@@ -77,6 +77,9 @@ const input = (props) => {
                 )) : null}
             </Form.Control>            
             break;
+        case ( 'headline' ):
+            inputElement = <h2>{props.config.displayText}</h2>          
+            break;
         default:
             break;            
     }
@@ -99,12 +102,14 @@ const input = (props) => {
         formGroupClass = 'd-none';
     }
 
-    return (
-        <Form.Group className={formGroupClass}>
+    if (props.config.displayText && props.config.displayText !== '' && props.config.elementType !== 'headline') {
+        inputElement = <Form.Group className={formGroupClass}>
             <Form.Label>{props.config.displayText}</Form.Label>
             {inputElement}
         </Form.Group>
-    );
+    }
+
+    return inputElement;
 }
 
 export default input;
