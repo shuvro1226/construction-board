@@ -25,14 +25,19 @@ class TaskBoards extends Component {
         ];  
 
         let taskBoardContent = null;
-        if (this.props.workingOrders && this.props.workingOrders[this.props.statusDetail.status]) {
+        if (
+            this.props.workingOrders && 
+            this.props.workingOrders[this.props.statusDetail.status] &&
+            this.props.workingOrders[this.props.statusDetail.status].length > 0) {
             taskBoardContent = <Tasks
-                workingOrders = {this.props.workingOrders}
+                workingOrders = {this.props.workingOrders[this.props.statusDetail.status]}
                 statusDetail = {this.props.statusDetail}
                 showWorkingOrderEditModal={this.showWOEditModal}
                 showActions={this.props.onToggleTaskActions} 
                 hideActions={this.props.onToggleTaskActions}
             />;
+        } else {
+            taskBoardContent = <p className="text-light">No working orders available. Try filtering the taskboard!</p>
         }
 
         return (

@@ -41,8 +41,7 @@ class WorkingOrder extends Component {
         }
         
         const workingOrderData = [updatedPostData];  
-        this.props.onSaveWorkingOrder(workingOrderData, this.props.isCreateWO, this.props.filters);        
-        this.props.history.push('/');
+        this.props.onSaveWorkingOrder(workingOrderData, this.props.isCreateWO, this.props.filters);      
     }
 
     onInputChangedHandler = (event, element) => {

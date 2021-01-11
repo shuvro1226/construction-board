@@ -8,10 +8,11 @@ export const authStart = () => {
     }
 }
 
-export const authSuccess = (response) => {
+export const authSuccess = (token, userId) => {
     return {
         type: actionTypes.AUTH_SUCCESS,
-        response: response
+        token: token,
+        userId: userId
     }
 }
 
@@ -36,7 +37,7 @@ export const authenticate = (email, password) => {
                 localStorage.setItem('token', response.data.idToken);
                 localStorage.setItem('expirationDate', expirationDate);
                 localStorage.setItem('userId', response.data.localId);
-                dispatch(authSuccess(response.data));
+                dispatch(authSuccess(response.data.idToken, response.data.localId));
                 dispatch(checkAuthTimeout(response.data.expiresIn));
             })
             .catch(error => {

@@ -2,7 +2,6 @@ import React from "react";
 import { Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
-import ProjectWO from './ProjectWO/ProjectWO';
 import ProjectStatus from './ProjectStatus/ProjectStatus';
 import Card from '../UI/Card/Card';
 
@@ -14,11 +13,13 @@ const ProjectDetails = (props) => {
         4: 0,
         5: 0
     };
-    let workingOrders = null, projectStatus = null, totalBookedHours = 0, totalFinishedHours = 0;
+    let projectStatus = null, totalBookedHours = 0, totalFinishedHours = 0;
     if (props.workingOrders && props.statusList) {
-        workingOrders = props.workingOrders.map(workingOrder => {
-            if (workingOrder.status !== 5) { // Skipping deleted status counts
+        props.workingOrders.forEach(workingOrder => {
+            if (workingOrder.status.toString() !== "5") {
                 workingOrderByStatus[workingOrder.status] = workingOrderByStatus[workingOrder.status] + 1;
+            }
+            if (["3","4"].includes(workingOrder.status.toString())) { // Skipping deleted/recorded/pre-planned status counts
                 if (!workingOrder.totalBookedHours) {
                     // manually calculating totalBookedHours for presentation purpose if no totalbookedhours found
                     const startDate = moment(workingOrder.executionStartDate);
@@ -34,14 +35,8 @@ const ProjectDetails = (props) => {
                 if (workingOrder.status === 4) {
                     totalFinishedHours += workingOrder.totalBookedHours;
                 }
-            }            
-            let statusDetail = props.statusList[workingOrder.status - 1];
-            return <ProjectWO 
-                key={workingOrder.workingOrderNo} 
-                workingOrder={workingOrder} 
-                statusDetail={statusDetail} 
-            />
-        })
+            }
+        });
 
         projectStatus = <ProjectStatus 
             statusList={props.statusList}

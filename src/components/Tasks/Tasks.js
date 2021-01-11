@@ -6,10 +6,9 @@ import './Tasks.css';
 import Wrapper from '../../hoc/Wrapper/Wrapper';
 
 const TasksList = (props) => {
-    
-    const workingOrdersList = props.workingOrders[props.statusDetail.status].map((woDetail, index) => {
+    const workingOrdersList = props.workingOrders.map((woDetail, index) => {
         
-        if (index < 10 && woDetail.detailDescription !== "" && woDetail.visible) {
+        if (index < 10 && (woDetail.detailDescription !== "" || woDetail.description !== "") && woDetail.customerName !== "" && woDetail.visible) {
             let taskActionsClasses = ['TaskActions'];
             if (!woDetail.showActions) {
                 taskActionsClasses.push('d-none');
@@ -32,7 +31,7 @@ const TasksList = (props) => {
                 toastAction={() => props.showWorkingOrderEditModal(woDetail)}
                 showActions={() => props.showActions(index, true, props.statusDetail.status)} 
                 hideActions={() => props.hideActions(index, false, props.statusDetail.status)}>
-                    {woDetail.detailDescription}
+                    {woDetail.detailDescription ? woDetail.detailDescription: woDetail.description}
             </Toast>;
         }
         return null;

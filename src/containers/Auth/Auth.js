@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap'; 
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+
 import { authModel } from '../../config/models/auth';
 import Input from '../../components/UI/Input/Input';
 import styles from './Auth.module.css';
@@ -24,6 +26,11 @@ class Auth extends Component {
     }
 
     render() {
+
+        if (this.props.isAuthenticated) {
+            return <Redirect to="/" />
+        }
+
         let authFields = null;
         if (authModel) {
             authFields = Object.keys(authModel).map(authKey => {    

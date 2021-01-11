@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 import Wrapper from '../../hoc/Wrapper/Wrapper';
 import TaskBoards from '../TaskBoards/TaskBoards';
@@ -20,6 +21,10 @@ class ConstructionBoard extends Component {
     }
     
     render() {
+        if (!this.props.isAuthenticated) {
+            return <Redirect to="/login" />
+        }
+
         let taskBoardLayout = null;
         if (this.props.status) {
             taskBoardLayout = this.props.status.map(status => {

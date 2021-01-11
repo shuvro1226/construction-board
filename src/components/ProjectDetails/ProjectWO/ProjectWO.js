@@ -1,28 +1,55 @@
-import React from "react";
-import { Col, Badge } from 'react-bootstrap';
+import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Card } from 'react-bootstrap';
+
+import Tasks from '../../Tasks/Tasks';
 import styles from './ProjectWO.module.css';
 
-const ProjectWO = (props) => {
-    let badge = null;
-    if (props.statusDetail) {
-        badge = <Badge variant={props.statusDetail.scheme.toLowerCase()} className={styles.Badge}>
-            <FontAwesomeIcon icon={props.statusDetail.icon} /> {props.statusDetail.displayText}
-        </Badge>
+const projectWO = (props) => {
+
+    let cardHeaderStyles = [
+        'text-white',
+        styles.TextCapitalize
+    ];  
+
+    let taskBoardContent = null;
+    if (props.statusDetail && props.workingOrders) {
+        const filteredWorkingOrders = props.workingOrders.reduce((workingOrders, woDetail) => {
+            if (woDetail.status.toString() === props.statusDetail.status.toString()) {
+                workingOrders.push({
+                    ...woDetail,
+                    visible: true
+                });
+            }
+            return workingOrders;
+        }, []);
+
+        if (filteredWorkingOrders.length > 0) {
+            taskBoardContent = <Tasks
+                workingOrders={filteredWorkingOrders}
+                statusDetail={props.statusDetail}  
+                showWorkingOrderEditModal={props.showWorkingOrderEditModal}                       
+                showActions={props.showActions} 
+                hideActions={props.hideActions}
+            />;
+        } else {
+            taskBoardContent = <p className="text-light">No working orders available with {props.statusDetail.displayText} status.</p>
+        }
+        
     }
 
-    let workingOrder = null;
-    if (props.statusDetail && props.workingOrder.detailDescription) {
-        workingOrder = <Col xs="12" className="py-2">
-            <h5>
-                {badge}
-                {props.workingOrder.detailDescription}
-            </h5>
-        </Col>
-    }
-    
-    
-    return workingOrder;
+    return (
+        <Card bg={props.statusDetail.scheme.toLowerCase()}>
+            <Card.Header as="h5" className={cardHeaderStyles.join(' ')}>
+                <FontAwesomeIcon icon={props.statusDetail.icon} /> {props.statusDetail.displayText}
+            </Card.Header>
+            <Card.Body>
+                <Card.Text as="div">
+                    {taskBoardContent}
+                </Card.Text>
+            </Card.Body>
+        </Card>
+    );
 }
 
-export default ProjectWO;
+export default projectWO;

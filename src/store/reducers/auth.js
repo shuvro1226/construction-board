@@ -18,8 +18,8 @@ const authStart = (state, action) => {
 const authSuccess = (state, action) => {
     return {
         ...state,
-        token: action.response.idToken,
-        userId: action.response.userId,
+        token: action.token,
+        userId: action.userId,
         loading: false,
         error: false
     };

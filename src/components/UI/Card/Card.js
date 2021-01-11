@@ -5,10 +5,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const card = (props) => {
     return(
         <Card>
+            <Card.Header as="h5">
+                <FontAwesomeIcon icon={props.icon} /> {props.title}
+            </Card.Header>
             <Card.Body>
-                <Card.Title>
-                    <FontAwesomeIcon icon={props.icon} /> {props.title}
-                </Card.Title>
                 <Card.Text as="div">
                     {props.children}
                 </Card.Text>
