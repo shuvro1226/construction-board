@@ -164,7 +164,10 @@ const toggleWOModal = (state, action) => {
     let workingOrderData = {};
     if (action.woDetail) {
         for (const [key, elements] of Object.entries(state.woDetail)) {
-            let updatedValue = action.woDetail[key];
+            let updatedValue = state.woDetail[key].value;
+            if (action.woDetail[key]) {
+                updatedValue = action.woDetail[key];
+            }
             workingOrderData[key] = {
                 ...elements,
                 value: updatedValue

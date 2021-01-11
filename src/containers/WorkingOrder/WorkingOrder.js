@@ -41,7 +41,11 @@ class WorkingOrder extends Component {
         }
         
         const workingOrderData = [updatedPostData];  
-        this.props.onSaveWorkingOrder(workingOrderData, this.props.isCreateWO, this.props.filters);      
+        let fromProject = false;
+        if (window.location.pathname.includes('project')) {
+            fromProject = true;
+        }
+        this.props.onSaveWorkingOrder(workingOrderData, this.props.isCreateWO, this.props.filters, fromProject);      
     }
 
     onInputChangedHandler = (event, element) => {
@@ -135,6 +139,7 @@ class WorkingOrder extends Component {
                     showWOModal={this.props.showWOModal}
                     isCreateWO={this.props.isCreateWO} 
                     onLinkClicked={this.linkClickedHandler}
+                    hasEditAccess={this.props.hasEditAccess}
                 />;
             </Wrapper>
         )
@@ -151,7 +156,8 @@ const mapStateToProps = state => {
         workingOrders: state.taskBoard.workingOrders,
         projects: state.taskBoard.woProjects,
         customers: state.taskBoard.woCustomers,
-        filters: state.taskBoard.woFilters
+        filters: state.taskBoard.woFilters,
+        hasEditAccess: state.auth.hasEditAccess
     }
 }
 
@@ -159,7 +165,7 @@ const mapDispatchToProps = dispatch => {
     return {
         onToggleWOModal: (showModal, woDetail, createMode) => dispatch(actions.toggleWOModal(showModal, woDetail, createMode)),
         onFormElementChange: (updatedFields) => dispatch(actions.formElementChange(updatedFields)),
-        onSaveWorkingOrder: (woDetail, isCreateWO) => dispatch(actions.saveWorkingOrder(woDetail, isCreateWO))
+        onSaveWorkingOrder: (woDetail, isCreateWO, filters, fromProject) => dispatch(actions.saveWorkingOrder(woDetail, isCreateWO, filters, fromProject))
     }
 }
 

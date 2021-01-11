@@ -3,6 +3,7 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
     token: null,
     userId: null,
+    hasEditAccess: false,
     loading: false,
     error: false
 }
@@ -16,10 +17,15 @@ const authStart = (state, action) => {
 }
 
 const authSuccess = (state, action) => {
+    let hasEditAccess = false;
+    if (action.userId === 'l7ciBJEi4NRB0qAiVD6KhKiQVfw2') {
+        hasEditAccess = true;
+    }
     return {
         ...state,
         token: action.token,
         userId: action.userId,
+        hasEditAccess: hasEditAccess,
         loading: false,
         error: false
     };

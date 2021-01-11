@@ -8,7 +8,10 @@ import * as actions from '../../store/actions/index';
 class Layout extends Component {
 
     showWOEditModal = () => {
-        this.props.onToggleWOModal(true, null, true);
+        const woDetail = {
+            projectNo: window.location.pathname.split('/')[2]
+        };
+        this.props.onToggleWOModal(true, woDetail, true);
     }
 
     logoutHandler = () => {
@@ -23,6 +26,7 @@ class Layout extends Component {
                         <Toolbar 
                             showCreateWOModal={this.showWOEditModal} 
                             logout={this.logoutHandler} 
+                            hasEditAccess={this.props.hasEditAccess}
                         /> 
                     : null                        
                 }
@@ -37,7 +41,8 @@ class Layout extends Component {
 
 const mapStateToProps = state => {
     return {
-        isAuthenticated: state.auth.token !== null
+        isAuthenticated: state.auth.token !== null,
+        hasEditAccess: state.auth.hasEditAccess
     }
 }
 

@@ -146,7 +146,7 @@ export const saveWOFail = (err) => {
     }
 }
 
-export const saveWorkingOrder = (updatedWOData, isCreate, filters) => {
+export const saveWorkingOrder = (updatedWOData, isCreate, filters, fromProject) => {
     return (dispatch) => {
         dispatch(saveWOStart());
         let method = 'put';
@@ -165,6 +165,9 @@ export const saveWorkingOrder = (updatedWOData, isCreate, filters) => {
                 setTimeout(() => {
                     dispatch(toggleWOModal(false, null, false));
                 }, 500);
+                if (fromProject) {
+                    dispatch(fetchProjectWorkingOrders(updatedWOData[0].projectNo));
+                }
             })
             .catch(error => {
                 dispatch(saveWOFail(error));
@@ -205,6 +208,39 @@ export const fetchTasks = () => {
             })
             .catch(error => {
                 dispatch(fetchTasksFail(error));
+            })
+    }
+}
+
+export const fetchProjectWOStart = () => {
+    return {
+        type: actionTypes.FETCH_PROJECT_WO_START
+    }
+}
+
+export const fetchProjectWOSuccess = (response) => {
+    return {
+        type: actionTypes.FETCH_PROJECT_WO_SUCCESS,
+        response: response
+    }
+}
+
+export const fetchProjectWOFail = (err) => {
+    return {
+        type: actionTypes.FETCH_PROJECT_WO_FAIL,
+        error: err
+    }
+}
+
+export const fetchProjectWorkingOrders = (projectNo) => {
+    return (dispatch) => {
+        dispatch(fetchProjectWOStart());
+        axios.get(apiConstants.GET_PROJECT_WO + projectNo + apiConstants.GET_WO_PARTIALS + apiConstants.GET_WO_ALIAS)
+            .then(response => {
+                dispatch(fetchProjectWOSuccess(response.data));
+            })
+            .catch(error => {
+                dispatch(fetchProjectWOFail(error));
             })
     }
 }

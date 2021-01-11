@@ -35,6 +35,7 @@ const form = (props) => {
             modalTitle={modalTitle}
             modalSubmit={props.modalSubmitted}
             modalSize="lg"
+            hasEditAccess={props.hasEditAccess}
         >
             <div className="row">
                 {workingOrderFields}
