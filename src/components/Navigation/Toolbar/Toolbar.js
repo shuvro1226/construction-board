@@ -18,6 +18,7 @@ const toolbar = (props) => {
     return (
         <Navbar fixed="top" bg="light" expand="lg" className={styles.Navbar}>
             <NavLink to="/" className={styles.Logo}>CB</NavLink>
+            <NavLink to="/projects" className={styles.NavLink}>Projects</NavLink>
             <Navbar.Toggle />
             <Navbar.Collapse>
                 <Nav className="ml-auto">

@@ -17,6 +17,12 @@ export {
 from './project';
 
 export {
+    fetchProjectStatuses,
+    fetchProjectsByStatus
+}
+from './projects';
+
+export {
     authenticate,
     logoutUser,
     authCheckState

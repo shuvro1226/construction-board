@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import Layout from './hoc/Layout/Layout';
 import ConstructionBoard from './containers/ConstructionBoard/ConstructionBoard';
+import Projects from './containers/Projects/Projects';
 import Project from './containers/Project/Project';
 import Loader from './components/UI/Loader/Loader';
 import Auth from './containers/Auth/Auth';
@@ -20,7 +21,7 @@ class App extends Component {
 
   render() {
     let loader = null;
-    if (this.props.taskBoardLoading || this.props.projectLoading || this.props.authLoading) {
+    if (this.props.taskBoardLoading || this.props.projectLoading || this.props.authLoading || this.props.projectsLoading) {
         loader = <Loader />;
     }
     let routes = (
@@ -33,6 +34,7 @@ class App extends Component {
       routes = (
         <Switch>
           <Route path="/project/:id/:year" component={Project} />
+          <Route path="/projects" component={Projects} />
           <Route path="/" exact component={ConstructionBoard} />
           <Redirect to="/" />
         </Switch>
@@ -54,6 +56,7 @@ const mapStateToProps = state => {
       taskBoardLoading: state.taskBoard.loading,
       projectLoading: state.project.loading,
       authLoading: state.auth.loading,
+      projectsLoading: state.projects.loading,
       isAuthenticated: state.auth.token !== null
   }
 }

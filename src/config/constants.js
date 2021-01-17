@@ -13,6 +13,13 @@ export const GET_WO_TASKS = 'v1/tasks/select';
 export const GET_PROJECT_DETAILS = 'v1/projects/select/';
 export const GET_PROJECT_WO = 'v3/workingorders?filter[projectNo][eq]=';
 
+export const GET_PROJECTS = 'v3/projects';
+export const GET_PROJECTS_BY_STATUS = GET_PROJECTS + '?filter[projectStatus][in]=';
+export const GET_PROJECTS_PARTIALS = '&partial=parentId,projectValidEndDate,projectValidStartDate,fiscalYearKey,customerDisplayName,customerName,colorCode,externalProjectNo,projectName,commercialContactKey,' +
+    'technicalContactKey,customerNo,isFrameContract,projectNo,calcOrderSum,workingOrderFilesCount,projectFilesCount,totalBookedHours,hasSubProjects,projectStatus,labelIds';
+export const GET_PROJECT_STATUSES = 'v3/projects/statuses';
+
+
 // Firebase API constants
 // export const API_BACKEND = 'firebase';
 // export const GET_WO_STATUS = 'statusList.json';
