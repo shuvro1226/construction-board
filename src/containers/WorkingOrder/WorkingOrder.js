@@ -39,6 +39,10 @@ class WorkingOrder extends Component {
                 }
             }         
         }
+
+        if (updatedPostData) {
+            updatedPostData['labelIds'] = [0];
+        }
         
         const workingOrderData = [updatedPostData];  
         let fromProject = false;
