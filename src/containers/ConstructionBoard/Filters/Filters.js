@@ -5,8 +5,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
 import Input from '../../../components/UI/Input/Input';
 import * as actions from '../../../store/actions/index';
+import { filters } from '../../../config/models/filters';
 
 class Filters extends Component {
+    state = {
+        filters: filters
+    }
 
     onFilterChangedHandler = (event, element) => {
         let updatedValue;
@@ -20,20 +24,33 @@ class Filters extends Component {
             updatedValue = parseInt(updatedValue);
         }
         const updatedFilterValue = {
-            ...this.props.filters,
+            ...this.state.filters,
             [element.id]: {
-                ...this.props.filters[element.id],
+                ...this.state.filters[element.id],
                 value: updatedValue
             }
         }
 
-        this.props.onFilterChange(updatedFilterValue);
+        this.setState({
+            filters: updatedFilterValue
+        });
     }
 
     onApplyFilter = () => {
         if (this.props.status) {
             for (const statusDetail of this.props.status) {
-                this.props.onWoGetByStatus(statusDetail.status, this.props.filters);
+                this.props.onWoGetByStatus(statusDetail.status, this.state.filters);
+            }
+        }
+    }
+
+    onClearFilters = () => {
+        this.setState({
+            filters: filters
+        });
+        if (this.props.status) {
+            for (const statusDetail of this.props.status) {
+                this.props.onWoGetByStatus(statusDetail.status);
             }
         }
     }
@@ -42,8 +59,8 @@ class Filters extends Component {
 
         const filtersArray = [];
 
-        if (this.props.filters) {
-            for (let key in this.props.filters) {
+        if (this.state.filters) {
+            for (let key in this.state.filters) {
                 let defaultOptions = null;
                 if (key === 'projectNo' && this.props.projects) {
                     defaultOptions = Object.keys(this.props.projects).map(key => {
@@ -70,7 +87,7 @@ class Filters extends Component {
                     });
                 }
                 const config = {
-                    ...this.props.filters[key],
+                    ...this.state.filters[key],
                     defaultOptions: defaultOptions
                 }
                 filtersArray.push({
@@ -103,7 +120,10 @@ class Filters extends Component {
                 <div className="col-12 col-md-2">
                     <Button variant="primary" onClick={this.onApplyFilter}>
                         <FontAwesomeIcon icon="filter" /> Filter
-                    </Button>                    
+                    </Button>        
+                    <Button variant="danger" className="ml-2" onClick={this.onClearFilters}>
+                        Clear
+                    </Button>            
                 </div>           
             </Row>
         )
@@ -115,15 +135,13 @@ const mapStateToProps = state => {
         status: state.taskBoard.status,
         projects: state.taskBoard.woProjects,
         customers: state.taskBoard.woCustomers,
-        tasks: state.taskBoard.woTasks,
-        filters: state.taskBoard.woFilters
+        tasks: state.taskBoard.woTasks
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onWoGetByStatus: (statusId, filters) => dispatch(actions.fetchWOByStatus(statusId, filters)),
-        onFilterChange: (updatedFields) => dispatch(actions.filterChange(updatedFields))
+        onWoGetByStatus: (statusId, filters) => dispatch(actions.fetchWOByStatus(statusId, filters))
     }
 }
 

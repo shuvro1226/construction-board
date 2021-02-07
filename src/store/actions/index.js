@@ -6,7 +6,6 @@ export {
     formElementChange,
     saveWorkingOrder,
     fetchTasks,
-    filterChange,
     filterCustomerListByProject,
     filterProjectListByCustomer
 }

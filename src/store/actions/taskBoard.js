@@ -116,15 +116,6 @@ export const formElementChange = (updatedFields) => {
     }
 }
 
-export const filterChange = (updatedFields) => {
-    return (dispatch) => {
-        dispatch({
-            type: actionTypes.FILTER_ELEMENT_CHANGE,
-            woFilters: updatedFields
-        })
-    }
-}
-
 export const saveWOStart = () => {
     return {
         type: actionTypes.UPDATE_WO_START

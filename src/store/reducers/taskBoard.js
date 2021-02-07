@@ -1,6 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
 import { workingOrderModel } from '../../config/models/workingOrder';
-import { filters } from '../../config/models/filters';
 
 const initialState = {
     status: null,
@@ -14,7 +13,6 @@ const initialState = {
     woDetail: workingOrderModel,
     oldWODetail: workingOrderModel,
     woTasks: null,
-    woFilters: filters,
     employees: null
 }
 
@@ -208,13 +206,6 @@ const updateWOEditFormElement = (state, action) => {
     };
 }
 
-const updateFilterElement = (state, action) => {
-    return {
-        ...state,
-        woFilters: action.woFilters
-    };
-}
-
 const saveWOStart = (state, action) => {
     return {
         ...state,
@@ -366,8 +357,6 @@ const reducer = (state = initialState, action) => {
             return toggleWOModal(state, action);
         case actionTypes.FORM_ELEMENT_CHANGE:
             return updateWOEditFormElement(state, action);
-        case actionTypes.FILTER_ELEMENT_CHANGE:
-            return updateFilterElement(state, action);
         case actionTypes.UPDATE_WO_START:
             return saveWOStart(state, action);
         case actionTypes.UPDATE_WO_SUCCESS:

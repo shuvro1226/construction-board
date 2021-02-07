@@ -38,12 +38,16 @@ const ProjectDetails = (props) => {
             }
         });
 
-        projectStatus = <ProjectStatus 
-            statusList={props.statusList}
-            workingOrderByStatus={workingOrderByStatus}
-            totalBookedHours={totalBookedHours}
-            totalFinishedHours={totalFinishedHours}
-        />
+        if (props.workingOrders.length > 0) {
+            projectStatus = <ProjectStatus 
+                statusList={props.statusList}
+                workingOrderByStatus={workingOrderByStatus}
+                totalBookedHours={totalBookedHours}
+                totalFinishedHours={totalFinishedHours}
+            />
+        } else {
+            projectStatus = <p>No working orders available for this project!</p>
+        }       
 
     }
 
