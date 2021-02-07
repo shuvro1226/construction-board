@@ -64,6 +64,12 @@ class WorkingOrder extends Component {
         }         
         if (['projectNo','status','customerNo'].includes(element.id)) {
             updatedValue = parseInt(updatedValue);
+            if (element.id === 'projectNo') {
+                this.props.onFilterCustomersList(updatedValue);
+            }
+            if (element.id === 'customerNo') {
+                this.props.onFilterProjectsList(updatedValue);
+            }
         }
         const updatedFormElement = {
             ...this.props.workingOrderFields,
@@ -94,7 +100,8 @@ class WorkingOrder extends Component {
                 defaultOptions = Object.keys(this.props.projects).map(key => {
                     return {
                         value: this.props.projects[key].projectNo,
-                        displayText: this.props.projects[key].projectName
+                        displayText: this.props.projects[key].projectName,                        
+                        hideOption: this.props.projects[key].hideOption
                     }
                 });                
             }
@@ -102,7 +109,8 @@ class WorkingOrder extends Component {
                 defaultOptions = Object.keys(this.props.customers).map(key => {
                     return {
                         value: this.props.customers[key].customerNo,
-                        displayText: this.props.customers[key].customerName
+                        displayText: this.props.customers[key].customerName,
+                        hideOption: this.props.customers[key].hideOption
                     }
                 });
             }
@@ -169,7 +177,9 @@ const mapDispatchToProps = dispatch => {
     return {
         onToggleWOModal: (showModal, woDetail, createMode) => dispatch(actions.toggleWOModal(showModal, woDetail, createMode)),
         onFormElementChange: (updatedFields) => dispatch(actions.formElementChange(updatedFields)),
-        onSaveWorkingOrder: (woDetail, isCreateWO, filters, fromProject) => dispatch(actions.saveWorkingOrder(woDetail, isCreateWO, filters, fromProject))
+        onSaveWorkingOrder: (woDetail, isCreateWO, filters, fromProject) => dispatch(actions.saveWorkingOrder(woDetail, isCreateWO, filters, fromProject)),
+        onFilterCustomersList: (projectNo) => dispatch(actions.filterCustomerListByProject(projectNo)),
+        onFilterProjectsList: (customerNo) => dispatch(actions.filterProjectListByCustomer(customerNo))
     }
 }
 

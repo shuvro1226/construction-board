@@ -277,3 +277,17 @@ export const fetchEmployees = () => {
             })
     }
 }
+
+export const filterCustomerListByProject = (projectNo) => {
+    return {
+        type: actionTypes.FILTER_CUSTOMERS_ON_PROJECT_SELECT,
+        projectNo: projectNo
+    }
+}
+
+export const filterProjectListByCustomer = (customerNo) => {
+    return {
+        type: actionTypes.FILTER_PROJECTS_ON_CUSTOMER_SELECT,
+        customerNo: customerNo
+    }
+}

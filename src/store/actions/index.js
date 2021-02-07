@@ -6,7 +6,9 @@ export {
     formElementChange,
     saveWorkingOrder,
     fetchTasks,
-    filterChange
+    filterChange,
+    filterCustomerListByProject,
+    filterProjectListByCustomer
 }
 from './taskBoard';
 

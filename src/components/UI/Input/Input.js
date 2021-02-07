@@ -72,9 +72,12 @@ const input = (props) => {
                 disabled={disabled}
                 onChange={props.changed}>
                     <option value="-1">{props.config.defaultOption}</option>
-                {props.config.defaultOptions ? props.config.defaultOptions.map(option => (
-                    <option key={option.value} value={option.value}>{option.displayText}</option>
-                )) : null}
+                {props.config.defaultOptions ? props.config.defaultOptions.map(option => {
+                    if (!option.hideOption) {
+                        return <option key={option.value} value={option.value}>{option.displayText}</option>                        
+                    }
+                    return false;
+                }) : null}
             </Form.Control>            
             break;
         case ( 'headline' ):

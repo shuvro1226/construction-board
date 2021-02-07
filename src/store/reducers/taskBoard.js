@@ -95,14 +95,28 @@ const fetchWOSuccess = (state, action) => {
 
     const updatedWOProjects = [];
     const updatedWOCustomers = [];
+    const customerProjects = [];
     for (const woDetail of action.workingOrders) {
+        let projects = [
+            ...(customerProjects['customer-' + woDetail.customerNo] ? customerProjects['customer-' + woDetail.customerNo] : []),
+            woDetail.projectNo
+        ];
+
+        const uniqueProjects = [...new Set(projects)];
+
+        customerProjects['customer-' + woDetail.customerNo] = uniqueProjects;
+
         updatedWOProjects['project-' + woDetail.projectNo] = {
             projectNo: woDetail.projectNo,
-            projectName: woDetail.projectName
+            projectName: woDetail.projectName,
+            customerNo: woDetail.customerNo,
+            hideOption: false
         };
         updatedWOCustomers['customer-' + woDetail.customerNo] = {
             customerNo: woDetail.customerNo,
-            customerName: woDetail.customerName
+            customerName: woDetail.customerName,
+            projects: customerProjects['customer-' + woDetail.customerNo],
+            hideOption: false
         };
     }
 
@@ -290,6 +304,48 @@ const fetchEmployeesFail = (state, action) => {
     }
 }
 
+const filterCustomerListByProject = (state, action) => {
+    const projectNo = action.projectNo;
+    const woCustomers = {
+        ...state.woCustomers
+    };
+    const updatedWOCustomers = Object.keys(woCustomers).map(key => {
+        let hideOption = false;
+        if (projectNo !== -1 && !woCustomers[key].projects.includes(projectNo)) {
+            hideOption = true;
+        }
+        return {
+            ...woCustomers[key],
+            hideOption: hideOption
+        }
+    })
+    return {
+        ...state,
+        woCustomers: updatedWOCustomers
+    };
+}
+
+const filterProjectListByCustomer = (state, action) => {
+    const customerNo = action.customerNo;
+    const woProjects = {
+        ...state.woProjects
+    };
+    const updatedWOProjects = Object.keys(woProjects).map(key => {
+        let hideOption = false;
+        if (customerNo !== -1 && woProjects[key].customerNo !== customerNo) {
+            hideOption = true;
+        }
+        return {
+            ...woProjects[key],
+            hideOption: hideOption
+        }
+    })
+    return {
+        ...state,
+        woProjects: updatedWOProjects
+    };
+}
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.FETCH_STATUS_SUCCESS:
@@ -330,6 +386,10 @@ const reducer = (state = initialState, action) => {
             return fetchEmployeesSuccess(state, action);
         case actionTypes.FETCH_EMPLOYEES_FAIL:
             return fetchEmployeesFail(state, action);
+        case actionTypes.FILTER_CUSTOMERS_ON_PROJECT_SELECT:
+            return filterCustomerListByProject(state, action);
+        case actionTypes.FILTER_PROJECTS_ON_CUSTOMER_SELECT:
+            return filterProjectListByCustomer(state, action);
         default:
             return state;
     }
