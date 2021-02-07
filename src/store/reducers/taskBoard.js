@@ -14,7 +14,8 @@ const initialState = {
     woDetail: workingOrderModel,
     oldWODetail: workingOrderModel,
     woTasks: null,
-    woFilters: filters
+    woFilters: filters,
+    employees: null
 }
 
 const WOStatusDefaults = {
@@ -264,6 +265,31 @@ const fetchTasksFail = (state, action) => {
     };
 }
 
+const fetchEmployeesStart = (state, action) => {
+    return {
+        ...state,
+        loading: true,
+        error: false
+    }
+}
+
+const fetchEmployeesSuccess = (state, action) => {
+    return {
+        ...state,
+        employees: action.response,
+        loading: false,
+        error: false
+    }
+}
+
+const fetchEmployeesFail = (state, action) => {
+    return {
+        ...state,
+        loading: false,
+        error: true
+    }
+}
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.FETCH_STATUS_SUCCESS:
@@ -298,6 +324,12 @@ const reducer = (state = initialState, action) => {
             return fetchTasksSuccess(state, action);
         case actionTypes.FETCH_TASKS_FAIL:
             return fetchTasksFail(state, action);
+        case actionTypes.FETCH_EMPLOYEES_START:
+            return fetchEmployeesStart(state, action);
+        case actionTypes.FETCH_EMPLOYEES_SUCCESS:
+            return fetchEmployeesSuccess(state, action);
+        case actionTypes.FETCH_EMPLOYEES_FAIL:
+            return fetchEmployeesFail(state, action);
         default:
             return state;
     }

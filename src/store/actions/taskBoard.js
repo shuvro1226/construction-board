@@ -244,3 +244,36 @@ export const fetchProjectWorkingOrders = (projectNo) => {
             })
     }
 }
+
+export const fetchEmployeesStart = () => {
+    return {
+        type: actionTypes.FETCH_EMPLOYEES_START
+    }
+}
+
+export const fetchEmployeesSuccess = (response) => {
+    return {
+        type: actionTypes.FETCH_EMPLOYEES_SUCCESS,
+        response: response
+    }
+}
+
+export const fetchEmployeesFail = (err) => {
+    return {
+        type: actionTypes.FETCH_EMPLOYEES_FAIL,
+        error: err
+    }
+}
+
+export const fetchEmployees = () => {
+    return (dispatch) => {
+        dispatch(fetchEmployeesStart());
+        axios.get(apiConstants.GET_ACTIVE_EMPLOYEES)
+            .then(response => {
+                dispatch(fetchEmployeesSuccess(response.data));
+            })
+            .catch(error => {
+                dispatch(fetchEmployeesFail(error));
+            })
+    }
+}

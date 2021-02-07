@@ -19,6 +19,9 @@ export const GET_PROJECTS_PARTIALS = '&partial=parentId,projectValidEndDate,proj
     'technicalContactKey,customerNo,isFrameContract,projectNo,calcOrderSum,workingOrderFilesCount,projectFilesCount,totalBookedHours,hasSubProjects,projectStatus,labelIds';
 export const GET_PROJECT_STATUSES = 'v3/projects/statuses';
 
+export const GET_EMPLOYEES = 'v3/employees';
+export const GET_ACTIVE_EMPLOYEES = GET_EMPLOYEES + '?type=active';
+
 
 // Firebase API constants
 // export const API_BACKEND = 'firebase';
