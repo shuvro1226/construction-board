@@ -215,25 +215,10 @@ const saveWOStart = (state, action) => {
 }
 
 const saveWOSuccess = (state, action) => {
-    const oldStatus = state.oldWODetail.status.value;
-    let workingOrdersList = {
-        ...state.workingOrders
-    };
-
-    if (action.woDetail.status.toString() !== oldStatus.toString() && oldStatus !== -1) {
-        const oldProjectNo = state.oldWODetail.projectNo.value,
-            oldWorkingOrderNo = state.oldWODetail.workingOrderNo.value,
-            oldIndex = state.workingOrders[oldStatus].findIndex(element => element.projectNo === oldProjectNo && element.workingOrderNo === oldWorkingOrderNo);
-
-
-        workingOrdersList[oldStatus].splice(oldIndex, 1);
-    }
-
     return {
         ...state,
         loading: false,
-        error: false,
-        workingOrders: workingOrdersList
+        error: false
     };
 }
 
@@ -337,6 +322,38 @@ const filterProjectListByCustomer = (state, action) => {
     };
 }
 
+const updateWOListAfterDrag = (state, action) => {
+    let workingOrders = {
+        ...state.workingOrders
+    };
+
+    const updateData = action.result;
+
+    const sourceWOByStatus = [
+        ...workingOrders[updateData.source.droppableId]
+    ];
+    const sourceWO = workingOrders[updateData.source.droppableId][updateData.source.index];
+
+    sourceWOByStatus.splice(updateData.source.index, 1);
+
+    const destinationWOByStatus = [
+        ...workingOrders[updateData.destination.droppableId]
+    ];
+
+    destinationWOByStatus.splice(updateData.destination.index, 0, sourceWO);
+
+    workingOrders = {
+        ...workingOrders,
+        [updateData.source.droppableId]: sourceWOByStatus,
+        [updateData.destination.droppableId]: destinationWOByStatus
+    };
+
+    return {
+        ...state,
+        workingOrders: workingOrders
+    }
+}
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.FETCH_STATUS_SUCCESS:
@@ -379,6 +396,8 @@ const reducer = (state = initialState, action) => {
             return filterCustomerListByProject(state, action);
         case actionTypes.FILTER_PROJECTS_ON_CUSTOMER_SELECT:
             return filterProjectListByCustomer(state, action);
+        case actionTypes.DRAG_WO_CHANGE_STATUS:
+            return updateWOListAfterDrag(state, action);
         default:
             return state;
     }

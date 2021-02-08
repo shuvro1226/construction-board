@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Toast from '../UI/Toast/Toast';
+import Task from './Task/Task';
 import './Tasks.css';
 import Wrapper from '../../hoc/Wrapper/Wrapper';
 
@@ -24,15 +24,17 @@ const TasksList = (props) => {
                 </div>
             </Wrapper>;            
             
-            return <Toast 
+            return <Task 
                 key={woDetail.uniqueKey} 
+                index={index}
+                uniqueKey={woDetail.uniqueKey}
                 header={taskHeader}
                 headerIcon="user-tie"
                 toastAction={() => props.showWorkingOrderEditModal(woDetail)}
                 showActions={() => props.showActions(index, true, props.statusDetail.status)} 
                 hideActions={() => props.hideActions(index, false, props.statusDetail.status)}>
                     {woDetail.detailDescription ? woDetail.detailDescription: woDetail.description}
-            </Toast>;
+            </Task>;
         }
         return null;
     });

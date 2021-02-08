@@ -7,7 +7,8 @@ export {
     saveWorkingOrder,
     fetchTasks,
     filterCustomerListByProject,
-    filterProjectListByCustomer
+    filterProjectListByCustomer,
+    changeWOStatus
 }
 from './taskBoard';
 

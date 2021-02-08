@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card } from 'react-bootstrap';
+import { Droppable } from 'react-beautiful-dnd';
 
 import Tasks from '../../components/Tasks/Tasks';
 import * as actions from '../../store/actions/index';
@@ -46,9 +47,17 @@ class TaskBoards extends Component {
                     <FontAwesomeIcon icon={this.props.statusDetail.icon} /> {this.props.statusDetail.displayText}
                 </Card.Header>
                 <Card.Body>
-                    <Card.Text as="div">
-                        {taskBoardContent}
-                    </Card.Text>
+                    <Droppable droppableId={this.props.statusDetail.status}>
+                        {provided => (
+                            <div
+                                ref={provided.innerRef}
+                                {...provided.droppableProps}
+                            >
+                                {taskBoardContent}
+                                {provided.placeholder}
+                            </div>
+                        )}                        
+                    </Droppable>                    
                 </Card.Body>
             </Card>
         );

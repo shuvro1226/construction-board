@@ -122,11 +122,10 @@ export const saveWOStart = () => {
     }
 }
 
-export const saveWOSuccess = (response, woDetail) => {
+export const saveWOSuccess = (response) => {
     return {
         type: actionTypes.UPDATE_WO_SUCCESS,
-        response: response,
-        woDetail: woDetail
+        response: response
     }
 }
 
@@ -151,7 +150,7 @@ export const saveWorkingOrder = (updatedWOData, isCreate, filters, fromProject) 
         }
         axios(config)
             .then(response => {
-                dispatch(saveWOSuccess(response.data, updatedWOData[0]));
+                dispatch(saveWOSuccess(response.data));
                 dispatch(fetchWOByStatus(updatedWOData[0].status, filters));
                 setTimeout(() => {
                     dispatch(toggleWOModal(false, null, false));
@@ -280,5 +279,40 @@ export const filterProjectListByCustomer = (customerNo) => {
     return {
         type: actionTypes.FILTER_PROJECTS_ON_CUSTOMER_SELECT,
         customerNo: customerNo
+    }
+}
+
+export const updateWOListAfterDrag = (result) => {
+    return {
+        type: actionTypes.DRAG_WO_CHANGE_STATUS,
+        result: result
+    }
+}
+
+export const changeWOStatus = (result) => {
+    return (dispatch) => {
+        dispatch(updateWOListAfterDrag(result));
+        dispatch(saveWOStart());
+
+        const uniqueKey = result.draggableId.split('-');
+        const updatedWOData = [{
+            projectNo: parseInt(uniqueKey[0]),
+            workingOrderNo: parseInt(uniqueKey[1]),
+            status: parseInt(result.destination.droppableId)
+        }];
+        const config = {
+            method: 'put',
+            url: apiConstants.WORKING_ORDERS,
+            data: updatedWOData
+        }
+        axios(config)
+            .then(response => {
+                dispatch(saveWOSuccess(response.data));
+                dispatch(fetchWOByStatus(parseInt(result.destination.droppableId), null));
+                dispatch(fetchWOByStatus(parseInt(result.source.droppableId), null));
+            })
+            .catch(error => {
+                dispatch(saveWOFail(error));
+            })
     }
 }

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { DragDropContext } from 'react-beautiful-dnd';
 
 import Wrapper from '../../hoc/Wrapper/Wrapper';
 import TaskBoards from '../TaskBoards/TaskBoards';
@@ -17,6 +18,12 @@ class ConstructionBoard extends Component {
         }
         if (!this.props.woTasks && this.props.isAuthenticated) {
             this.props.onFetchTaskSelections();
+        }
+    }
+
+    onDragEnd = result => {
+        if (result.destination && result.destination.droppableId !== result.source.droppableId) {
+            this.props.onWODragEnd(result);
         }
     }
     
@@ -43,7 +50,11 @@ class ConstructionBoard extends Component {
                 <Container fluid>
                     <Filters />
                     <Row className="py-2">
-                        {taskBoardLayout}
+                        <DragDropContext
+                            onDragEnd={this.onDragEnd}
+                        >
+                            {taskBoardLayout}
+                        </DragDropContext>                        
                     </Row>
                 </Container>
                 <WorkingOrder />
@@ -63,7 +74,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onFetchStatus: () => dispatch(actions.fetchStatus()),
-        onFetchTaskSelections: () => dispatch(actions.fetchTasks())
+        onFetchTaskSelections: () => dispatch(actions.fetchTasks()),
+        onWODragEnd: (result) => dispatch(actions.changeWOStatus(result))
     }
 }
 
