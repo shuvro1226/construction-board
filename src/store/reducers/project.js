@@ -57,6 +57,32 @@ const fetchProjectWOFail = (state, action) => {
     };
 }
 
+const updateWOListAfterDrag = (state, action) => {
+    let workingOrders = [
+        ...state.projectWorkingOrders
+    ];
+
+    const updateData = action.result;
+
+    workingOrders = workingOrders.map(workingOrder => {
+        let updatedWorkingOrder = {
+            ...workingOrder
+        };
+        if (workingOrder.uniqueKey === updateData.draggableId) {
+            updatedWorkingOrder = {
+                ...workingOrder,
+                status: parseInt(updateData.destination.droppableId)
+            }
+        }
+        return updatedWorkingOrder;
+    })
+
+    return {
+        ...state,
+        projectWorkingOrders: workingOrders
+    }
+}
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.FETCH_PROJECT_START:
@@ -71,6 +97,8 @@ const reducer = (state = initialState, action) => {
             return fetchProjectWOSuccess(state, action);
         case actionTypes.FETCH_PROJECT_WO_FAIL:
             return fetchProjectWOFail(state, action);
+        case actionTypes.DRAG_PROJECT_WO_CHANGE_STATUS:
+            return updateWOListAfterDrag(state, action);
         default:
             return state;
     }

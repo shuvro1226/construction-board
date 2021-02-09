@@ -15,7 +15,8 @@ from './taskBoard';
 
 export {
     fetchProject,
-    fetchProjectWorkingOrders
+    fetchProjectWorkingOrders,
+    changeProjectWOStatus
 }
 from './project';
 

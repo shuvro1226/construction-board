@@ -1,6 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card } from 'react-bootstrap';
+import { Droppable } from 'react-beautiful-dnd';
 
 import Tasks from '../../Tasks/Tasks';
 import styles from './ProjectWO.module.css';
@@ -44,9 +45,17 @@ const projectWO = (props) => {
                 <FontAwesomeIcon icon={props.statusDetail.icon} /> {props.statusDetail.displayText}
             </Card.Header>
             <Card.Body>
-                <Card.Text as="div">
-                    {taskBoardContent}
-                </Card.Text>
+                <Droppable droppableId={props.statusDetail.status}>
+                    {provided => (
+                        <div
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                        >
+                            {taskBoardContent}
+                            {provided.placeholder}
+                        </div>
+                    )}                        
+                </Droppable>   
             </Card.Body>
         </Card>
     );

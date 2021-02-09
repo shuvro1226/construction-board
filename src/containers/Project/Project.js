@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
+import { DragDropContext } from 'react-beautiful-dnd';
 
 import Wrapper from '../../hoc/Wrapper/Wrapper';
 import ProjectDetails from '../../components/ProjectDetails/ProjectDetails';
@@ -25,6 +26,12 @@ class Project extends Component {
 
     onToggleTaskActions = (index, showActions, status) => {
         // console.log(index, showActions, status);
+    }
+
+    onDragEnd = result => {
+        if (result.destination && result.destination.droppableId !== result.source.droppableId) {
+            this.props.onWODragEnd(result);
+        }
     }
 
     render() {
@@ -66,7 +73,11 @@ class Project extends Component {
                     {projectDetails}                    
                     <Card icon="tasks" title="Working Orders">
                         <Row>
-                            {taskBoardLayout}               
+                            <DragDropContext
+                                onDragEnd={this.onDragEnd}
+                            >
+                                {taskBoardLayout}
+                            </DragDropContext>             
                         </Row>                    
                     </Card>                  
                 </Container>
@@ -89,7 +100,8 @@ const mapDispatchToProps = dispatch => {
         onFetchStatus: () => dispatch(actions.fetchStatus()),
         onFetchProjectDetails: (projectNo, projectYear) => dispatch(actions.fetchProject(projectNo, projectYear)),
         onFetchProjectWO: (projectNo) => dispatch(actions.fetchProjectWorkingOrders(projectNo)),
-        onToggleWOModal: (showModal, woDetail, createMode) => dispatch(actions.toggleWOModal(showModal, woDetail, createMode))
+        onToggleWOModal: (showModal, woDetail, createMode) => dispatch(actions.toggleWOModal(showModal, woDetail, createMode)),
+        onWODragEnd: (result) => dispatch(actions.changeProjectWOStatus(result))
     }
 }
 

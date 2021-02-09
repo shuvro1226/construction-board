@@ -67,3 +67,50 @@ export const fetchProjectWorkingOrders = (projectNo) => {
             })
     }
 }
+
+export const updateWOListAfterDrag = (result) => {
+    return {
+        type: actionTypes.DRAG_PROJECT_WO_CHANGE_STATUS,
+        result: result
+    }
+}
+
+export const saveWOSuccess = (response) => {
+    return {
+        type: actionTypes.UPDATE_WO_SUCCESS,
+        response: response
+    }
+}
+
+export const saveWOFail = (err) => {
+    return {
+        type: actionTypes.UPDATE_WO_FAIL,
+        error: err
+    }
+}
+
+export const changeProjectWOStatus = (result) => {
+    return (dispatch) => {
+        dispatch(updateWOListAfterDrag(result));
+
+        const uniqueKey = result.draggableId.split('-');
+        const updatedWOData = [{
+            projectNo: parseInt(uniqueKey[0]),
+            workingOrderNo: parseInt(uniqueKey[1]),
+            status: parseInt(result.destination.droppableId)
+        }];
+        const config = {
+            method: 'put',
+            url: apiConstants.WORKING_ORDERS,
+            data: updatedWOData
+        }
+        axios(config)
+            .then(response => {
+                dispatch(saveWOSuccess(response.data));
+                dispatch(fetchProjectWorkingOrders(parseInt(uniqueKey[0]), null));
+            })
+            .catch(error => {
+                dispatch(saveWOFail(error));
+            })
+    }
+}
