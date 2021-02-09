@@ -36,6 +36,7 @@ class TaskBoards extends Component {
                 showWorkingOrderEditModal={this.showWOEditModal}
                 showActions={this.props.onToggleTaskActions} 
                 hideActions={this.props.onToggleTaskActions}
+                getWOBookedHours={this.props.getWOBookedHours}
             />;
         } else {
             taskBoardContent = <p className="text-light">No working orders available. Try filtering the taskboard!</p>

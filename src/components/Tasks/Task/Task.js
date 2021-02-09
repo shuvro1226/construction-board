@@ -22,6 +22,7 @@ const task = (props) => {
                         onClick={props.toastAction}
                         onMouseEnter={props.showActions}
                         onMouseLeave={props.hideActions}
+                        onMouseDown={props.getWOBookedHours}
                     >
                         <ToastHeader>
                             <FontAwesomeIcon icon={props.headerIcon} className="mr-1" /> {props.header}

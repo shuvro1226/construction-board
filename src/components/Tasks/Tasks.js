@@ -32,7 +32,9 @@ const TasksList = (props) => {
                 headerIcon="user-tie"
                 toastAction={() => props.showWorkingOrderEditModal(woDetail)}
                 showActions={() => props.showActions(index, true, props.statusDetail.status)} 
-                hideActions={() => props.hideActions(index, false, props.statusDetail.status)}>
+                hideActions={() => props.hideActions(index, false, props.statusDetail.status)}
+                getWOBookedHours={() => props.getWOBookedHours(woDetail.totalBookedHours)}
+            >
                     {woDetail.detailDescription ? woDetail.detailDescription: woDetail.description}
             </Task>;
         }

@@ -8,9 +8,15 @@ import Wrapper from '../../hoc/Wrapper/Wrapper';
 import TaskBoards from '../TaskBoards/TaskBoards';
 import WorkingOrder from '../WorkingOrder/WorkingOrder';
 import Filters from './Filters/Filters';
+import BookedHours from '../../components/WorkingOrder/BookedHours/BookedHours';
 import * as actions from '../../store/actions/index';
 
 class ConstructionBoard extends Component {
+
+    state = {
+        showTotalBookedHoursModal: false,
+        totalBookedHours: 0
+    }
 
     componentDidMount() {
         if (!this.props.status && this.props.isAuthenticated) {
@@ -22,9 +28,41 @@ class ConstructionBoard extends Component {
     }
 
     onDragEnd = result => {
+        if (result.source.droppableId === '3' && result.destination.droppableId === '4') {
+            this.setState({
+                showTotalBookedHoursModal: true
+            });
+        }
         if (result.destination && result.destination.droppableId !== result.source.droppableId) {
             this.props.onWODragEnd(result);
         }
+    }
+
+    onModalClose = () => {
+        this.setState({
+            showTotalBookedHoursModal: false,
+            totalBookedHours: 0
+        });
+    }
+
+    onModalSubmitted = () => {
+        this.props.onUpdateBookedHours(this.state.totalBookedHours);
+        this.setState({
+            showTotalBookedHoursModal: false,
+            totalBookedHours: 0
+        });
+    }
+
+    onTotalBookedHoursUpdate = (event) => {
+        this.setState({
+            totalBookedHours: event.target.value
+        });
+    }
+
+    onGetBookedHours = (hours) => {
+        this.setState({
+            totalBookedHours: hours
+        });
     }
     
     render() {
@@ -37,7 +75,10 @@ class ConstructionBoard extends Component {
             taskBoardLayout = this.props.status.map(status => {
                 if (status.useBoard) {
                     return <Col xs={12} md={3} key={status.status}>
-                        <TaskBoards statusDetail={status} />
+                        <TaskBoards 
+                            statusDetail={status}                            
+                            getWOBookedHours={this.onGetBookedHours}
+                        />
                     </Col>
                 } else {
                     return null;
@@ -58,6 +99,14 @@ class ConstructionBoard extends Component {
                     </Row>
                 </Container>
                 <WorkingOrder />
+                <BookedHours
+                    showBookedHoursModal={this.state.showTotalBookedHoursModal}
+                    modalClosed={this.onModalClose}
+                    modalSubmitted={this.onModalSubmitted}
+                    hasEditAccess={this.props.hasEditAccess}
+                    totalBookedHours={this.state.totalBookedHours}
+                    totalBookedHoursUpdate={(event) => this.onTotalBookedHoursUpdate(event)}
+                />
             </Wrapper>
         )
     }
@@ -67,7 +116,8 @@ const mapStateToProps = state => {
     return {
         status: state.taskBoard.status,
         woTasks: state.taskBoard.woTasks,
-        isAuthenticated: state.auth.token !== null
+        isAuthenticated: state.auth.token !== null,
+        hasEditAccess: state.auth.hasEditAccess
     }
 }
 
