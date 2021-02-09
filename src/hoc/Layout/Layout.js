@@ -7,6 +7,10 @@ import * as actions from '../../store/actions/index';
 
 class Layout extends Component {
 
+    state = {
+        searchText: ''
+    }
+
     showWOEditModal = () => {
         const woDetail = {
             projectNo: window.location.pathname.split('/')[2]
@@ -18,6 +22,13 @@ class Layout extends Component {
         this.props.onLogout();
     }
 
+    onSearchTaskBoard = (event) => {
+        this.setState({
+            searchText: event.target.value
+        });
+        this.props.onBoardSearchInit(event.target.value);
+    }
+
     render() {   
         return (
             <Wrapper>
@@ -27,13 +38,14 @@ class Layout extends Component {
                             showCreateWOModal={this.showWOEditModal} 
                             logout={this.logoutHandler} 
                             hasEditAccess={this.props.hasEditAccess}
+                            searchTaskBoard={(event) => this.onSearchTaskBoard(event)}
                         /> 
                     : null                        
                 }
                 <main className="my-5 py-4">
                     {this.props.children}                               
                     <WorkingOrder />
-                </main>     
+                </main>
             </Wrapper>
         );
     }
@@ -49,7 +61,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onToggleWOModal: (showModal, woDetail, createMode) => dispatch(actions.toggleWOModal(showModal, woDetail, createMode)),
-        onLogout: () => dispatch(actions.logoutUser())
+        onLogout: () => dispatch(actions.logoutUser()),
+        onBoardSearchInit: (value) => dispatch(actions.searchTaskBoard(value))
     }
 }
 

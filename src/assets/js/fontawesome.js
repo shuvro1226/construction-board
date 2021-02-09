@@ -14,7 +14,8 @@ import {
     faBatteryHalf,
     faPlus,
     faCog,
-    faSignOutAlt
+    faSignOutAlt,
+    faSearch
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -32,5 +33,6 @@ library.add(
     faBatteryHalf,
     faPlus,
     faCog,
-    faSignOutAlt
+    faSignOutAlt,
+    faSearch
 )

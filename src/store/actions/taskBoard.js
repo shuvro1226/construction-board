@@ -292,7 +292,6 @@ export const updateWOListAfterDrag = (result) => {
 export const changeWOStatus = (result) => {
     return (dispatch) => {
         dispatch(updateWOListAfterDrag(result));
-        dispatch(saveWOStart());
 
         const uniqueKey = result.draggableId.split('-');
         const updatedWOData = [{
@@ -314,5 +313,12 @@ export const changeWOStatus = (result) => {
             .catch(error => {
                 dispatch(saveWOFail(error));
             })
+    }
+}
+
+export const searchTaskBoard = (value) => {
+    return {
+        type: actionTypes.SEARCH_WORKING_ORDER_BOARD,
+        value: value
     }
 }

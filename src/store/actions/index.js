@@ -8,7 +8,8 @@ export {
     fetchTasks,
     filterCustomerListByProject,
     filterProjectListByCustomer,
-    changeWOStatus
+    changeWOStatus,
+    searchTaskBoard
 }
 from './taskBoard';
 

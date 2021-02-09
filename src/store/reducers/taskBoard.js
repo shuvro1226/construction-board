@@ -354,6 +354,40 @@ const updateWOListAfterDrag = (state, action) => {
     }
 }
 
+const searchWorkingOrderBoard = (state, action) => {
+    const searchText = action.value.toLowerCase();
+    let workingOrders = {
+        ...state.workingOrders
+    };
+
+    const woGroupdByStatus = [];
+    Object.keys(workingOrders).forEach((statusId) => {
+        woGroupdByStatus[statusId] = workingOrders[statusId].map(woDetail => {
+            let visible = true;
+            if (!woDetail.description.toLowerCase().includes(searchText) &&
+                !woDetail.detailDescription.toLowerCase().includes(searchText) &&
+                !woDetail.customerName.toLowerCase().includes(searchText)
+            ) {
+                visible = false;
+            }
+            return {
+                ...woDetail,
+                visible: visible
+            };
+        });
+
+        workingOrders = {
+            ...workingOrders,
+            [statusId]: woGroupdByStatus[statusId]
+        }
+    });
+
+    return {
+        ...state,
+        workingOrders: workingOrders
+    }
+}
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.FETCH_STATUS_SUCCESS:
@@ -398,6 +432,8 @@ const reducer = (state = initialState, action) => {
             return filterProjectListByCustomer(state, action);
         case actionTypes.DRAG_WO_CHANGE_STATUS:
             return updateWOListAfterDrag(state, action);
+        case actionTypes.SEARCH_WORKING_ORDER_BOARD:
+            return searchWorkingOrderBoard(state, action);
         default:
             return state;
     }
