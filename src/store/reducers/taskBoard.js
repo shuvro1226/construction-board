@@ -215,10 +215,25 @@ const saveWOStart = (state, action) => {
 }
 
 const saveWOSuccess = (state, action) => {
+    const oldStatus = state.oldWODetail.status.value;
+    let workingOrdersList = {
+        ...state.workingOrders
+    };
+
+    if (action.woDetail && action.woDetail.status.toString() !== oldStatus.toString() && oldStatus !== -1) {
+        const oldProjectNo = state.oldWODetail.projectNo.value,
+            oldWorkingOrderNo = state.oldWODetail.workingOrderNo.value,
+            oldIndex = state.workingOrders[oldStatus].findIndex(element => element.projectNo === oldProjectNo && element.workingOrderNo === oldWorkingOrderNo);
+
+
+        workingOrdersList[oldStatus].splice(oldIndex, 1);
+    }
+
     return {
         ...state,
         loading: false,
-        error: false
+        error: false,
+        workingOrders: workingOrdersList
     };
 }
 

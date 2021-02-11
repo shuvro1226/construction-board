@@ -15,7 +15,10 @@ const ProjectStatus = (props) => {
     });
 
     const progress = (props.totalFinishedHours * 100) / props.totalBookedHours;
-    const projectProgress = <ProgressBar now={Math.floor(progress)} label={`${Math.floor(progress)}%`} />;
+    let projectProgress = null;
+    if (props.totalBookedHours > 0) {
+        projectProgress = <ProgressBar now={Math.floor(progress)} label={`${Math.floor(progress)}%`} />;        
+    }
     
     return (
         <Row>

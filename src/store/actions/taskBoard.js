@@ -122,10 +122,11 @@ export const saveWOStart = () => {
     }
 }
 
-export const saveWOSuccess = (response) => {
+export const saveWOSuccess = (response, woDetail) => {
     return {
         type: actionTypes.UPDATE_WO_SUCCESS,
-        response: response
+        response: response,
+        woDetail: woDetail
     }
 }
 
@@ -150,7 +151,7 @@ export const saveWorkingOrder = (updatedWOData, isCreate, filters, fromProject) 
         }
         axios(config)
             .then(response => {
-                dispatch(saveWOSuccess(response.data));
+                dispatch(saveWOSuccess(response.data, updatedWOData[0]));
                 dispatch(fetchWOByStatus(updatedWOData[0].status, filters));
                 setTimeout(() => {
                     dispatch(toggleWOModal(false, null, false));
