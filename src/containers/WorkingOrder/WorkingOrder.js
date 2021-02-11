@@ -96,7 +96,7 @@ class WorkingOrder extends Component {
             let linkedTo = '';
             let defaultOptions = null;
             if (key === 'projectNo' && this.props.projects) {
-                linkedTo = '/project/' + this.props.workingOrderFields['projectNo'].value + '/' + this.props.workingOrderFields['projectYear'].value;
+                linkedTo = '/projects/' + this.props.workingOrderFields['projectNo'].value + '/' + this.props.workingOrderFields['projectYear'].value;
                 defaultOptions = Object.keys(this.props.projects).map(key => {
                     return {
                         value: this.props.projects[key].projectNo,

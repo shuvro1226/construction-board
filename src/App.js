@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Layout from './hoc/Layout/Layout';
 import ConstructionBoard from './containers/ConstructionBoard/ConstructionBoard';
 import Projects from './containers/Projects/Projects';
-import Project from './containers/Project/Project';
+import Project from './containers/Projects/Project/Project';
 import Loader from './components/UI/Loader/Loader';
 import Auth from './containers/Auth/Auth';
 import * as actions from './store/actions/index';
@@ -33,7 +33,7 @@ class App extends Component {
     if (this.props.isAuthenticated) {
       routes = (
         <Switch>
-          <Route path="/project/:id/:year" component={Project} />
+          <Route path="/projects/:id/:year" component={Project} />
           <Route path="/projects" component={Projects} />
           <Route path="/" exact component={ConstructionBoard} />
           <Redirect to="/" />

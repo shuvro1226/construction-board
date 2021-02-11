@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { DragDropContext } from 'react-beautiful-dnd';
 
-import TaskBoards from '../TaskBoards/TaskBoards';
+import TaskBoards from './TaskBoards/TaskBoards';
 import Filters from './Filters/Filters';
 import * as actions from '../../store/actions/index';
 

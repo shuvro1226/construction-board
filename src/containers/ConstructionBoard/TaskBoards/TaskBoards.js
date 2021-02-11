@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card } from 'react-bootstrap';
 import { Droppable } from 'react-beautiful-dnd';
 
-import Tasks from '../../components/Tasks/Tasks';
-import * as actions from '../../store/actions/index';
+import Tasks from '../../../components/Tasks/Tasks';
+import * as actions from '../../../store/actions/index';
 import styles from './TaskBoards.module.css';
 
 class TaskBoards extends Component {

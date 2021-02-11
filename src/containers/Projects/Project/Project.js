@@ -4,11 +4,11 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { Redirect } from 'react-router-dom';
 import { DragDropContext } from 'react-beautiful-dnd';
 
-import Wrapper from '../../hoc/Wrapper/Wrapper';
-import ProjectDetails from '../../components/ProjectDetails/ProjectDetails';
-import * as actions from '../../store/actions/index';
-import ProjectWO from '../../components/ProjectDetails/ProjectWO/ProjectWO';
-import Card from '../../components/UI/Card/Card';
+import Wrapper from '../../../hoc/Wrapper/Wrapper';
+import ProjectDetails from '../../../components/ProjectDetails/ProjectDetails';
+import * as actions from '../../../store/actions/index';
+import ProjectWO from '../../../components/ProjectDetails/ProjectWO/ProjectWO';
+import Card from '../../../components/UI/Card/Card';
 
 class Project extends Component {
 
