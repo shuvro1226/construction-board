@@ -8,7 +8,34 @@ import TaskBoards from './TaskBoards/TaskBoards';
 import Filters from './Filters/Filters';
 import * as actions from '../../store/actions/index';
 
-class ConstructionBoard extends Component {
+class ConstructionBoard extends Component {   
+
+    state = {
+        maxWOInBoard: {
+            1: 10,
+            2: 10,
+            3: 10,
+            4: 10
+        }
+    }
+
+    loadMoreWO = (statusID) => {
+        this.setState({
+            maxWOInBoard: {
+                ...this.state.maxWOInBoard,
+                [statusID]: this.state.maxWOInBoard[statusID] + 10
+            }
+        })
+    }
+
+    loadAllWO = (statusID, totalWOWithStatus) => {
+        this.setState({
+            maxWOInBoard: {
+                ...this.state.maxWOInBoard,
+                [statusID]: totalWOWithStatus
+            }
+        })
+    }
 
     componentDidMount() {
         if (!this.props.status && this.props.isAuthenticated) {
@@ -36,8 +63,10 @@ class ConstructionBoard extends Component {
                 if (status.useBoard) {
                     return <Col xs={12} md={3} key={status.status}>
                         <TaskBoards 
-                            statusDetail={status}                            
-                            getWOBookedHours={this.onGetBookedHours}
+                            statusDetail={status}
+                            maxWOInBoard={this.state.maxWOInBoard}
+                            loadMoreWO={this.loadMoreWO}
+                            loadAllWO={this.loadAllWO}
                         />
                     </Col>
                 } else {
@@ -55,7 +84,7 @@ class ConstructionBoard extends Component {
                     >
                         {taskBoardLayout}
                     </DragDropContext>                        
-                </Row>
+                </Row>                
             </Container>
         )
     }

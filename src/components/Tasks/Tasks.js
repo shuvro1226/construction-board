@@ -6,9 +6,11 @@ import './Tasks.css';
 import Wrapper from '../../hoc/Wrapper/Wrapper';
 
 const TasksList = (props) => {
+    const totalWorkingOrders = props.workingOrders.length;
+    const maxWOInBoard = props.maxWOInBoard ? props.maxWOInBoard: 10;
     const workingOrdersList = props.workingOrders.map((woDetail, index) => {
         
-        if (index < 10 && (woDetail.detailDescription !== "" || woDetail.description !== "") && woDetail.customerName !== "" && woDetail.visible) {
+        if (index < maxWOInBoard && (woDetail.detailDescription !== "" || woDetail.description !== "") && woDetail.customerName !== "" && woDetail.visible) {
             let taskActionsClasses = ['TaskActions'];
             if (!woDetail.showActions) {
                 taskActionsClasses.push('d-none');

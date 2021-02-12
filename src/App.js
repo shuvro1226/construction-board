@@ -21,7 +21,7 @@ class App extends Component {
 
   render() {
     let loader = null;
-    if (this.props.taskBoardLoading || this.props.projectLoading || this.props.authLoading || this.props.projectsLoading) {
+    if (this.props.taskBoardLoading || this.props.authLoading || this.props.projectsLoading) {
         loader = <Loader />;
     }
     let routes = (
@@ -54,7 +54,6 @@ class App extends Component {
 const mapStateToProps = state => {
   return {
       taskBoardLoading: state.taskBoard.loading,
-      projectLoading: state.project.loading,
       authLoading: state.auth.loading,
       projectsLoading: state.projects.loading,
       isAuthenticated: state.auth.token !== null

@@ -88,8 +88,8 @@ class Project extends Component {
 
 const mapStateToProps = state => {
     return {
-        project: state.project.projectDetails,
-        workingOrders: state.project.projectWorkingOrders,
+        project: state.projects.projectDetails,
+        workingOrders: state.projects.projectWorkingOrders,
         status: state.taskBoard.status,
         isAuthenticated: state.auth.token !== null
     }

@@ -14,15 +14,11 @@ export {
 from './taskBoard';
 
 export {
+    fetchProjectStatuses,
+    fetchProjectsByStatus,
     fetchProject,
     fetchProjectWorkingOrders,
     changeProjectWOStatus
-}
-from './project';
-
-export {
-    fetchProjectStatuses,
-    fetchProjectsByStatus
 }
 from './projects';
 

@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Card } from 'react-bootstrap';
+import { Card, Row, Col, Button } from 'react-bootstrap';
 import { Droppable } from 'react-beautiful-dnd';
 
 import Tasks from '../../../components/Tasks/Tasks';
 import * as actions from '../../../store/actions/index';
 import styles from './TaskBoards.module.css';
 
-class TaskBoards extends Component {
+class TaskBoards extends Component {   
+
     componentDidMount() {
         if (!this.props.workingOrders) {
             this.props.onWoGetByStatus(this.props.statusDetail.status);
@@ -36,10 +37,41 @@ class TaskBoards extends Component {
                 showWorkingOrderEditModal={this.showWOEditModal}
                 showActions={this.props.onToggleTaskActions} 
                 hideActions={this.props.onToggleTaskActions}
-                getWOBookedHours={this.props.getWOBookedHours}
+                maxWOInBoard={this.props.maxWOInBoard[this.props.statusDetail.status]}
             />;
         } else {
             taskBoardContent = <p className="text-light">No working orders available. Try filtering the taskboard!</p>
+        }
+
+        let loadMoreButton = null;
+        if (this.props.workingOrders && 
+            this.props.workingOrders[this.props.statusDetail.status] && 
+            this.props.workingOrders[this.props.statusDetail.status].length > 10 &&
+            this.props.workingOrders[this.props.statusDetail.status].length > this.props.maxWOInBoard[this.props.statusDetail.status]
+        ) {
+            loadMoreButton = <Button 
+                variant="light" 
+                size="sm" 
+                className="mr-2" 
+                onClick={() => this.props.loadMoreWO(this.props.statusDetail.status)}
+            >
+                Load 10 More...
+            </Button>
+        }
+
+        let loadAllButton = null;
+        if (this.props.workingOrders && 
+            this.props.workingOrders[this.props.statusDetail.status] && 
+            this.props.workingOrders[this.props.statusDetail.status].length > this.props.maxWOInBoard[this.props.statusDetail.status]
+        ) {
+            loadAllButton = <Button 
+                variant="light" 
+                size="sm" 
+                className="mr-2" 
+                onClick={() => this.props.loadAllWO(this.props.statusDetail.status, this.props.workingOrders[this.props.statusDetail.status].length)}
+            >
+                Load all
+            </Button>
         }
 
         return (
@@ -58,7 +90,13 @@ class TaskBoards extends Component {
                                 {provided.placeholder}
                             </div>
                         )}                        
-                    </Droppable>                    
+                    </Droppable>    
+                    <Row className="py-2">
+                        <Col xs={12} className="text-center">
+                            {loadMoreButton}
+                            {loadAllButton}
+                        </Col>
+                    </Row>                
                 </Card.Body>
             </Card>
         );
