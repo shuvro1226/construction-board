@@ -18,8 +18,7 @@ class Boards extends Component {
     }
 
     showProjectEditModal = (projectDetails) => {
-        this.props.history.push('/project/' + projectDetails.projectNo + '/' + projectDetails.fiscalYearKey);
-        // this.props.onToggleProjectModal(true, projectDetails, false);
+        this.props.history.push('/projects/' + projectDetails.projectNo + '/' + projectDetails.fiscalYearKey);
     }
 
     render() {

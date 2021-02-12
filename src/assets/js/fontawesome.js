@@ -15,7 +15,9 @@ import {
     faPlus,
     faCog,
     faSignOutAlt,
-    faSearch
+    faSearch,
+    faHourglass,
+    faHourglassStart
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -34,5 +36,7 @@ library.add(
     faPlus,
     faCog,
     faSignOutAlt,
-    faSearch
+    faSearch,
+    faHourglass,
+    faHourglassStart
 )

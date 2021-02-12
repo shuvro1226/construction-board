@@ -10,7 +10,9 @@ import * as actions from '../../store/actions/index';
 class WorkingOrder extends Component {
 
     onModalClose = () => {
-        this.props.onToggleWOModal(false, null, false);
+        this.props.onToggleWOModal(false, null, false); 
+        this.props.onFilterCustomersList(-1);  
+        this.props.onFilterProjectsList(-1);
     }
 
     onModalSubmit = () => {
@@ -49,7 +51,9 @@ class WorkingOrder extends Component {
         if (window.location.pathname.includes('project')) {
             fromProject = true;
         }
-        this.props.onSaveWorkingOrder(workingOrderData, this.props.isCreateWO, this.props.filters, fromProject);      
+        this.props.onSaveWorkingOrder(workingOrderData, this.props.isCreateWO, this.props.filters, fromProject);    
+        this.props.onFilterCustomersList(-1);  
+        this.props.onFilterProjectsList(-1);
     }
 
     onInputChangedHandler = (event, element) => {

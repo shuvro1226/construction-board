@@ -1,16 +1,6 @@
 import moment from 'moment';
 
 export const filters = {
-    projectNo: {
-        elementType: 'select',
-        elementConfig: null,
-        elementUIConfig: {
-            grid: 'col-12 col-md-2'
-        },
-        defaultOptions: null,
-        defaultOption: 'Select a project',
-        value: -1
-    },
     customerNo: {
         elementType: 'select',
         elementConfig: null,
@@ -19,6 +9,16 @@ export const filters = {
         },
         defaultOptions: null,
         defaultOption: 'Select a customer',
+        value: -1
+    },
+    projectNo: {
+        elementType: 'select',
+        elementConfig: null,
+        elementUIConfig: {
+            grid: 'col-12 col-md-2'
+        },
+        defaultOptions: null,
+        defaultOption: 'Select a project',
         value: -1
     },
     taskSelection: {

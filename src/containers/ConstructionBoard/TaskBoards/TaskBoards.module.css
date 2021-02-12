@@ -1,3 +1,7 @@
 .TextCapitalize {
     text-transform: capitalize;
 }
+
+.CardBody {
+    padding: .75rem;
+}

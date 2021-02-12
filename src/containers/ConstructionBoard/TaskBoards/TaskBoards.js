@@ -50,12 +50,12 @@ class TaskBoards extends Component {
             this.props.workingOrders[this.props.statusDetail.status].length > this.props.maxWOInBoard[this.props.statusDetail.status]
         ) {
             loadMoreButton = <Button 
-                variant="light" 
+                variant="outline-light" 
                 size="sm" 
-                className="mr-2" 
+                className="mr-2 mt-2" 
                 onClick={() => this.props.loadMoreWO(this.props.statusDetail.status)}
             >
-                Load 10 More...
+                <FontAwesomeIcon icon="hourglass-start" /> Load More
             </Button>
         }
 
@@ -65,12 +65,12 @@ class TaskBoards extends Component {
             this.props.workingOrders[this.props.statusDetail.status].length > this.props.maxWOInBoard[this.props.statusDetail.status]
         ) {
             loadAllButton = <Button 
-                variant="light" 
+                variant="outline-light" 
                 size="sm" 
-                className="mr-2" 
+                className="mr-2 mt-2" 
                 onClick={() => this.props.loadAllWO(this.props.statusDetail.status, this.props.workingOrders[this.props.statusDetail.status].length)}
             >
-                Load all
+                <FontAwesomeIcon icon="hourglass" /> Load all
             </Button>
         }
 
@@ -79,7 +79,7 @@ class TaskBoards extends Component {
                 <Card.Header as="h5" className={cardHeaderStyles.join(' ')}>
                     <FontAwesomeIcon icon={this.props.statusDetail.icon} /> {this.props.statusDetail.displayText}
                 </Card.Header>
-                <Card.Body>
+                <Card.Body className={styles.CardBody}>
                     <Droppable droppableId={this.props.statusDetail.status}>
                         {provided => (
                             <div
@@ -91,7 +91,7 @@ class TaskBoards extends Component {
                             </div>
                         )}                        
                     </Droppable>    
-                    <Row className="py-2">
+                    <Row>
                         <Col xs={12} className="text-center">
                             {loadMoreButton}
                             {loadAllButton}
