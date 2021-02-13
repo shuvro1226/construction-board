@@ -1,11 +1,12 @@
 import axios from 'axios';
+import apiConstants from './constants';
 
 const authInstance = axios.create({
     baseURL: "https://identitytoolkit.googleapis.com/v1/"
 });
 
 const dbInstance = axios.create({
-    baseURL: "https://construction-board-default-rtdb.firebaseio.com/"
+    baseURL: apiConstants.FIREBASE_ENDPOINT
 });
 
 export {

@@ -1,6 +1,6 @@
 import * as actionTypes from './actionTypes';
-import * as apiConstants from '../../config/constants';
-import axios from '../../config/axios-config';
+import * as apiConstants from '../../config/vero/constants';
+import axios from '../../config/vero/axios-config';
 import moment from 'moment';
 
 export const fetchStatusSuccess = (woStatusData) => {
