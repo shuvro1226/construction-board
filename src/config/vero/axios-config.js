@@ -1,11 +1,10 @@
 import axios from 'axios';
-import apiConstants from './constants';
+import * as apiConstants from './constants';
 
 // config for VERO API portal
-const url = apiConstants.API_DEV;
 
 const instance = axios.create({
-    baseURL: url
+    baseURL: apiConstants.PROXY_URL + apiConstants.API_DEV
 });
 
 export default instance;

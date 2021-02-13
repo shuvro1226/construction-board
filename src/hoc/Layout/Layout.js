@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Wrapper from '../Wrapper/Wrapper';
 import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
-import WorkingOrder from '../../containers/WorkingOrder/WorkingOrder';
+import WorkingOrder from '../../containers/Modals/WorkingOrder/WorkingOrder';
 import * as actions from '../../store/actions/index';
 
 class Layout extends Component {
