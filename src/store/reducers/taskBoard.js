@@ -403,6 +403,30 @@ const searchWorkingOrderBoard = (state, action) => {
     }
 }
 
+const saveWOCommentStart = (state, action) => {
+    return {
+        ...state,
+        loading: true,
+        error: false
+    };
+}
+
+const saveWOCommentSuccess = (state, action) => {
+    return {
+        ...state,
+        loading: false,
+        error: false
+    };
+}
+
+const saveWOCommentFail = (state, action) => {
+    return {
+        ...state,
+        loading: false,
+        error: true
+    };
+}
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.FETCH_STATUS_SUCCESS:
@@ -449,6 +473,12 @@ const reducer = (state = initialState, action) => {
             return updateWOListAfterDrag(state, action);
         case actionTypes.SEARCH_WORKING_ORDER_BOARD:
             return searchWorkingOrderBoard(state, action);
+        case actionTypes.ADD_COMMENT_TO_WO_START:
+            return saveWOCommentStart(state, action);
+        case actionTypes.ADD_COMMENT_TO_WO_SUCCESS:
+            return saveWOCommentSuccess(state, action);
+        case actionTypes.ADD_COMMENT_TO_WO_FAIL:
+            return saveWOCommentFail(state, action);
         default:
             return state;
     }

@@ -6,6 +6,7 @@ import { DragDropContext } from 'react-beautiful-dnd';
 
 import TaskBoards from './TaskBoards/TaskBoards';
 import Filters from './Filters/Filters';
+import CommentModal from '../../components/WorkingOrder/Comment/Comment';
 import * as actions from '../../store/actions/index';
 
 class ConstructionBoard extends Component {   
@@ -16,7 +17,35 @@ class ConstructionBoard extends Component {
             2: 10,
             3: 10,
             4: 10
-        }
+        },
+        comment: '',
+        showCommentModal: false,
+        commentWOKey: ''
+    }
+
+    onCommentModalClose = () => {
+        this.setState({
+            comment: '',
+            showCommentModal: false,
+            commentWOKey: ''
+        });
+    }
+
+    onCommentModalSubmit = () => {
+        const comment = this.state.comment;
+        const woKey = this.state.commentWOKey;
+        this.props.onWOAddComment(woKey, comment);
+        this.setState({
+            comment: '',
+            showCommentModal: false,
+            commentWOKey: ''
+        });
+    }
+
+    onCommentChange = (event) => {
+        this.setState({
+            comment: event.target.value
+        });
     }
 
     loadMoreWO = (statusID) => {
@@ -49,6 +78,10 @@ class ConstructionBoard extends Component {
     onDragEnd = result => {
         if (result.destination && result.destination.droppableId !== result.source.droppableId) {
             this.props.onWODragEnd(result);
+            this.setState({
+                showCommentModal: true,
+                commentWOKey: result.draggableId
+            });
         }
     }
     
@@ -84,7 +117,14 @@ class ConstructionBoard extends Component {
                     >
                         {taskBoardLayout}
                     </DragDropContext>                        
-                </Row>                
+                </Row>   
+                <CommentModal
+                    showCommentModal={this.state.showCommentModal}
+                    commentChanged={this.onCommentChange}
+                    modalClose={this.onCommentModalClose}
+                    modalSubmit={this.onCommentModalSubmit}
+                    hasEditAccess={this.props.hasEditAccess}
+                />             
             </Container>
         )
     }
@@ -94,7 +134,8 @@ const mapStateToProps = state => {
     return {
         status: state.taskBoard.status,
         woTasks: state.taskBoard.woTasks,
-        isAuthenticated: state.auth.token !== null
+        isAuthenticated: state.auth.token !== null,
+        hasEditAccess: state.auth.hasEditAccess
     }
 }
 
@@ -102,7 +143,8 @@ const mapDispatchToProps = dispatch => {
     return {
         onFetchStatus: () => dispatch(actions.fetchStatus()),
         onFetchTaskSelections: () => dispatch(actions.fetchTasks()),
-        onWODragEnd: (result) => dispatch(actions.changeWOStatus(result))
+        onWODragEnd: (result) => dispatch(actions.changeWOStatus(result)),
+        onWOAddComment: (key, comment) => dispatch(actions.addCommentToWO(key, comment))
     }
 }
 

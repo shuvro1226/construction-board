@@ -9,7 +9,8 @@ export {
     filterCustomerListByProject,
     filterProjectListByCustomer,
     changeWOStatus,
-    searchTaskBoard
+    searchTaskBoard,
+    addCommentToWO
 }
 from './taskBoard';
 

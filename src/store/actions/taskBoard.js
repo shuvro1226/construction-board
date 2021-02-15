@@ -323,3 +323,50 @@ export const searchTaskBoard = (value) => {
         value: value
     }
 }
+
+export const addCommentStart = () => {
+    return {
+        type: actionTypes.ADD_COMMENT_TO_WO_START
+    }
+}
+
+export const addCommentSuccess = (res) => {
+    return {
+        type: actionTypes.ADD_COMMENT_TO_WO_SUCCESS,
+        response: res
+    }
+}
+
+export const addCommentFail = (err) => {
+    return {
+        type: actionTypes.ADD_COMMENT_TO_WO_FAIL,
+        error: err
+    }
+}
+
+export const addCommentToWO = (key, comment) => {
+    return dispatch => {
+        dispatch(addCommentStart());
+        const projectNo = parseInt(key.split('-')[0]);
+        const workingOrderNo = parseInt(key.split('-')[1]);
+        const url = apiConstants.WORKING_ORDERS_V1 + '/' + projectNo + '/' + workingOrderNo + '/comment';
+        const woCommentData = {
+            parentCommentId: 0,
+            commentText: comment,
+            createdBy: 314,
+            createdOn: moment(new Date()).format('YYYY-MM-DDThh:mm:ssZ')
+        };
+        const config = {
+            method: 'post',
+            url: url,
+            data: woCommentData
+        }
+        axios(config)
+            .then((response) => {
+                dispatch(addCommentSuccess(response.data));
+            })
+            .catch((error) => {
+                dispatch(addCommentFail(error));
+            });
+    }
+}
