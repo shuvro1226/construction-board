@@ -383,7 +383,8 @@ const searchWorkingOrderBoard = (state, action) => {
             let visible = true;
             if (!woDetail.description.toLowerCase().includes(searchText) &&
                 !woDetail.detailDescription.toLowerCase().includes(searchText) &&
-                !woDetail.customerName.toLowerCase().includes(searchText)
+                !woDetail.customerName.toLowerCase().includes(searchText) &&
+                !woDetail.projectName.toLowerCase().includes(searchText)
             ) {
                 visible = false;
             }

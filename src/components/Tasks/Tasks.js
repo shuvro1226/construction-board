@@ -6,7 +6,6 @@ import './Tasks.css';
 import Wrapper from '../../hoc/Wrapper/Wrapper';
 
 const TasksList = (props) => {
-    const totalWorkingOrders = props.workingOrders.length;
     const maxWOInBoard = props.maxWOInBoard ? props.maxWOInBoard: 10;
     const workingOrdersList = props.workingOrders.map((woDetail, index) => {
         
@@ -36,7 +35,12 @@ const TasksList = (props) => {
                 showActions={() => props.showActions(index, true, props.statusDetail.status)} 
                 hideActions={() => props.hideActions(index, false, props.statusDetail.status)}
             >
-                    {woDetail.detailDescription ? woDetail.detailDescription: woDetail.description}
+                    <span>
+                        <b>Project:</b> {woDetail.projectName}
+                    </span>
+                    <span>
+                        <b>Task:</b> {woDetail.detailDescription ? woDetail.detailDescription: woDetail.description}
+                    </span>
             </Task>;
         }
         return null;
