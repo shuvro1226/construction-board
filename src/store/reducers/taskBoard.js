@@ -300,19 +300,19 @@ const filterCustomerListByProject = (state, action) => {
     const woCustomers = {
         ...state.woCustomers
     };
-    const updatedWOCustomers = Object.keys(woCustomers).map(key => {
+    for (const [key, customerDetail] of Object.entries(woCustomers)) {
         let hideOption = false;
         if (projectNo !== -1 && !woCustomers[key].projects.includes(projectNo)) {
             hideOption = true;
         }
-        return {
-            ...woCustomers[key],
+        woCustomers[key] = {
+            ...customerDetail,
             hideOption: hideOption
         }
-    })
+    }
     return {
         ...state,
-        woCustomers: updatedWOCustomers
+        woCustomers: woCustomers
     };
 }
 
@@ -321,19 +321,21 @@ const filterProjectListByCustomer = (state, action) => {
     const woProjects = {
         ...state.woProjects
     };
-    const updatedWOProjects = Object.keys(woProjects).map(key => {
+    for (const [key, projectDetail] of Object.entries(woProjects)) {
         let hideOption = false;
         if (customerNo !== -1 && woProjects[key].customerNo !== customerNo) {
             hideOption = true;
         }
-        return {
-            ...woProjects[key],
+
+        woProjects[key] = {
+            ...projectDetail,
             hideOption: hideOption
         }
-    })
+    }
+
     return {
         ...state,
-        woProjects: updatedWOProjects
+        woProjects: woProjects
     };
 }
 
