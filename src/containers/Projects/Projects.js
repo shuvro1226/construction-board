@@ -22,8 +22,8 @@ class Projects extends Component {
 
         let taskBoardLayout = null;
         if (this.props.statuses) {
-            taskBoardLayout = this.props.statuses.map(status => {
-                if (status.useBoard) {
+            taskBoardLayout = this.props.statuses.map((status, index) => {
+                if (status.useBoard && index <= 4) {
                     return <Col xs={12} md={3} key={status.id}>
                         <Boards statusDetail={status} />
                     </Col>

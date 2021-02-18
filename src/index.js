@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { BrowserRouter } from 'react-router-dom';
 import thunk from 'redux-thunk';
 
@@ -13,17 +13,15 @@ import taskBoardReducer from './store/reducers/taskBoard';
 import projectsReducer from './store/reducers/projects';
 import authReducer from './store/reducers/auth';
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
 const rootReducer = combineReducers({
   taskBoard: taskBoardReducer,
   projects: projectsReducer,
   auth: authReducer
 })
 
-const store = createStore(rootReducer, composeEnhancers(
+const store = createStore(rootReducer,
   applyMiddleware(thunk)
-));
+);
 
 ReactDOM.render(
     <React.StrictMode>

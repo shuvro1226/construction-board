@@ -17,6 +17,7 @@ class App extends Component {
 
   componentDidMount() {
     this.props.onTryAutoSignUp();
+    document.title = "Construction Board";
   }
 
   render() {
