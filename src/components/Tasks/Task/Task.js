@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Draggable } from 'react-beautiful-dnd';
 
 const task = (props) => {     
-
     return (
         <Draggable
             draggableId={props.uniqueKey}

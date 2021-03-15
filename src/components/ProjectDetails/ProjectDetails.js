@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
 import ProjectStatus from './ProjectStatus/ProjectStatus';
@@ -15,7 +15,7 @@ const ProjectDetails = (props) => {
     };
     let projectStatus = null, totalBookedHours = 0, totalFinishedHours = 0;
     if (props.workingOrders && props.statusList) {
-        props.workingOrders.forEach(workingOrder => {
+        Object.values(props.workingOrders).forEach(workingOrder => {
             if (workingOrder.status.toString() !== "5") {
                 workingOrderByStatus[workingOrder.status] = workingOrderByStatus[workingOrder.status] + 1;
             }
@@ -38,7 +38,7 @@ const ProjectDetails = (props) => {
             }
         });
 
-        if (props.workingOrders.length > 0) {
+        if (Object.values(props.workingOrders).length > 0) {
             projectStatus = <ProjectStatus 
                 statusList={props.statusList}
                 workingOrderByStatus={workingOrderByStatus}
@@ -51,19 +51,28 @@ const ProjectDetails = (props) => {
 
     }
 
+    const woDetail = {
+        projectNo: props.project.projectNo
+    };
+
     return (
         <Row>
-            <Col xs="8" className="py-2">
-                <h3 className="text-info">{props.project.project_name}</h3>
+            <Col xs="6" className="py-2">
+                <h3 className="text-info">{props.project.projectName}</h3>
             </Col>
-            <Col xs="4" className="py-2">
-                <FontAwesomeIcon icon="calendar-alt" /> Start Date: {moment(props.project.start_date).format('DD.MM.YYYY')}
+            <Col xs="3" className="py-2 text-right">
+                <FontAwesomeIcon icon="calendar-alt" /> Start Date: {moment(props.project.startDate).format('DD.MM.YYYY')}
+            </Col>
+            <Col xs="3" className="py-2 text-right">
+                <Button variant="primary" onClick={() => props.showCreateWOModal(woDetail, true)}>
+                    <FontAwesomeIcon icon="plus" /> Add task for this project
+                </Button>
             </Col>
             <Col xs="4" className="py-2">
                 <Card icon="user-tie" title="Customer Details">
-                    {props.project.customer_kname}<br/>
-                    {props.project.customer_address}<br/>
-                    {props.project.customer_postcode + ', ' + props.project.customer_city}
+                    {props.project.customerName}<br/>
+                    {props.project.customerAddress}<br/>
+                    {props.project.customerPostcode + ', ' + props.project.customerCity}
                 </Card>                
             </Col>
             <Col xs="8" className="py-2">

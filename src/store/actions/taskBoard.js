@@ -1,7 +1,6 @@
 import * as actionTypes from './actionTypes';
-import * as apiConstants from '../../config/vero/constants';
-import axios from '../../config/vero/axios-config';
-import moment from 'moment';
+import * as apiConstants from '../../config/firebase/constants';
+import * as axios from '../../config/firebase/axios-config';
 
 export const fetchStatusSuccess = (woStatusData) => {
     return {
@@ -25,7 +24,7 @@ export const fetchStatusStart = () => {
 export const fetchStatus = () => {
     return (dispatch) => {
         dispatch(fetchStatusStart());
-        axios.get(apiConstants.GET_WO_STATUS)
+        axios.dbInstance.get(apiConstants.GET_WO_STATUS)
             .then(res => {
                 dispatch(fetchStatusSuccess(res.data));
             })
@@ -55,27 +54,11 @@ export const fetchWOStart = () => {
     }
 }
 
-export const fetchWOByStatus = (statusId, filters = null) => {
+export const fetchWOByStatus = (statusId) => {
     let url = apiConstants.GET_WO_BY_STATUS + statusId;
-    if (filters) {
-        if (filters.projectNo.value.toString() !== "-1") {
-            url += '&filter[projectNo][eq]=' + filters.projectNo.value;
-        }
-        if (filters.customerNo.value.toString() !== "-1") {
-            url += '&filter[customerNo][eq]=' + filters.customerNo.value;
-        }
-        if (filters.taskSelection.value.toString() !== "-1") {
-            url += '&filter[taskName][like]=' + filters.taskSelection.value;
-        }
-        url += '&filter[plannedDate][gte]=' + moment(filters.executionStartDate.value, 'YYYY-MM-DDThh:mm:ss').format('YYYY-MM-DD');
-        url += '&filter[plannedDate][lte]=' + moment(filters.executionEndDate.value, 'YYYY-MM-DDThh:mm:ss').format('YYYY-MM-DD');
-    } else {
-        url += '&filter[plannedDate][gte]=' + moment().clone().startOf('month').format('YYYY-MM-DD');
-        url += '&filter[plannedDate][lte]=' + moment().clone().endOf('month').format('YYYY-MM-DD')
-    }
     return (dispatch) => {
         dispatch(fetchWOStart());
-        axios.get(url + apiConstants.GET_WO_PARAMS)
+        axios.dbInstance.get(url)
             .then(res => {
                 dispatch(fetchWOSuccess(res.data, statusId));
             })
@@ -137,27 +120,30 @@ export const saveWOFail = (err) => {
     }
 }
 
-export const saveWorkingOrder = (updatedWOData, isCreate, filters, fromProject) => {
+export const saveWorkingOrder = (updatedWOData, isCreate, fromProject) => {
     return (dispatch) => {
         dispatch(saveWOStart());
         let method = 'put';
+        let url = 'workingOrders/' + updatedWOData.uniqueKey + '.json';
+        delete updatedWOData.uniqueKey;
         if (isCreate) {
             method = 'post';
+            url = apiConstants.WORKING_ORDERS;
         }
         let config = {
             method: method,
-            url: apiConstants.WORKING_ORDERS,
+            url: url,
             data: updatedWOData
         }
-        axios(config)
+        axios.dbInstance(config)
             .then(response => {
-                dispatch(saveWOSuccess(response.data, updatedWOData[0]));
-                dispatch(fetchWOByStatus(updatedWOData[0].status, filters));
+                dispatch(saveWOSuccess(response.data, updatedWOData));
+                dispatch(fetchWOByStatus(updatedWOData.status));
                 setTimeout(() => {
                     dispatch(toggleWOModal(false, null, false));
                 }, 500);
                 if (fromProject) {
-                    dispatch(fetchProjectWorkingOrders(updatedWOData[0].projectNo));
+                    dispatch(fetchProjectWorkingOrders(updatedWOData.projectNo));
                 }
             })
             .catch(error => {
@@ -193,7 +179,7 @@ export const fetchTasks = () => {
             method: 'get',
             url: apiConstants.GET_WO_TASKS
         };
-        axios(config)
+        axios.dbInstance(config)
             .then(response => {
                 dispatch(fetchTasksSuccess(response.data));
             })
@@ -226,60 +212,13 @@ export const fetchProjectWOFail = (err) => {
 export const fetchProjectWorkingOrders = (projectNo) => {
     return (dispatch) => {
         dispatch(fetchProjectWOStart());
-        axios.get(apiConstants.GET_PROJECT_WO + projectNo + apiConstants.GET_WO_PARTIALS + apiConstants.GET_WO_ALIAS)
+        axios.dbInstance.get(apiConstants.GET_PROJECT_WO + '"' + projectNo + '"')
             .then(response => {
                 dispatch(fetchProjectWOSuccess(response.data));
             })
             .catch(error => {
                 dispatch(fetchProjectWOFail(error));
             })
-    }
-}
-
-export const fetchEmployeesStart = () => {
-    return {
-        type: actionTypes.FETCH_EMPLOYEES_START
-    }
-}
-
-export const fetchEmployeesSuccess = (response) => {
-    return {
-        type: actionTypes.FETCH_EMPLOYEES_SUCCESS,
-        response: response
-    }
-}
-
-export const fetchEmployeesFail = (err) => {
-    return {
-        type: actionTypes.FETCH_EMPLOYEES_FAIL,
-        error: err
-    }
-}
-
-export const fetchEmployees = () => {
-    return (dispatch) => {
-        dispatch(fetchEmployeesStart());
-        axios.get(apiConstants.GET_ACTIVE_EMPLOYEES)
-            .then(response => {
-                dispatch(fetchEmployeesSuccess(response.data));
-            })
-            .catch(error => {
-                dispatch(fetchEmployeesFail(error));
-            })
-    }
-}
-
-export const filterCustomerListByProject = (projectNo) => {
-    return {
-        type: actionTypes.FILTER_CUSTOMERS_ON_PROJECT_SELECT,
-        projectNo: projectNo
-    }
-}
-
-export const filterProjectListByCustomer = (customerNo) => {
-    return {
-        type: actionTypes.FILTER_PROJECTS_ON_CUSTOMER_SELECT,
-        customerNo: customerNo
     }
 }
 
@@ -294,22 +233,17 @@ export const changeWOStatus = (result) => {
     return (dispatch) => {
         dispatch(updateWOListAfterDrag(result));
 
-        const uniqueKey = result.draggableId.split('-');
-        const updatedWOData = [{
-            projectNo: parseInt(uniqueKey[0]),
-            workingOrderNo: parseInt(uniqueKey[1]),
-            status: parseInt(result.destination.droppableId)
-        }];
+        const url = 'workingOrders/' + result.draggableId + '/status.json';
         const config = {
             method: 'put',
-            url: apiConstants.WORKING_ORDERS,
-            data: updatedWOData
+            url: url,
+            data: parseInt(result.destination.droppableId)
         }
-        axios(config)
+        axios.dbInstance(config)
             .then(response => {
                 dispatch(saveWOSuccess(response.data));
-                dispatch(fetchWOByStatus(parseInt(result.destination.droppableId), null));
-                dispatch(fetchWOByStatus(parseInt(result.source.droppableId), null));
+                dispatch(fetchWOByStatus(parseInt(result.destination.droppableId)));
+                dispatch(fetchWOByStatus(parseInt(result.source.droppableId)));
             })
             .catch(error => {
                 dispatch(saveWOFail(error));
@@ -324,49 +258,10 @@ export const searchTaskBoard = (value) => {
     }
 }
 
-export const addCommentStart = () => {
+export const onFilterWOList = (statusID, filters) => {
     return {
-        type: actionTypes.ADD_COMMENT_TO_WO_START
-    }
-}
-
-export const addCommentSuccess = (res) => {
-    return {
-        type: actionTypes.ADD_COMMENT_TO_WO_SUCCESS,
-        response: res
-    }
-}
-
-export const addCommentFail = (err) => {
-    return {
-        type: actionTypes.ADD_COMMENT_TO_WO_FAIL,
-        error: err
-    }
-}
-
-export const addCommentToWO = (key, comment) => {
-    return dispatch => {
-        dispatch(addCommentStart());
-        const projectNo = parseInt(key.split('-')[0]);
-        const workingOrderNo = parseInt(key.split('-')[1]);
-        const url = apiConstants.WORKING_ORDERS_V1 + '/' + projectNo + '/' + workingOrderNo + '/comment';
-        const woCommentData = {
-            parentCommentId: 0,
-            commentText: comment,
-            createdBy: 314,
-            createdOn: moment(new Date()).format('YYYY-MM-DDThh:mm:ssZ')
-        };
-        const config = {
-            method: 'post',
-            url: url,
-            data: woCommentData
-        }
-        axios(config)
-            .then((response) => {
-                dispatch(addCommentSuccess(response.data));
-            })
-            .catch((error) => {
-                dispatch(addCommentFail(error));
-            });
+        type: actionTypes.FILTER_WO_LIST,
+        statusID: statusID,
+        filters: filters
     }
 }

@@ -2,6 +2,7 @@ import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
     projects: null,
+    customers: null,
     statuses: null,
     projectDetails: null,
     projectWorkingOrders: null,
@@ -23,11 +24,6 @@ const ProjectStatusDefaults = {
     "3": {
         scheme: 'Success',
         icon: 'balance-scale',
-        useBoard: false
-    },
-    "4": {
-        scheme: 'Success',
-        icon: 'check-circle',
         useBoard: true
     },
     "5": {
@@ -84,24 +80,23 @@ const fetchProjectsStart = (state, action) => {
 }
 
 const fetchProjectsSuccess = (state, action) => {
-    const statusId = action.statusId;
-    const projectGroupdByStatus = [];
-
-    projectGroupdByStatus[statusId] = action.projects.map(project => {
-        return {
-            ...project,
-            visible: true
-        };
-    });
-
-    const updatedProjects = {
-        ...state.projects,
-        [statusId]: projectGroupdByStatus[statusId]
-    };
+    let projects = {
+        ...action.projects
+    }
+    for (const [key, project] of Object.entries(action.projects)) {
+        projects = {
+            ...projects,
+            [key]: {
+                ...project,
+                visible: true,
+                hideOption: false
+            }
+        }
+    }
 
     return {
         ...state,
-        projects: updatedProjects,
+        projects: projects,
         loading: false,
         error: null
     }
@@ -115,28 +110,16 @@ const fetchProjectsFailed = (state, action) => {
     }
 }
 
-const fetchProjectStart = (state, action) => {
+const fetchProjectDetails = (state, action) => {
+    const projectDetails = {
+        ...state.projects[action.projectID],
+        projectNo: action.projectID
+    }
     return {
         ...state,
-        loading: true,
-        error: false
-    };
-}
-
-const fetchProjectSuccess = (state, action) => {
-    return {
-        ...state,
-        projectDetails: action.response,
+        projectDetails: projectDetails,
         loading: false,
         error: false
-    };
-}
-
-const fetchProjectFail = (state, action) => {
-    return {
-        ...state,
-        loading: false,
-        error: true
     };
 }
 
@@ -149,15 +132,60 @@ const fetchProjectWOStart = (state, action) => {
 }
 
 const fetchProjectWOSuccess = (state, action) => {
+    const projectWorkingOrders = Object.keys(action.response).map(key => {
+        return {
+            ...action.response[key],
+            uniqueKey: key,
+            visible: true
+        };
+    });
     return {
         ...state,
-        projectWorkingOrders: action.response,
+        projectWorkingOrders: projectWorkingOrders,
         loading: false,
         error: false
     };
 }
 
 const fetchProjectWOFail = (state, action) => {
+    return {
+        ...state,
+        loading: false,
+        error: true
+    };
+}
+
+const fetchCustomersStart = (state, action) => {
+    return {
+        ...state,
+        loading: true,
+        error: false
+    };
+}
+
+const fetchCustomersSuccess = (state, action) => {
+    let customers = {
+        ...action.customers
+    }
+    for (const [key, customer] of Object.entries(action.customers)) {
+        customers = {
+            ...customers,
+            [key]: {
+                ...customer,
+                visible: true,
+                hideOption: false
+            }
+        }
+    }
+    return {
+        ...state,
+        customers: customers,
+        loading: false,
+        error: false
+    };
+}
+
+const fetchCustomersFail = (state, action) => {
     return {
         ...state,
         loading: false,
@@ -205,18 +233,20 @@ const reducer = (state = initialState, action) => {
             return fetchProjectsSuccess(state, action);
         case actionTypes.FETCH_PROJECTS_FAILED:
             return fetchProjectsFailed(state, action);
-        case actionTypes.FETCH_PROJECT_START:
-            return fetchProjectStart(state, action);
-        case actionTypes.FETCH_PROJECT_SUCCESS:
-            return fetchProjectSuccess(state, action);
-        case actionTypes.FETCH_PROJECT_FAIL:
-            return fetchProjectFail(state, action);
+        case actionTypes.FETCH_PROJECT_DETAILS:
+            return fetchProjectDetails(state, action);
         case actionTypes.FETCH_PROJECT_WO_START:
             return fetchProjectWOStart(state, action);
         case actionTypes.FETCH_PROJECT_WO_SUCCESS:
             return fetchProjectWOSuccess(state, action);
         case actionTypes.FETCH_PROJECT_WO_FAIL:
             return fetchProjectWOFail(state, action);
+        case actionTypes.FETCH_CUSTOMERS_START:
+            return fetchCustomersStart(state, action);
+        case actionTypes.FETCH_CUSTOMERS_SUCCESS:
+            return fetchCustomersSuccess(state, action);
+        case actionTypes.FETCH_CUSTOMERS_FAIL:
+            return fetchCustomersFail(state, action);
         case actionTypes.DRAG_PROJECT_WO_CHANGE_STATUS:
             return updateWOListAfterDrag(state, action);
         default:

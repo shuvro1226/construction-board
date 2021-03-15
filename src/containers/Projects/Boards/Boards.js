@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card } from 'react-bootstrap';
@@ -7,18 +6,12 @@ import moment from 'moment';
 
 import Toast from '../../../components/UI/Toast/Toast';
 import Wrapper from '../../../hoc/Wrapper/Wrapper';
-import * as actions from '../../../store/actions/index';
 import styles from './Boards.module.css';
 
 class Boards extends Component {
-    componentDidMount() {
-        if (!this.props.projects) {
-            this.props.onProjectsGetByStatus(this.props.statusDetail.id);
-        }
-    }
 
-    showProjectEditModal = (projectDetails) => {
-        this.props.history.push('/projects/' + projectDetails.projectNo + '/' + projectDetails.fiscalYearKey);
+    showProjectDetails = (projectID) => {
+        this.props.history.push('/projects/' + projectID);
     }
 
     render() {
@@ -28,27 +21,36 @@ class Boards extends Component {
         ];  
 
         let boardContent = null;
-        if (this.props.projects && this.props.projects[this.props.statusDetail.id]) {
-            boardContent = this.props.projects[this.props.statusDetail.id].map((project, index) => {        
-                if (index < 10 && project.projectName !== "" && project.customerDisplayName !== "" && project.visible) {
+        let projectsForBoard = null;
+        if (this.props.projects) {
+            projectsForBoard = Object.entries(this.props.projects).reduce((projects, [key, project]) => {
+                if (project.status === this.props.statusDetail.id) {
+                    projects[key] = project;
+                }
+                return projects;
+            }, {});
+        }
+        if (Object.keys(projectsForBoard).length) {
+            boardContent = Object.keys(projectsForBoard).map((key, index) => {        
+                if (index < 10 && projectsForBoard[key].projectName !== "" && projectsForBoard[key].customerName !== "" && projectsForBoard[key].visible) {
 
                     const taskHeader = <Wrapper>
-                        <strong className="mr-auto">{project.customerDisplayName}</strong>
-                        <small>{moment(project.projectValidStartDate).fromNow()}</small>
+                        <strong className="mr-auto">{projectsForBoard[key].customerName}</strong>
+                        <small>{moment(projectsForBoard[key].startDate).fromNow()}</small>
                     </Wrapper>;            
                     
                     return <Toast 
-                        key={project.projectNo} 
+                        key={key} 
                         header={taskHeader}
                         headerIcon="user-tie"
-                        toastAction={() => this.showProjectEditModal(project)}>
-                            {project.projectName}
+                        toastAction={() => this.showProjectDetails(key)}>
+                            {projectsForBoard[key].projectName}
                     </Toast>;
                 }
                 return null;
             });
         } else {
-            boardContent = <p className="text-light">No projects available. Try filtering the board!</p>
+            boardContent = <p className="text-light">No projects available.</p>
         }
 
         return (
@@ -66,17 +68,4 @@ class Boards extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        projects: state.projects.projects
-    }
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        onProjectsGetByStatus: (statusId) => dispatch(actions.fetchProjectsByStatus(statusId))//,
-        // onToggleProjectModal: (showModal, woDetail, createMode) => dispatch(actions.toggleWOModal(showModal, woDetail, createMode))
-    }
-}
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Boards));
+export default withRouter(Boards);

@@ -15,7 +15,7 @@ const projectWO = (props) => {
 
     let taskBoardContent = null;
     if (props.statusDetail && props.workingOrders) {
-        const filteredWorkingOrders = props.workingOrders.reduce((workingOrders, woDetail) => {
+        const filteredWorkingOrders = Object.values(props.workingOrders).reduce((workingOrders, woDetail) => {
             if (woDetail.status.toString() === props.statusDetail.status.toString()) {
                 workingOrders.push({
                     ...woDetail,

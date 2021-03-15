@@ -6,7 +6,6 @@ import { DragDropContext } from 'react-beautiful-dnd';
 
 import TaskBoards from './TaskBoards/TaskBoards';
 import Filters from './Filters/Filters';
-import CommentModal from '../../components/WorkingOrder/Comment/Comment';
 import * as actions from '../../store/actions/index';
 
 class ConstructionBoard extends Component {   
@@ -17,35 +16,7 @@ class ConstructionBoard extends Component {
             2: 10,
             3: 10,
             4: 10
-        },
-        comment: '',
-        showCommentModal: false,
-        commentWOKey: ''
-    }
-
-    onCommentModalClose = () => {
-        this.setState({
-            comment: '',
-            showCommentModal: false,
-            commentWOKey: ''
-        });
-    }
-
-    onCommentModalSubmit = () => {
-        const comment = this.state.comment;
-        const woKey = this.state.commentWOKey;
-        this.props.onWOAddComment(woKey, comment);
-        this.setState({
-            comment: '',
-            showCommentModal: false,
-            commentWOKey: ''
-        });
-    }
-
-    onCommentChange = (event) => {
-        this.setState({
-            comment: event.target.value
-        });
+        }
     }
 
     loadMoreWO = (statusID) => {
@@ -73,13 +44,21 @@ class ConstructionBoard extends Component {
         if (!this.props.woTasks && this.props.isAuthenticated) {
             this.props.onFetchTaskSelections();
         }
+        if (!this.props.projectStatusList && this.props.isAuthenticated) {
+            this.props.onFetchProjectStatuses();
+        }
+        if (this.props.isAuthenticated && !this.props.projects) {
+            this.props.onFetchProjects();
+        }
+        if (this.props.isAuthenticated && !this.props.customers) {
+            this.props.onFetchCustomers();
+        }
     }
 
     onDragEnd = result => {
         if (result.destination && result.destination.droppableId !== result.source.droppableId) {
             this.props.onWODragEnd(result);
             this.setState({
-                showCommentModal: true,
                 commentWOKey: result.draggableId
             });
         }
@@ -118,13 +97,6 @@ class ConstructionBoard extends Component {
                         {taskBoardLayout}
                     </DragDropContext>                        
                 </Row>   
-                <CommentModal
-                    showCommentModal={this.state.showCommentModal}
-                    commentChanged={this.onCommentChange}
-                    modalClose={this.onCommentModalClose}
-                    modalSubmit={this.onCommentModalSubmit}
-                    hasEditAccess={this.props.hasEditAccess}
-                />             
             </Container>
         )
     }
@@ -133,9 +105,12 @@ class ConstructionBoard extends Component {
 const mapStateToProps = state => {
     return {
         status: state.taskBoard.status,
+        projectStatusList: state.projects.statuses,
         woTasks: state.taskBoard.woTasks,
         isAuthenticated: state.auth.token !== null,
-        hasEditAccess: state.auth.hasEditAccess
+        hasEditAccess: state.auth.hasEditAccess,
+        projects: state.projects.projects,
+        customers: state.projects.customers
     }
 }
 
@@ -144,7 +119,9 @@ const mapDispatchToProps = dispatch => {
         onFetchStatus: () => dispatch(actions.fetchStatus()),
         onFetchTaskSelections: () => dispatch(actions.fetchTasks()),
         onWODragEnd: (result) => dispatch(actions.changeWOStatus(result)),
-        onWOAddComment: (key, comment) => dispatch(actions.addCommentToWO(key, comment))
+        onFetchProjectStatuses: () => dispatch(actions.fetchProjectStatuses()),
+        onFetchProjects: () => dispatch(actions.fetchProjects()),
+        onFetchCustomers: () => dispatch(actions.fetchCustomers())
     }
 }
 

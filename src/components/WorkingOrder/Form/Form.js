@@ -1,4 +1,5 @@
 import React from "react";
+import { Alert, Col } from 'react-bootstrap';
 import Input from '../../../components/UI/Input/Input';
 import Modal from '../../../components/UI/Modal/Modal';
 
@@ -28,6 +29,15 @@ const form = (props) => {
         modalTitle = 'Create Working Order';
     }
 
+    let invalidAlert = null;
+    if (props.invalidFields.length > 0) {
+        invalidAlert = <Col xs="12">
+                <Alert variant="danger" dismissible>
+                The fields <b>[{props.invalidFields.join(", ")}]</b> must be filled to save a working order.
+            </Alert>
+        </Col>
+    }
+
     return (            
         <Modal
             modalShow={props.showWOModal}
@@ -39,6 +49,7 @@ const form = (props) => {
         >
             <div className="row">
                 {workingOrderFields}
+                {invalidAlert}
             </div>               
         </Modal>
     )

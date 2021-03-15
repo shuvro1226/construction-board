@@ -8,52 +8,42 @@ import * as actions from '../../../store/actions/index';
 
 
 class WorkingOrder extends Component {
+    state = {
+        invalidFields: []
+    }
 
     onModalClose = () => {
-        this.props.onToggleWOModal(false, null, false); 
-        this.props.onFilterCustomersList(-1);  
-        this.props.onFilterProjectsList(-1);
+        this.props.onToggleWOModal(false, null, false);
     }
 
     onModalSubmit = () => {
         const updatedPostData = {};
-        const plannedDate = moment(this.props.workingOrderFields['plannedDate'].value, "YYYY-MM-DDThh:mm:ss").format("YYYY-MM-DD");
-        
+        let invalidFields = [];
         for (let key in this.props.workingOrderFields) {    
-            let woConfig = this.props.workingOrderFields[key];        
-            if (
-                (this.props.isCreateWO && this.props.workingOrderFields[key].addToCreateRequest) ||
-                (!this.props.isCreateWO && this.props.workingOrderFields[key].addToEditRequest)
-            ) {
-                let fieldValue = woConfig.value;
-                if (['startTime','endTime'].includes(key)) {
-                    fieldValue = plannedDate + 'T' + fieldValue + ':00';
-                }
-                if (woConfig.parent) {
-                    if ([woConfig.parent] in updatedPostData) {
-                        updatedPostData[woConfig.parent][key] = fieldValue;
-                    } else {
-                        updatedPostData[woConfig.parent] = {};
-                        updatedPostData[woConfig.parent][key] = fieldValue;
-                    }                    
-                } else {
-                    updatedPostData[key] = fieldValue;
-                }
-            }         
+            let woConfig = this.props.workingOrderFields[key];   
+            if (woConfig && woConfig.addToCreateRequest && (woConfig.value === '' || woConfig.value === '-1' || woConfig.value === -1)) {
+                invalidFields.push(woConfig.displayText);
+            }
+            if ((woConfig && woConfig.addToCreateRequest && this.props.isCreateWO) || (woConfig && woConfig.addToEditRequest && !this.props.isCreateWO)) {
+                updatedPostData[key] = woConfig.value;
+            }
+            if (key === 'customerNo' && this.props.customers) {
+                updatedPostData['customer'] = this.props.customers[woConfig.value]
+            }     
+            if (key === 'projectNo' && this.props.projects) {
+                updatedPostData['project'] = this.props.projects[woConfig.value]
+            }     
         }
-
-        if (updatedPostData) {
-            updatedPostData['labelIds'] = [0];
-        }
-        
-        const workingOrderData = [updatedPostData];  
-        let fromProject = false;
-        if (window.location.pathname.includes('project')) {
-            fromProject = true;
-        }
-        this.props.onSaveWorkingOrder(workingOrderData, this.props.isCreateWO, this.props.filters, fromProject);    
-        this.props.onFilterCustomersList(-1);  
-        this.props.onFilterProjectsList(-1);
+        if (!invalidFields.length) {
+            let fromProject = false;
+            if (window.location.pathname.includes('projects')) {
+                fromProject = true;
+            }
+            this.props.onSaveWorkingOrder(updatedPostData, this.props.isCreateWO, fromProject);   
+        } 
+        this.setState({
+            invalidFields: invalidFields
+        });        
     }
 
     onInputChangedHandler = (event, element) => {
@@ -66,16 +56,10 @@ class WorkingOrder extends Component {
         } else {
             updatedValue = event.target.value;
         }         
-        if (['projectNo','status','customerNo'].includes(element.id)) {
-            updatedValue = parseInt(updatedValue);
-            if (element.id === 'projectNo') {
-                this.props.onFilterCustomersList(updatedValue);
-            }
-            if (element.id === 'customerNo') {
-                this.props.onFilterProjectsList(updatedValue);
-            }
+        if (['status'].includes(element.id)) {
+            updatedValue = parseInt(updatedValue);            
         }
-        const updatedFormElement = {
+        let updatedFormElement = {
             ...this.props.workingOrderFields,
             [element.id]: {
                 ...this.props.workingOrderFields[element.id],
@@ -100,10 +84,10 @@ class WorkingOrder extends Component {
             let linkedTo = '';
             let defaultOptions = null;
             if (key === 'projectNo' && this.props.projects) {
-                linkedTo = '/projects/' + this.props.workingOrderFields['projectNo'].value + '/' + this.props.workingOrderFields['projectYear'].value;
+                linkedTo = '/projects/' + this.props.workingOrderFields['projectNo'].value;
                 defaultOptions = Object.keys(this.props.projects).map(key => {
                     return {
-                        value: this.props.projects[key].projectNo,
+                        value: key,
                         displayText: this.props.projects[key].projectName,                        
                         hideOption: this.props.projects[key].hideOption
                     }
@@ -112,7 +96,7 @@ class WorkingOrder extends Component {
             if (key === 'customerNo' && this.props.customers) {
                 defaultOptions = Object.keys(this.props.customers).map(key => {
                     return {
-                        value: this.props.customers[key].customerNo,
+                        value: key,
                         displayText: this.props.customers[key].customerName,
                         hideOption: this.props.customers[key].hideOption
                     }
@@ -127,10 +111,10 @@ class WorkingOrder extends Component {
                 });
             }
             if (key === 'taskSelection' && this.props.woTasks) {
-                defaultOptions = this.props.woTasks.map(tasks => {
+                defaultOptions = Object.values(this.props.woTasks).map(taskDetails => {
                     return {
-                        value: tasks.task.toString(),
-                        displayText: tasks.title
+                        value: taskDetails.task.toString(),
+                        displayText: taskDetails.title
                     }
                 });
             }
@@ -156,7 +140,8 @@ class WorkingOrder extends Component {
                     isCreateWO={this.props.isCreateWO} 
                     onLinkClicked={this.linkClickedHandler}
                     hasEditAccess={this.props.hasEditAccess}
-                />;
+                    invalidFields={this.state.invalidFields}
+                />
             </Wrapper>
         )
     }
@@ -170,8 +155,8 @@ const mapStateToProps = state => {
         workingOrderFields: state.taskBoard.woDetail,
         status: state.taskBoard.status,
         workingOrders: state.taskBoard.workingOrders,
-        projects: state.taskBoard.woProjects,
-        customers: state.taskBoard.woCustomers,
+        projects: state.projects.projects,
+        customers: state.projects.customers,
         filters: state.taskBoard.woFilters,
         hasEditAccess: state.auth.hasEditAccess
     }
@@ -181,9 +166,7 @@ const mapDispatchToProps = dispatch => {
     return {
         onToggleWOModal: (showModal, woDetail, createMode) => dispatch(actions.toggleWOModal(showModal, woDetail, createMode)),
         onFormElementChange: (updatedFields) => dispatch(actions.formElementChange(updatedFields)),
-        onSaveWorkingOrder: (woDetail, isCreateWO, filters, fromProject) => dispatch(actions.saveWorkingOrder(woDetail, isCreateWO, filters, fromProject)),
-        onFilterCustomersList: (projectNo) => dispatch(actions.filterCustomerListByProject(projectNo)),
-        onFilterProjectsList: (customerNo) => dispatch(actions.filterProjectListByCustomer(customerNo))
+        onSaveWorkingOrder: (woDetail, isCreateWO, fromProject) => dispatch(actions.saveWorkingOrder(woDetail, isCreateWO, fromProject))
     }
 }
 

@@ -6,20 +6,19 @@ export {
     formElementChange,
     saveWorkingOrder,
     fetchTasks,
-    filterCustomerListByProject,
-    filterProjectListByCustomer,
     changeWOStatus,
     searchTaskBoard,
-    addCommentToWO
+    onFilterWOList
 }
 from './taskBoard';
 
 export {
     fetchProjectStatuses,
-    fetchProjectsByStatus,
+    fetchProjects,
     fetchProject,
     fetchProjectWorkingOrders,
-    changeProjectWOStatus
+    changeProjectWOStatus,
+    fetchCustomers
 }
 from './projects';
 

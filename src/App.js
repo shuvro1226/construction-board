@@ -34,7 +34,7 @@ class App extends Component {
     if (this.props.isAuthenticated) {
       routes = (
         <Switch>
-          <Route path="/projects/:id/:year" component={Project} />
+          <Route path="/projects/:id" component={Project} />
           <Route path="/projects" component={Projects} />
           <Route path="/" exact component={ConstructionBoard} />
           <Redirect to="/" />

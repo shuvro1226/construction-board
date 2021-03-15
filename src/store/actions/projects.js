@@ -1,7 +1,6 @@
 import * as actionTypes from './actionTypes';
-import * as apiConstants from '../../config/vero/constants';
-import axios from '../../config/vero/axios-config';
-import moment from 'moment';
+import * as apiConstants from '../../config/firebase/constants';
+import * as axios from '../../config/firebase/axios-config';
 
 export const fetchProjectStatusStart = () => {
     return {
@@ -26,7 +25,7 @@ export const fetchProjectStatusFail = (error) => {
 export const fetchProjectStatuses = () => {
     return (disptach) => {
         disptach(fetchProjectStatusStart());
-        axios.get(apiConstants.GET_PROJECT_STATUSES)
+        axios.dbInstance.get(apiConstants.GET_PROJECT_STATUSES)
             .then(response => {
                 disptach(fetchProjectStatusSuccess(response.data));
             })
@@ -57,30 +56,14 @@ export const fetchProjectsFailed = (error) => {
     }
 }
 
-export const fetchProjectsByStatus = (statusId, filters = null) => {
-    let url = apiConstants.GET_PROJECTS_BY_STATUS + statusId;
-    if (filters) {
-        if (filters.projectNo.value.toString() !== "-1") {
-            url += '&filter[projectNo][eq]=' + filters.projectNo.value;
-        }
-        if (filters.customerNo.value.toString() !== "-1") {
-            url += '&filter[customerNo][eq]=' + filters.customerNo.value;
-        }
-        if (filters.taskSelection.value.toString() !== "-1") {
-            url += '&filter[taskName][like]=' + filters.taskSelection.value;
-        }
-        url += '&filter[plannedDate][gte]=' + moment(filters.executionStartDate.value, 'YYYY-MM-DDThh:mm:ss').format('YYYY-MM-DD');
-        url += '&filter[plannedDate][lte]=' + moment(filters.executionEndDate.value, 'YYYY-MM-DDThh:mm:ss').format('YYYY-MM-DD');
-    } else {
-        url += '&filter[projectValidStartDate][gte]=' + moment().clone().startOf('month').format('YYYY-MM-DD');
-        url += '&filter[projectValidStartDate][lte]=' + moment().clone().endOf('month').format('YYYY-MM-DD')
-    }
+export const fetchProjects = () => {
+    let url = apiConstants.GET_PROJECTS;
 
     return (dispatch) => {
         dispatch(fetchProjectsStart());
-        axios.get(url + apiConstants.GET_PROJECTS_PARTIALS)
+        axios.dbInstance.get(url)
             .then(res => {
-                dispatch(fetchProjectsSuccess(res.data, statusId));
+                dispatch(fetchProjectsSuccess(res.data));
             })
             .catch(err => {
                 dispatch(fetchProjectsFailed(err));
@@ -88,36 +71,10 @@ export const fetchProjectsByStatus = (statusId, filters = null) => {
     }
 }
 
-export const fetchProjectStart = () => {
+export const fetchProject = (projectID) => {
     return {
-        type: actionTypes.FETCH_PROJECT_START
-    }
-}
-
-export const fetchProjectSuccess = (response) => {
-    return {
-        type: actionTypes.FETCH_PROJECT_SUCCESS,
-        response: response
-    }
-}
-
-export const fetchProjectFail = (err) => {
-    return {
-        type: actionTypes.FETCH_PROJECT_FAIL,
-        error: err
-    }
-}
-
-export const fetchProject = (projectNo, projectYear) => {
-    return (dispatch) => {
-        dispatch(fetchProjectStart());
-        axios.get(apiConstants.GET_PROJECT_DETAILS + projectNo + '/' + projectYear)
-            .then(response => {
-                dispatch(fetchProjectSuccess(response.data));
-            })
-            .catch(error => {
-                dispatch(fetchProjectFail(error));
-            })
+        type: actionTypes.FETCH_PROJECT_DETAILS,
+        projectID: projectID
     }
 }
 
@@ -141,10 +98,10 @@ export const fetchProjectWOFail = (err) => {
     }
 }
 
-export const fetchProjectWorkingOrders = (projectNo) => {
+export const fetchProjectWorkingOrders = (projectID) => {
     return (dispatch) => {
         dispatch(fetchProjectWOStart());
-        axios.get(apiConstants.GET_PROJECT_WO + projectNo + apiConstants.GET_WO_PARTIALS + apiConstants.GET_WO_ALIAS)
+        axios.dbInstance.get(apiConstants.GET_PROJECT_WO + '"' + projectID + '"')
             .then(response => {
                 dispatch(fetchProjectWOSuccess(response.data));
             })
@@ -175,28 +132,92 @@ export const saveWOFail = (err) => {
     }
 }
 
-export const changeProjectWOStatus = (result) => {
+export const changeProjectWOStatus = (result, projectNo) => {
     return (dispatch) => {
         dispatch(updateWOListAfterDrag(result));
 
-        const uniqueKey = result.draggableId.split('-');
-        const updatedWOData = [{
-            projectNo: parseInt(uniqueKey[0]),
-            workingOrderNo: parseInt(uniqueKey[1]),
-            status: parseInt(result.destination.droppableId)
-        }];
+        const url = 'workingOrders/' + result.draggableId + '/status.json';
         const config = {
             method: 'put',
-            url: apiConstants.WORKING_ORDERS,
-            data: updatedWOData
+            url: url,
+            data: parseInt(result.destination.droppableId)
         }
-        axios(config)
+        axios.dbInstance(config)
             .then(response => {
                 dispatch(saveWOSuccess(response.data));
-                dispatch(fetchProjectWorkingOrders(parseInt(uniqueKey[0]), null));
+                dispatch(fetchProjectWorkingOrders(projectNo, null));
+                dispatch(fetchWOByStatus(result.source.droppableId));
+                dispatch(fetchWOByStatus(result.destination.droppableId));
             })
             .catch(error => {
                 dispatch(saveWOFail(error));
+            })
+    }
+}
+
+export const fetchWOSuccess = (workingOrdersList, statusId) => {
+    return {
+        type: actionTypes.FETCH_WO_SUCCESS,
+        workingOrders: workingOrdersList,
+        statusId: statusId
+    }
+}
+
+export const fetchWOFailed = (error) => {
+    return {
+        type: actionTypes.FETCH_WO_FAILED
+    }
+}
+
+export const fetchWOStart = () => {
+    return {
+        type: actionTypes.FETCH_WO_START
+    }
+}
+
+export const fetchWOByStatus = (statusId) => {
+    let url = apiConstants.GET_WO_BY_STATUS + statusId;
+    return (dispatch) => {
+        dispatch(fetchWOStart());
+        axios.dbInstance.get(url)
+            .then(res => {
+                dispatch(fetchWOSuccess(res.data, statusId));
+            })
+            .catch(err => {
+                dispatch(fetchWOFailed(err));
+            });
+    }
+}
+
+export const fetchCustomersStart = () => {
+    return {
+        type: actionTypes.FETCH_CUSTOMERS_START
+    };
+}
+
+export const fetchCustomersSuccess = (customers) => {
+    return {
+        type: actionTypes.FETCH_CUSTOMERS_SUCCESS,
+        customers: customers
+    };
+}
+
+export const fetchCustomersFail = (error) => {
+    return {
+        type: actionTypes.FETCH_CUSTOMERS_FAIL,
+        error: error
+    };
+}
+
+export const fetchCustomers = (state, action) => {
+    return (dispatch) => {
+        dispatch(fetchCustomersStart());
+        axios.dbInstance.get(apiConstants.GET_CUSTOMERS)
+            .then(response => {
+                dispatch(fetchCustomersSuccess(response.data))
+            })
+            .catch(error => {
+                dispatch(fetchCustomersFail(error))
             })
     }
 }

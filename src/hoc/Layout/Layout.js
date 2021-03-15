@@ -11,11 +11,8 @@ class Layout extends Component {
         searchText: ''
     }
 
-    showWOEditModal = () => {
-        const woDetail = {
-            projectNo: window.location.pathname.split('/')[2]
-        };
-        this.props.onToggleWOModal(true, woDetail, true);
+    showWOEditModal = () => {        
+        this.props.onToggleWOModal(true, null, true);
     }
 
     logoutHandler = () => {

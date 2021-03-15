@@ -19,10 +19,7 @@ class Filters extends Component {
             updatedValue = moment(updatedDate, "YYYY-MM-DD").format("YYYY-MM-DDThh:mm:ss");
         } else {
             updatedValue = event.target.value;
-        }         
-        if (['projectNo','customerNo'].includes(element.id)) {
-            updatedValue = parseInt(updatedValue);
-        }
+        }      
         const updatedFilterValue = {
             ...this.state.filters,
             [element.id]: {
@@ -39,7 +36,9 @@ class Filters extends Component {
     onApplyFilter = () => {
         if (this.props.status) {
             for (const statusDetail of this.props.status) {
-                this.props.onWoGetByStatus(statusDetail.status, this.state.filters);
+                if (statusDetail.useBoard) {
+                    this.props.onFilterWOList(statusDetail.status, this.state.filters);                    
+                }
             }
         }
     }
@@ -50,7 +49,9 @@ class Filters extends Component {
         });
         if (this.props.status) {
             for (const statusDetail of this.props.status) {
-                this.props.onWoGetByStatus(statusDetail.status);
+                if (statusDetail.useBoard) {
+                    this.props.onFilterWOList(statusDetail.status, filters);                    
+                }
             }
         }
     }
@@ -65,7 +66,7 @@ class Filters extends Component {
                 if (key === 'projectNo' && this.props.projects) {
                     defaultOptions = Object.keys(this.props.projects).map(key => {
                         return {
-                            value: this.props.projects[key].projectNo,
+                            value: key,
                             displayText: this.props.projects[key].projectName
                         }
                     });                
@@ -73,16 +74,16 @@ class Filters extends Component {
                 if (key === 'customerNo' && this.props.customers) {
                     defaultOptions = Object.keys(this.props.customers).map(key => {
                         return {
-                            value: this.props.customers[key].customerNo,
+                            value: key,
                             displayText: this.props.customers[key].customerName
                         }
                     });
                 }
                 if (key === 'taskSelection' && this.props.tasks) {
-                    defaultOptions = this.props.tasks.map(taskDetail => {
+                    defaultOptions = Object.values(this.props.tasks).map(taskDetails => {
                         return {
-                            value: taskDetail.task.toString(),
-                            displayText: taskDetail.title
+                            value: taskDetails.task.toString(),
+                            displayText: taskDetails.title
                         }
                     });
                 }
@@ -133,15 +134,15 @@ class Filters extends Component {
 const mapStateToProps = state => {
     return {
         status: state.taskBoard.status,
-        projects: state.taskBoard.woProjects,
-        customers: state.taskBoard.woCustomers,
+        projects: state.projects.projects,
+        customers: state.projects.customers,
         tasks: state.taskBoard.woTasks
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onWoGetByStatus: (statusId, filters) => dispatch(actions.fetchWOByStatus(statusId, filters))
+        onFilterWOList: (statusId, filters) => dispatch(actions.onFilterWOList(statusId, filters))
     }
 }
 

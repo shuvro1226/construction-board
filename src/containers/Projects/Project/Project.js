@@ -16,12 +16,12 @@ class Project extends Component {
         if (!this.props.status && this.props.isAuthenticated) {
             this.props.onFetchStatus();
         }
-        this.props.onFetchProjectDetails(this.props.match.params.id, this.props.match.params.year);
+        this.props.onFetchProjectDetails(this.props.match.params.id);
         this.props.onFetchProjectWO(this.props.match.params.id);
     }
 
-    showWOEditModal = (woDetail) => {
-        this.props.onToggleWOModal(true, woDetail, false);
+    showWOModal = (woDetail, isCreate = false) => {
+        this.props.onToggleWOModal(true, woDetail, isCreate);
     }
 
     onToggleTaskActions = (index, showActions, status) => {
@@ -30,7 +30,7 @@ class Project extends Component {
 
     onDragEnd = result => {
         if (result.destination && result.destination.droppableId !== result.source.droppableId) {
-            this.props.onWODragEnd(result);
+            this.props.onWODragEnd(result, this.props.match.params.id);
         }
     }
 
@@ -46,6 +46,7 @@ class Project extends Component {
                 project={this.props.project} 
                 workingOrders={this.props.workingOrders}
                 statusList={this.props.status}
+                showCreateWOModal={this.showWOModal}
             />;
         }
 
@@ -57,7 +58,7 @@ class Project extends Component {
                         <ProjectWO 
                             statusDetail={status} 
                             workingOrders={this.props.workingOrders}     
-                            showWorkingOrderEditModal={this.showWOEditModal}                       
+                            showWorkingOrderEditModal={this.showWOModal}                       
                             showActions={this.onToggleTaskActions} 
                             hideActions={this.onToggleTaskActions} />
                     </Col>
@@ -98,10 +99,10 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onFetchStatus: () => dispatch(actions.fetchStatus()),
-        onFetchProjectDetails: (projectNo, projectYear) => dispatch(actions.fetchProject(projectNo, projectYear)),
-        onFetchProjectWO: (projectNo) => dispatch(actions.fetchProjectWorkingOrders(projectNo)),
+        onFetchProjectDetails: (projectID) => dispatch(actions.fetchProject(projectID)),
+        onFetchProjectWO: (projectID) => dispatch(actions.fetchProjectWorkingOrders(projectID)),
         onToggleWOModal: (showModal, woDetail, createMode) => dispatch(actions.toggleWOModal(showModal, woDetail, createMode)),
-        onWODragEnd: (result) => dispatch(actions.changeProjectWOStatus(result))
+        onWODragEnd: (result, projectNo) => dispatch(actions.changeProjectWOStatus(result, projectNo))
     }
 }
 

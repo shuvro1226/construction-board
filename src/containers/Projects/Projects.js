@@ -13,6 +13,9 @@ class Projects extends Component {
         if (!this.props.statuses && this.props.isAuthenticated) {
             this.props.onFetchProjectStatuses();
         }
+        if (!this.props.projects && this.props.isAuthenticated) {
+            this.props.onFetchProjects();
+        }
     }
     
     render() {
@@ -21,11 +24,11 @@ class Projects extends Component {
         }
 
         let taskBoardLayout = null;
-        if (this.props.statuses) {
+        if (this.props.statuses && this.props.projects) {
             taskBoardLayout = this.props.statuses.map((status, index) => {
                 if (status.useBoard && index <= 4) {
                     return <Col xs={12} md={3} key={status.id}>
-                        <Boards statusDetail={status} />
+                        <Boards statusDetail={status} projects={this.props.projects} />
                     </Col>
                 } else {
                     return null;
@@ -48,13 +51,15 @@ class Projects extends Component {
 const mapStateToProps = state => {
     return {
         statuses: state.projects.statuses,
-        isAuthenticated: state.auth.token !== null
+        isAuthenticated: state.auth.token !== null,
+        projects: state.projects.projects
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onFetchProjectStatuses: () => dispatch(actions.fetchProjectStatuses())
+        onFetchProjectStatuses: () => dispatch(actions.fetchProjectStatuses()),
+        onFetchProjects: () => dispatch(actions.fetchProjects())
     }
 }
 

@@ -1,6 +1,15 @@
 import moment from 'moment';
 
 export const workingOrderModel = {
+    uniqueKey: {
+        elementType: 'input',
+        elementConfig: {
+            type: 'hidden'
+        },
+        elementUIConfig: null,
+        value: '',
+        addToEditRequest: true
+    },
     customerNo: {
         elementType: 'select',
         elementConfig: null,
@@ -11,6 +20,7 @@ export const workingOrderModel = {
         defaultOption: 'Select a customer',
         value: -1,
         displayText: 'Customer',
+        addToEditRequest: true,
         addToCreateRequest: true,
         disabledOnEdit: true
     },
@@ -26,24 +36,7 @@ export const workingOrderModel = {
         displayText: 'Project',
         addToEditRequest: true,
         addToCreateRequest: true,
-        disabledOnEdit: true,
-    },
-    projectYear: {
-        elementType: 'input',
-        elementConfig: {
-            type: 'hidden'
-        },
-        elementUIConfig: null,
-        value: 0
-    },
-    workingOrderNo: {
-        elementType: 'input',
-        elementConfig: {
-            type: 'hidden'
-        },
-        elementUIConfig: null,
-        value: 0,
-        addToEditRequest: true
+        disabledOnEdit: true
     },
     description: {
         elementType: 'input',
@@ -92,7 +85,7 @@ export const workingOrderModel = {
         },
         defaultOptions: null,
         defaultOption: 'Select task',
-        value: '',
+        value: '-1',
         displayText: 'Task',
         addToEditRequest: true,
         addToCreateRequest: true
@@ -106,7 +99,7 @@ export const workingOrderModel = {
         elementUIConfig: {
             grid: 'col-12 col-md-6'
         },
-        value: '',
+        value: 0.0,
         displayText: 'Total Planned Hours',
         hideOnCreate: true
     },
@@ -148,16 +141,9 @@ export const workingOrderModel = {
         },
         value: moment().format('YYYY-MM-DDThh:mm:ss'),
         displayText: 'Plan Date',
-        isDate: true
-    },
-    planData: {
-        elementType: 'headline',
-        elementConfig: null,
-        elementUIConfig: {
-            grid: 'col-12 my-2'
-        },
-        value: '',
-        displayText: 'Disposition'
+        isDate: true,
+        addToEditRequest: true,
+        addToCreateRequest: true
     },
     startTime: {
         elementType: 'input',
@@ -171,8 +157,7 @@ export const workingOrderModel = {
         displayText: 'Plan Start Time',
         isTime: true,
         addToEditRequest: true,
-        addToCreateRequest: true,
-        parent: 'planData'
+        addToCreateRequest: true
     },
     endTime: {
         elementType: 'input',
@@ -186,8 +171,7 @@ export const workingOrderModel = {
         displayText: 'Plan End Time',
         isTime: true,
         addToEditRequest: true,
-        addToCreateRequest: true,
-        parent: 'planData'
+        addToCreateRequest: true
     },
     workingHours: {
         elementType: 'input',
@@ -200,8 +184,7 @@ export const workingOrderModel = {
         value: 0.0,
         displayText: 'Working Hours',
         addToEditRequest: true,
-        addToCreateRequest: true,
-        parent: 'planData'
+        addToCreateRequest: true
     },
     duration: {
         elementType: 'input',
@@ -214,8 +197,7 @@ export const workingOrderModel = {
         value: 0.0,
         displayText: 'Duration',
         addToEditRequest: true,
-        addToCreateRequest: true,
-        parent: 'planData'
+        addToCreateRequest: true
     },
     travelTime: {
         elementType: 'input',
@@ -228,7 +210,8 @@ export const workingOrderModel = {
         value: 0.0,
         displayText: 'Travel Time',
         addToEditRequest: true,
-        addToCreateRequest: true,
-        parent: 'planData'
-    }
+        addToCreateRequest: true
+    },
+    customer: null,
+    project: null
 }

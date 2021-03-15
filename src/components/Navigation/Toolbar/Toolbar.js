@@ -8,7 +8,7 @@ import SearchBox from '../../SearchBox/SearchBox';
 const toolbar = (props) => {
 
     let createAction = null;
-    if (props.hasEditAccess) {
+    if (props.hasEditAccess && window.location.pathname === '/') {
         createAction = (
             <Button variant="primary" onClick={props.showCreateWOModal} className={styles.Button}>
                 <FontAwesomeIcon icon="plus" /> Add New Task

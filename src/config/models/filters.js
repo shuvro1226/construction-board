@@ -9,7 +9,7 @@ export const filters = {
         },
         defaultOptions: null,
         defaultOption: 'Select a customer',
-        value: -1
+        value: "-1"
     },
     projectNo: {
         elementType: 'select',
@@ -19,7 +19,7 @@ export const filters = {
         },
         defaultOptions: null,
         defaultOption: 'Select a project',
-        value: -1
+        value: "-1"
     },
     taskSelection: {
         elementType: 'select',
@@ -29,7 +29,7 @@ export const filters = {
         },
         defaultOptions: null,
         defaultOption: 'Select task',
-        value: ''
+        value: "-1"
     },
     executionStartDate: {
         elementType: 'input',

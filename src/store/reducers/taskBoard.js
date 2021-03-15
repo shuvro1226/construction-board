@@ -1,19 +1,17 @@
 import * as actionTypes from '../actions/actionTypes';
 import { workingOrderModel } from '../../config/models/workingOrder';
+import moment from 'moment';
 
 const initialState = {
     status: null,
     workingOrders: null,
     error: false,
     loading: false,
-    woProjects: null,
-    woCustomers: null,
     showWOModal: false,
     createMode: false,
     woDetail: workingOrderModel,
     oldWODetail: workingOrderModel,
-    woTasks: null,
-    employees: null
+    woTasks: null
 }
 
 const WOStatusDefaults = {
@@ -79,9 +77,10 @@ const fetchWOSuccess = (state, action) => {
     const statusId = action.statusId;
     const woGroupdByStatus = [];
 
-    woGroupdByStatus[statusId] = action.workingOrders.map(woDetail => {
+    woGroupdByStatus[statusId] = Object.keys(action.workingOrders).map(key => {
         return {
-            ...woDetail,
+            ...action.workingOrders[key],
+            uniqueKey: key,
             visible: true
         };
     });
@@ -91,46 +90,11 @@ const fetchWOSuccess = (state, action) => {
         [statusId]: woGroupdByStatus[statusId]
     };
 
-    const updatedWOProjects = [];
-    const updatedWOCustomers = [];
-    const customerProjects = [];
-    for (const woDetail of action.workingOrders) {
-        let projects = [
-            ...(customerProjects['customer-' + woDetail.customerNo] ? customerProjects['customer-' + woDetail.customerNo] : []),
-            woDetail.projectNo
-        ];
-
-        const uniqueProjects = [...new Set(projects)];
-
-        customerProjects['customer-' + woDetail.customerNo] = uniqueProjects;
-
-        updatedWOProjects['project-' + woDetail.projectNo] = {
-            projectNo: woDetail.projectNo,
-            projectName: woDetail.projectName,
-            customerNo: woDetail.customerNo,
-            hideOption: false
-        };
-        updatedWOCustomers['customer-' + woDetail.customerNo] = {
-            customerNo: woDetail.customerNo,
-            customerName: woDetail.customerName,
-            projects: customerProjects['customer-' + woDetail.customerNo],
-            hideOption: false
-        };
-    }
-
     return {
         ...state,
         workingOrders: updatedWorkingOrdersList,
         error: false,
-        loading: false,
-        woProjects: {
-            ...state.woProjects,
-            ...updatedWOProjects
-        },
-        woCustomers: {
-            ...state.woCustomers,
-            ...updatedWOCustomers
-        }
+        loading: false
     }
 }
 
@@ -177,13 +141,17 @@ const toggleWOModal = (state, action) => {
     let workingOrderData = {};
     if (action.woDetail) {
         for (const [key, elements] of Object.entries(state.woDetail)) {
-            let updatedValue = state.woDetail[key].value;
-            if (action.woDetail[key]) {
-                updatedValue = action.woDetail[key];
-            }
-            workingOrderData[key] = {
-                ...elements,
-                value: updatedValue
+            if (['customer', 'project'].includes(key)) {
+                workingOrderData[key] = action.woDetail[key];
+            } else {
+                let updatedValue = state.woDetail[key].value;
+                if (action.woDetail[key]) {
+                    updatedValue = action.woDetail[key];
+                }
+                workingOrderData[key] = {
+                    ...elements,
+                    value: updatedValue
+                }
             }
         }
     } else {
@@ -221,10 +189,8 @@ const saveWOSuccess = (state, action) => {
     };
 
     if (action.woDetail && action.woDetail.status.toString() !== oldStatus.toString() && oldStatus !== -1) {
-        const oldProjectNo = state.oldWODetail.projectNo.value,
-            oldWorkingOrderNo = state.oldWODetail.workingOrderNo.value,
-            oldIndex = state.workingOrders[oldStatus].findIndex(element => element.projectNo === oldProjectNo && element.workingOrderNo === oldWorkingOrderNo);
-
+        const oldUniqueKey = state.oldWODetail.uniqueKey.value,
+            oldIndex = state.workingOrders[oldStatus].findIndex(element => element.uniqueKey === oldUniqueKey);
 
         workingOrdersList[oldStatus].splice(oldIndex, 1);
     }
@@ -267,75 +233,6 @@ const fetchTasksFail = (state, action) => {
         ...state,
         loading: false,
         error: true
-    };
-}
-
-const fetchEmployeesStart = (state, action) => {
-    return {
-        ...state,
-        loading: true,
-        error: false
-    }
-}
-
-const fetchEmployeesSuccess = (state, action) => {
-    return {
-        ...state,
-        employees: action.response,
-        loading: false,
-        error: false
-    }
-}
-
-const fetchEmployeesFail = (state, action) => {
-    return {
-        ...state,
-        loading: false,
-        error: true
-    }
-}
-
-const filterCustomerListByProject = (state, action) => {
-    const projectNo = action.projectNo;
-    const woCustomers = {
-        ...state.woCustomers
-    };
-    for (const [key, customerDetail] of Object.entries(woCustomers)) {
-        let hideOption = false;
-        if (projectNo !== -1 && !woCustomers[key].projects.includes(projectNo)) {
-            hideOption = true;
-        }
-        woCustomers[key] = {
-            ...customerDetail,
-            hideOption: hideOption
-        }
-    }
-    return {
-        ...state,
-        woCustomers: woCustomers
-    };
-}
-
-const filterProjectListByCustomer = (state, action) => {
-    const customerNo = action.customerNo;
-    const woProjects = {
-        ...state.woProjects
-    };
-    for (const [key, projectDetail] of Object.entries(woProjects)) {
-        let hideOption = false;
-        if (customerNo !== -1 && woProjects[key].customerNo !== customerNo) {
-            hideOption = true;
-        }
-
-        woProjects[key] = {
-            ...projectDetail,
-            hideOption: hideOption
-        }
-    }
-
-    return {
-        ...state,
-        woProjects: woProjects
     };
 }
 
@@ -406,28 +303,35 @@ const searchWorkingOrderBoard = (state, action) => {
     }
 }
 
-const saveWOCommentStart = (state, action) => {
+const filterWOList = (state, action) => {
+    const workingOrders = {
+        ...state.workingOrders[action.statusID]
+    }
+    const updatesWorkingOrders = Object.values(workingOrders).map(workingOrder => {
+        let visible = false;
+        if (action.filters) {
+            if ((action.filters.projectNo.value === "-1" || workingOrder.projectNo === action.filters.projectNo.value) &&
+                (action.filters.customerNo.value === "-1" || workingOrder.customerNo === action.filters.customerNo.value) &&
+                (action.filters.taskSelection.value === "-1" || workingOrder.taskSelection === action.filters.taskSelection.value) &&
+                (moment(workingOrder.plannedDate).isSameOrAfter(action.filters.executionStartDate.value) &&
+                    moment(workingOrder.plannedDate).isSameOrBefore(action.filters.executionEndDate.value))) {
+                visible = true;
+            }
+        } else {
+            visible = true;
+        }
+        return {
+            ...workingOrder,
+            visible: visible
+        }
+    })
     return {
         ...state,
-        loading: true,
-        error: false
-    };
-}
-
-const saveWOCommentSuccess = (state, action) => {
-    return {
-        ...state,
-        loading: false,
-        error: false
-    };
-}
-
-const saveWOCommentFail = (state, action) => {
-    return {
-        ...state,
-        loading: false,
-        error: true
-    };
+        workingOrders: {
+            ...state.workingOrders,
+            [action.statusID]: updatesWorkingOrders
+        }
+    }
 }
 
 const reducer = (state = initialState, action) => {
@@ -462,26 +366,12 @@ const reducer = (state = initialState, action) => {
             return fetchTasksSuccess(state, action);
         case actionTypes.FETCH_TASKS_FAIL:
             return fetchTasksFail(state, action);
-        case actionTypes.FETCH_EMPLOYEES_START:
-            return fetchEmployeesStart(state, action);
-        case actionTypes.FETCH_EMPLOYEES_SUCCESS:
-            return fetchEmployeesSuccess(state, action);
-        case actionTypes.FETCH_EMPLOYEES_FAIL:
-            return fetchEmployeesFail(state, action);
-        case actionTypes.FILTER_CUSTOMERS_ON_PROJECT_SELECT:
-            return filterCustomerListByProject(state, action);
-        case actionTypes.FILTER_PROJECTS_ON_CUSTOMER_SELECT:
-            return filterProjectListByCustomer(state, action);
         case actionTypes.DRAG_WO_CHANGE_STATUS:
             return updateWOListAfterDrag(state, action);
         case actionTypes.SEARCH_WORKING_ORDER_BOARD:
             return searchWorkingOrderBoard(state, action);
-        case actionTypes.ADD_COMMENT_TO_WO_START:
-            return saveWOCommentStart(state, action);
-        case actionTypes.ADD_COMMENT_TO_WO_SUCCESS:
-            return saveWOCommentSuccess(state, action);
-        case actionTypes.ADD_COMMENT_TO_WO_FAIL:
-            return saveWOCommentFail(state, action);
+        case actionTypes.FILTER_WO_LIST:
+            return filterWOList(state, action);
         default:
             return state;
     }

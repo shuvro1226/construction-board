@@ -31,6 +31,7 @@ const input = (props) => {
                 };
                 inputElement = <DatePicker
                     value={dateValue}
+                    required
                     formatInputText={formatInputValue}
                     shouldHighlightWeekends
                     inputClassName={styles.DatePickerWrapper}
@@ -72,9 +73,9 @@ const input = (props) => {
                 disabled={disabled}
                 onChange={props.changed}>
                     <option value="-1">{props.config.defaultOption}</option>
-                {props.config.defaultOptions ? props.config.defaultOptions.map(option => {
+                {props.config.defaultOptions ? props.config.defaultOptions.map((option, index) => {
                     if (!option.hideOption) {
-                        return <option key={option.value} value={option.value}>{option.displayText}</option>                        
+                        return <option key={index+1} value={option.value}>{option.displayText}</option>                        
                     }
                     return false;
                 }) : null}

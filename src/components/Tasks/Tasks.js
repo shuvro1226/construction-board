@@ -16,7 +16,7 @@ const TasksList = (props) => {
             }
 
             const taskHeader = <Wrapper>
-                <strong className="mr-auto">{woDetail.customerName}</strong>
+                <strong className="mr-auto">{woDetail.customer.customerName}</strong>
                 <small>{moment(woDetail.plannedDate).fromNow()}</small>
                 <div className={taskActionsClasses.join(' ')}>
                     <span className="TaskAction">
@@ -26,7 +26,7 @@ const TasksList = (props) => {
             </Wrapper>;            
             
             return <Task 
-                key={woDetail.uniqueKey} 
+                key={index+1} 
                 index={index}
                 uniqueKey={woDetail.uniqueKey}
                 header={taskHeader}
@@ -36,7 +36,7 @@ const TasksList = (props) => {
                 hideActions={() => props.hideActions(index, false, props.statusDetail.status)}
             >
                     <span>
-                        <b>Project:</b> {woDetail.projectName}
+                        <b>Project:</b> {woDetail.project.projectName}
                     </span>
                     <span>
                         <b>Task:</b> {woDetail.detailDescription ? woDetail.detailDescription: woDetail.description}
